@@ -1,0 +1,3686 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CESS DYNAMICS · Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<style>/* cyrillic-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("3235b94f-6550-42bd-93a0-ba75abef4cb6.bin") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("6bf5dd8a-37e3-4d95-b567-6388fafc61e2.bin") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("6d8329a0-633f-4e50-ab80-2f80c9a3b27f.bin") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("9ab1e3a9-01f1-4d46-a96c-faf757c7894a.bin") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("c7e99509-c460-43a1-8981-c150dad3b4d8.bin") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("a8647cbd-ad85-4f3c-90ca-be00e75ccca8.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("3235b94f-6550-42bd-93a0-ba75abef4cb6.bin") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("6bf5dd8a-37e3-4d95-b567-6388fafc61e2.bin") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("6d8329a0-633f-4e50-ab80-2f80c9a3b27f.bin") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("9ab1e3a9-01f1-4d46-a96c-faf757c7894a.bin") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("c7e99509-c460-43a1-8981-c150dad3b4d8.bin") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("a8647cbd-ad85-4f3c-90ca-be00e75ccca8.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("3235b94f-6550-42bd-93a0-ba75abef4cb6.bin") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("6bf5dd8a-37e3-4d95-b567-6388fafc61e2.bin") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("6d8329a0-633f-4e50-ab80-2f80c9a3b27f.bin") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("9ab1e3a9-01f1-4d46-a96c-faf757c7894a.bin") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("c7e99509-c460-43a1-8981-c150dad3b4d8.bin") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("a8647cbd-ad85-4f3c-90ca-be00e75ccca8.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("3235b94f-6550-42bd-93a0-ba75abef4cb6.bin") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("6bf5dd8a-37e3-4d95-b567-6388fafc61e2.bin") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("6d8329a0-633f-4e50-ab80-2f80c9a3b27f.bin") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("9ab1e3a9-01f1-4d46-a96c-faf757c7894a.bin") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("c7e99509-c460-43a1-8981-c150dad3b4d8.bin") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("a8647cbd-ad85-4f3c-90ca-be00e75ccca8.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("a878359c-633e-418c-aa69-233d92aa5334.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("a878359c-633e-418c-aa69-233d92aa5334.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("a878359c-633e-418c-aa69-233d92aa5334.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("a878359c-633e-418c-aa69-233d92aa5334.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("a878359c-633e-418c-aa69-233d92aa5334.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* devanagari */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("845d9b6a-983d-4129-8c8e-a0c6262af74c.bin") format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("9cf2f572-f06a-4590-916c-ed1087bfd7ca.bin") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("198c51da-0cee-4021-8129-7339b9fbb350.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* devanagari */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("e95c8890-bdbe-42a8-b2cc-59246bc1ae99.bin") format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("cd61b613-c318-4d44-afd6-cd3978ed4201.bin") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("dda6b52c-eea3-40b8-a6c4-62da4cbf1839.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* devanagari */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("3b508e78-69c1-45f0-9dad-5b5f66db3ac3.bin") format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("99b75447-5c27-4d8e-9d86-7c6790e50228.bin") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("5465f87c-01e5-4d5d-81bb-401176803d94.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* devanagari */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("0e38fd92-e394-41a1-b9c8-51c23936739d.bin") format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("5550d6d9-8aa2-47d6-a446-fa7254c2016b.bin") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("03427d28-f7d8-4954-b4c3-634ab226e842.bin") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<script src="de6916ff-52c5-4462-bfb4-6ba84f8598d8.js"></script>
+
+<style>
+:root{
+  --bg:#05070f;
+  --bg-2:#0a0e1a;
+  --ink:#e9eef7;
+  --dim:#7b8597;
+  --line:rgba(120,160,220,.12);
+  --cyan:#3ad6ff;
+  --cyan-d:#1ea7d6;
+  --orange:#ff7a2a;
+  --orange-d:#e85d0c;
+  --blue:#3a7bff;
+  --blue-d:#1f4fd6;
+  --green:#3ddc97;
+  --red:#ff4d6d;
+  --violet:#9b6bff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;overflow:hidden;}
+body{position:relative;}
+
+/* ─── BACKGROUND ATMOSPHERE ────────────────────── */
+.bg-atmos{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(900px 600px at 78% 38%, rgba(58,123,255,.10), transparent 60%),
+    radial-gradient(700px 500px at 22% 75%, rgba(255,122,42,.06), transparent 60%),
+    radial-gradient(1100px 800px at 50% 50%, rgba(58,214,255,.04), transparent 70%),
+    var(--bg);
+}
+.bg-grid{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.32;
+  background-image:
+    linear-gradient(rgba(120,160,220,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120,160,220,.07) 1px, transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 50%, #000 40%, transparent 100%);
+}
+.bg-noise{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+}
+.bg-scan{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.4;
+  background:repeating-linear-gradient(180deg, transparent 0 3px, rgba(255,255,255,.012) 3px 4px);}
+
+/* ─── ROBOT CANVAS ────────────────────── */
+#robot-canvas{position:fixed;inset:0;z-index:5;display:block;}
+
+/* ─── BRAND ────────────────────── */
+.brand{position:fixed;top:24px;left:32px;z-index:50;display:flex;align-items:center;gap:11px;
+  font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:.18em;color:#fff;text-decoration:none;}
+.brand-mark{width:36px;height:36px;display:grid;place-items:center;position:relative;
+  filter:drop-shadow(0 0 12px rgba(58,214,255,.5));}
+.brand-mark svg{width:36px;height:36px;display:block;}
+.brand-mark .hx{stroke:var(--cyan);fill:rgba(58,214,255,.08);stroke-width:1.6;}
+.brand-mark .hx2{stroke:rgba(58,214,255,.4);fill:none;stroke-width:1;}
+.brand-mark .lt{stroke:var(--orange);fill:none;stroke-width:1.8;stroke-linecap:round;}
+.brand-mark .dt{fill:var(--orange);}
+.brand-name{display:flex;flex-direction:column;line-height:1;gap:3px;}
+.brand-name b{font-size:13px;font-weight:800;letter-spacing:.18em;}
+.brand-name small{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.32em;color:var(--cyan);font-weight:400;text-shadow:0 0 6px rgba(58,214,255,.4);}
+
+/* ─── STATUS RAIL TOP-RIGHT ────────────────────── */
+.status-rail{position:fixed;top:24px;right:32px;z-index:50;display:flex;gap:18px;align-items:center;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;}
+.status-rail .pill{padding:6px 11px;border:1px solid var(--line);border-radius:20px;background:rgba(10,14,26,.55);backdrop-filter:blur(10px);}
+.status-rail .pill.live{color:var(--green);border-color:rgba(61,220,151,.35);}
+.status-rail .pill.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:7px;vertical-align:1px;box-shadow:0 0 8px var(--green);animation:pulse 2s ease-in-out infinite;}
+.status-rail .pill.locked{color:var(--orange);border-color:rgba(255,122,42,.35);}
+.status-rail .pill.locked.unlocked{color:var(--green);border-color:rgba(61,220,151,.35);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ─── CORNER MARKERS ────────────────────── */
+.corner{position:fixed;width:28px;height:28px;border:1px solid var(--line);z-index:6;pointer-events:none;}
+.corner.tl{top:16px;left:16px;border-right:none;border-bottom:none;}
+.corner.tr{top:16px;right:16px;border-left:none;border-bottom:none;}
+.corner.bl{bottom:16px;left:16px;border-right:none;border-top:none;}
+.corner.br{bottom:16px;right:16px;border-left:none;border-top:none;}
+
+/* ─── LOGIN PANEL ────────────────────── */
+.login{position:fixed;left:40px;top:50%;transform:translateY(-50%);z-index:40;
+  width:432px;
+  padding:34px 36px 28px;
+  background:linear-gradient(180deg, rgba(10,14,26,.92), rgba(5,7,15,.85));
+  border:1px solid var(--line);
+  border-radius:18px;
+  backdrop-filter:blur(28px) saturate(140%);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.55),
+    0 0 50px rgba(58,214,255,.06),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+.login::before{content:"";position:absolute;left:0;top:32px;bottom:32px;width:2px;
+  background:linear-gradient(180deg, transparent, var(--cyan) 40%, var(--cyan) 60%, transparent);
+  box-shadow:0 0 14px var(--cyan);}
+.login-tag{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;
+  padding:5px 12px;border:1px solid rgba(58,214,255,.3);border-radius:50px;background:rgba(58,214,255,.06);
+  margin-bottom:18px;}
+.login-tag::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);}
+.login h1{font-family:'Orbitron',sans-serif;font-size:38px;font-weight:800;line-height:1.02;color:#fff;margin-bottom:14px;letter-spacing:-.01em;}
+.login h1 .accent{background:linear-gradient(90deg, var(--cyan), var(--blue));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;}
+.login .sub{font-size:14px;color:var(--dim);line-height:1.55;margin-bottom:24px;font-weight:400;}
+.login .sub b{color:var(--ink);font-weight:600;}
+
+/* form */
+.field{position:relative;margin-bottom:14px;}
+.field label{position:absolute;left:14px;top:10px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;pointer-events:none;}
+.field input{width:100%;padding:28px 14px 12px;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:11px;
+  color:#fff;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:500;outline:none;
+  transition:border-color .2s, box-shadow .2s, background .2s;}
+.field input:focus{border-color:var(--cyan);background:rgba(58,214,255,.04);box-shadow:0 0 0 3px rgba(58,214,255,.08);}
+.field input::placeholder{color:rgba(150,160,180,.35);}
+
+.err{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--red);
+  padding:8px 12px;border:1px solid rgba(255,77,109,.3);border-radius:8px;background:rgba(255,77,109,.07);
+  margin-bottom:12px;opacity:0;height:0;overflow:hidden;transition:opacity .2s, height .2s, margin .2s;}
+.err.show{opacity:1;height:auto;margin-bottom:12px;padding:8px 12px;}
+
+.login-btn{width:100%;padding:15px;
+  background:linear-gradient(135deg, rgba(58,214,255,.18), rgba(58,123,255,.18));
+  border:1px solid rgba(58,214,255,.4);border-radius:11px;
+  color:#fff;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:.18em;
+  cursor:pointer;transition:transform .15s, box-shadow .2s, background .2s;text-transform:uppercase;}
+.login-btn:hover{background:linear-gradient(135deg, rgba(58,214,255,.3), rgba(58,123,255,.3));box-shadow:0 0 32px rgba(58,214,255,.3);transform:translateY(-1px);}
+.login-btn:active{transform:translateY(0);}
+.login-btn.success{background:linear-gradient(135deg, rgba(61,220,151,.3), rgba(61,220,151,.2));border-color:rgba(61,220,151,.5);}
+
+/* TaskFlow embed inside login */
+.tf-divider{display:flex;align-items:center;gap:10px;margin:22px 0 12px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;}
+.tf-divider::before,.tf-divider::after{content:"";flex:1;height:1px;background:var(--line);}
+.tf-card{display:block;text-decoration:none;padding:14px 16px;
+  border:1px solid var(--line);border-radius:12px;
+  background:linear-gradient(135deg, rgba(255,122,42,.06), rgba(255,122,42,.02));
+  transition:border-color .2s, transform .15s, box-shadow .2s;
+  position:relative;overflow:hidden;}
+.tf-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,122,42,.18);}
+.tf-card.locked{opacity:.5;cursor:not-allowed;}
+.tf-card.locked:hover{transform:none;border-color:var(--line);box-shadow:none;}
+.tf-row{display:flex;align-items:center;gap:12px;}
+.tf-ico{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;
+  background:linear-gradient(135deg, var(--orange), var(--orange-d));
+  box-shadow:0 0 18px rgba(255,122,42,.4), inset 0 1px 0 rgba(255,255,255,.2);
+  color:#fff;}
+.tf-meta{flex:1;min-width:0;}
+.tf-name{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;color:#fff;}
+.tf-sub{font-size:12px;color:var(--dim);margin-top:2px;}
+.tf-arrow{color:var(--orange);font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;}
+.tf-card.locked .tf-arrow::before{content:"⌬ ";color:var(--dim);}
+
+.login-foot{margin-top:20px;display:flex;justify-content:space-between;align-items:center;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;}
+.login-foot .ok{color:var(--green);}
+.login-foot .hint-key{padding:2px 6px;border:1px solid var(--line);border-radius:4px;color:var(--ink);}
+
+/* ─── BUBBLES ────────────────────── */
+.bubble{position:fixed;z-index:30;width:152px;
+  pointer-events:auto;
+  transform:translate(-50%,-50%);
+  cursor:pointer;
+  transition:filter .25s ease;
+}
+.bubble.locked{cursor:not-allowed;filter:saturate(.4) brightness(.6);}
+.bubble-orb{width:88px;height:88px;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%, rgba(255,255,255,.25), rgba(255,255,255,0) 45%),
+             radial-gradient(circle at 50% 50%, var(--orb-c1, #1c3454), var(--orb-c2,#070a18) 70%);
+  border:1.5px solid var(--orb-ring, rgba(58,214,255,.4));
+  box-shadow:
+    0 0 36px var(--orb-glow, rgba(58,214,255,.35)),
+    inset 0 0 22px rgba(0,0,0,.55),
+    inset 0 2px 6px rgba(255,255,255,.1);
+  display:grid;place-items:center;
+  margin:0 auto;position:relative;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.bubble:hover:not(.locked) .bubble-orb{
+  transform:scale(1.08);
+  box-shadow:0 0 60px var(--orb-glow, rgba(58,214,255,.6)), inset 0 0 22px rgba(0,0,0,.5), inset 0 2px 6px rgba(255,255,255,.15);
+  border-color:var(--orb-glow, var(--cyan));
+}
+.bubble-orb svg{width:34px;height:34px;color:#fff;filter:drop-shadow(0 0 8px var(--orb-glow));}
+.bubble-orb::after{content:"";position:absolute;inset:-6px;border-radius:50%;
+  border:1px dashed var(--orb-ring, rgba(58,214,255,.25));
+  opacity:.55;
+  animation:spin 22s linear infinite;
+}
+.bubble:hover:not(.locked) .bubble-orb::after{opacity:.9;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.bubble-label{margin-top:10px;text-align:center;
+  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;
+  color:#fff;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.8);}
+.bubble-sub{margin-top:2px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase;}
+
+.bubble-line{position:fixed;z-index:25;height:0;pointer-events:none;
+  border-top:1px dashed var(--orb-ring,rgba(58,214,255,.4));
+  opacity:0;transform-origin:left center;
+  transition:opacity .2s ease;}
+.bubble:hover:not(.locked) ~ #lines .bubble-line[data-i],
+.bubble.active ~ #lines .bubble-line{opacity:.7;}
+
+/* tool color themes */
+.bubble[data-tool="gripper"]   { --orb-c1:#7a3508; --orb-c2:#1d0c04; --orb-ring:rgba(255,122,42,.5); --orb-glow:rgba(255,122,42,.55); }
+.bubble[data-tool="io"]        { --orb-c1:#0e4e6e; --orb-c2:#04111c; --orb-ring:rgba(58,214,255,.5);  --orb-glow:rgba(58,214,255,.55);  }
+.bubble[data-tool="register"]  { --orb-c1:#3b1e7a; --orb-c2:#0a0420; --orb-ring:rgba(155,107,255,.55);--orb-glow:rgba(155,107,255,.55); }
+.bubble[data-tool="tool5"]     { --orb-c1:#10543a; --orb-c2:#04140d; --orb-ring:rgba(61,220,151,.55); --orb-glow:rgba(61,220,151,.55); }
+
+/* ─── BOTTOM HINT ────────────────────── */
+.hint-bar{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:50;
+  display:flex;gap:18px;align-items:center;padding:10px 18px;
+  background:rgba(10,14,26,.55);backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:50px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;}
+.hint-bar .k{padding:2px 8px;border:1px solid var(--line);border-radius:5px;color:var(--ink);background:rgba(255,255,255,.02);font-size:10px;}
+.hint-bar .sep{width:1px;height:14px;background:var(--line);}
+
+/* ─── TARGET RETICLE OVER ACTIVE BUBBLE ────────────────────── */
+.reticle{position:fixed;z-index:28;width:160px;height:160px;pointer-events:none;
+  transform:translate(-50%,-50%);opacity:0;transition:opacity .25s ease;}
+.reticle.show{opacity:.85;}
+.reticle::before,.reticle::after{content:"";position:absolute;border:1.5px solid var(--cyan);}
+.reticle::before{inset:0;border-radius:50%;border-style:dashed;animation:spin 8s linear infinite;}
+.reticle::after{inset:36px;border-radius:50%;border-color:rgba(58,214,255,.5);}
+.reticle .tick{position:absolute;background:var(--cyan);box-shadow:0 0 8px var(--cyan);}
+.reticle .tick.t{top:-3px;left:50%;width:1.5px;height:14px;transform:translateX(-50%);}
+.reticle .tick.b{bottom:-3px;left:50%;width:1.5px;height:14px;transform:translateX(-50%);}
+.reticle .tick.l{left:-3px;top:50%;width:14px;height:1.5px;transform:translateY(-50%);}
+.reticle .tick.r{right:-3px;top:50%;width:14px;height:1.5px;transform:translateY(-50%);}
+
+/* hud crosshair under robot - shows current EOAT target */
+.eoat-marker{position:fixed;z-index:28;width:14px;height:14px;pointer-events:none;
+  border:1.5px solid var(--orange);border-radius:50%;transform:translate(-50%,-50%);
+  box-shadow:0 0 12px var(--orange), inset 0 0 6px rgba(255,122,42,.5);
+  opacity:0;transition:opacity .3s;}
+.eoat-marker.show{opacity:.85;}
+
+/* small data readout floating mid-bottom */
+.telemetry{position:fixed;right:32px;bottom:22px;z-index:40;
+  display:grid;grid-template-columns:auto auto;gap:4px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:.08em;}
+.telemetry b{color:var(--cyan);font-weight:500;}
+
+/* loading splash */
+.splash{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;
+  transition:opacity .6s ease, visibility .6s ease;}
+.splash.gone{opacity:0;visibility:hidden;}
+.splash .ring{width:54px;height:54px;border:2px solid rgba(58,214,255,.15);border-top-color:var(--cyan);border-radius:50%;animation:spin 1s linear infinite;}
+.splash .txt{position:absolute;bottom:32%;left:50%;transform:translateX(-50%);font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:.4em;color:var(--cyan);}
+
+/* mobile fallback */
+@media (max-width: 920px){
+  .login{position:relative;left:auto;top:auto;transform:none;margin:80px auto 0;width:calc(100% - 32px);max-width:432px;}
+  body{overflow:auto;}
+  .bubble{display:none;}
+}
+/* ─── TWEAKS PANEL ────────────────────── */
+.twk{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:120;
+  width:260px;max-height:calc(100vh - 120px);
+  display:none;flex-direction:column;
+  background:rgba(8,11,22,.92);
+  border:1px solid rgba(58,214,255,.22);
+  border-radius:14px;
+  backdrop-filter:blur(22px) saturate(160%);
+  box-shadow:0 24px 60px rgba(0,0,0,.55), 0 0 30px rgba(58,214,255,.08);
+  color:var(--ink);font-family:'Rajdhani',sans-serif;overflow:hidden;}
+.twk.open{display:flex;}
+.twk-head{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;border-bottom:1px solid var(--line);cursor:move;user-select:none;}
+.twk-head b{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--cyan);}
+.twk-x{appearance:none;background:transparent;border:0;color:var(--dim);width:24px;height:24px;border-radius:6px;cursor:pointer;font-size:18px;line-height:1;}
+.twk-x:hover{background:rgba(255,255,255,.06);color:var(--ink);}
+.twk-body{padding:10px 14px 14px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:rgba(58,214,255,.25) transparent;}
+.twk-body::-webkit-scrollbar{width:6px;}
+.twk-body::-webkit-scrollbar-thumb{background:rgba(58,214,255,.25);border-radius:3px;}
+.twk-sect{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase;
+  padding-top:6px;border-top:1px dashed var(--line);margin-top:4px;}
+.twk-sect:first-child{padding-top:0;border-top:0;margin-top:0;}
+.twk-row{display:flex;flex-direction:column;gap:6px;}
+.twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;}
+.twk-lbl{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--ink);font-weight:500;}
+.twk-val{color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;font-variant-numeric:tabular-nums;}
+.twk-slider{appearance:none;width:100%;height:22px;background:transparent;outline:none;}
+.twk-slider::-webkit-slider-runnable-track{height:3px;background:rgba(58,214,255,.18);border-radius:2px;}
+.twk-slider::-webkit-slider-thumb{appearance:none;width:14px;height:14px;background:var(--cyan);border-radius:50%;margin-top:-5.5px;box-shadow:0 0 8px var(--cyan);cursor:pointer;}
+.twk-slider::-moz-range-track{height:3px;background:rgba(58,214,255,.18);border-radius:2px;}
+.twk-slider::-moz-range-thumb{width:14px;height:14px;background:var(--cyan);border:0;border-radius:50%;box-shadow:0 0 8px var(--cyan);cursor:pointer;}
+.twk-seg{display:flex;gap:4px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;padding:3px;}
+.twk-seg button{flex:1;appearance:none;background:transparent;border:0;color:var(--dim);
+  padding:6px 4px;font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:5px;}
+.twk-seg button.on{background:rgba(58,214,255,.16);color:var(--cyan);box-shadow:inset 0 0 0 1px rgba(58,214,255,.35);}
+.twk-swatches{display:flex;gap:6px;}
+.twk-sw{width:30px;height:30px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:transform .15s;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15), 0 2px 6px rgba(0,0,0,.4);}
+.twk-sw:hover{transform:translateY(-2px);}
+.twk-sw.on{border-color:var(--cyan);box-shadow:inset 0 1px 0 rgba(255,255,255,.15), 0 0 14px rgba(58,214,255,.4);}
+.twk-toggle{position:relative;width:38px;height:22px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:13px;cursor:pointer;transition:background .2s;}
+.twk-toggle::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--dim);transition:transform .2s, background .2s;}
+.twk-toggle.on{background:rgba(58,214,255,.18);border-color:rgba(58,214,255,.4);}
+.twk-toggle.on::after{transform:translateX(16px);background:var(--cyan);box-shadow:0 0 8px var(--cyan);}
+.twk-btn{appearance:none;width:100%;padding:9px;
+  background:rgba(58,214,255,.08);border:1px solid rgba(58,214,255,.3);border-radius:8px;
+  color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;cursor:pointer;
+  text-transform:uppercase;transition:background .2s;}
+.twk-btn:hover{background:rgba(58,214,255,.16);}
+
+/* ─── ROBOT KINEMATICS PANEL ────────────────────── */
+.robo{position:fixed;left:40px;bottom:24px;z-index:130;
+  width:372px;max-height:calc(100vh - 120px);
+  display:none;flex-direction:column;
+  background:rgba(7,10,20,.94);
+  border:1px solid rgba(255,107,28,.3);
+  border-radius:14px;
+  backdrop-filter:blur(24px) saturate(150%);
+  box-shadow:0 26px 64px rgba(0,0,0,.6), 0 0 36px rgba(255,107,28,.08);
+  color:var(--ink);font-family:'Rajdhani',sans-serif;overflow:hidden;}
+.robo.open{display:flex;}
+.robo-head{display:flex;align-items:center;justify-content:space-between;
+  padding:13px 15px;border-bottom:1px solid var(--line);cursor:move;user-select:none;}
+.robo-head b{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--orange);}
+.robo-tabs{display:flex;gap:4px;padding:8px 12px 0;border-bottom:1px solid var(--line);}
+.robo-tabs button{flex:1;appearance:none;background:transparent;border:0;border-bottom:2px solid transparent;
+  color:var(--dim);padding:8px 4px 9px;cursor:pointer;
+  font:700 9.5px/1 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;transition:color .2s,border-color .2s;}
+.robo-tabs button.on{color:var(--orange);border-bottom-color:var(--orange);}
+.robo-body{padding:14px 15px 16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:rgba(255,107,28,.25) transparent;}
+.robo-body::-webkit-scrollbar{width:6px;}
+.robo-body::-webkit-scrollbar-thumb{background:rgba(255,107,28,.25);border-radius:3px;}
+
+/* mode segmented */
+.robo-mode{display:flex;gap:4px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:3px;}
+.robo-mode button{flex:1;appearance:none;background:transparent;border:0;color:var(--dim);
+  padding:8px 4px;font:700 9.5px/1.2 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:6px;text-align:center;}
+.robo-mode button.on{background:rgba(255,107,28,.16);color:var(--orange);box-shadow:inset 0 0 0 1px rgba(255,107,28,.4);}
+.robo-mode small{display:block;font-size:8px;opacity:.7;margin-top:3px;letter-spacing:.04em;}
+
+/* joint slider rows */
+.jrow{display:flex;flex-direction:column;gap:5px;}
+.jrow-h{display:flex;align-items:baseline;justify-content:space-between;}
+.jrow-h .jn{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:var(--ink);letter-spacing:.06em;}
+.jrow-h .jn small{color:var(--dim);font-family:'JetBrains Mono',monospace;font-weight:400;font-size:9px;letter-spacing:.04em;margin-left:6px;}
+.jrow-h .jv{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange);font-variant-numeric:tabular-nums;}
+.jslider{appearance:none;width:100%;height:18px;background:transparent;outline:none;cursor:pointer;}
+.jslider::-webkit-slider-runnable-track{height:3px;background:rgba(255,107,28,.16);border-radius:2px;}
+.jslider::-webkit-slider-thumb{appearance:none;width:13px;height:13px;background:var(--orange);border-radius:50%;margin-top:-5px;box-shadow:0 0 7px rgba(255,107,28,.6);}
+.jslider::-moz-range-track{height:3px;background:rgba(255,107,28,.16);border-radius:2px;}
+.jslider::-moz-range-thumb{width:13px;height:13px;background:var(--orange);border:0;border-radius:50%;}
+.jslider:disabled{opacity:.5;cursor:default;}
+.jslider:disabled::-webkit-slider-thumb{background:var(--dim);}
+
+.robo-note{font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.6;color:var(--dim);letter-spacing:.03em;
+  padding:9px 11px;border:1px dashed var(--line);border-radius:8px;background:rgba(255,255,255,.015);}
+.robo-note b{color:var(--cyan);font-weight:500;}
+
+/* readout grid */
+.robo-grid{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;}
+.robo-grid span{color:var(--dim);letter-spacing:.06em;}
+.robo-grid b{color:var(--cyan);font-weight:500;text-align:right;font-variant-numeric:tabular-nums;}
+
+/* matrix tables */
+.mtx{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:9.5px;}
+.mtx th{color:var(--orange);font-weight:600;letter-spacing:.08em;text-align:right;padding:3px 6px;border-bottom:1px solid var(--line);}
+.mtx td{color:var(--ink);text-align:right;padding:3px 6px;font-variant-numeric:tabular-nums;border-bottom:1px solid rgba(120,160,220,.06);}
+.mtx td:first-child{color:var(--dim);text-align:left;}
+.mtx .zero{color:rgba(150,160,180,.3);}
+
+.robo-sect{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;
+  padding-top:8px;border-top:1px dashed var(--line);margin-top:2px;}
+.robo-sect:first-child{padding-top:0;border-top:0;margin-top:0;}
+
+/* robot hover affordance hint near canvas */
+.robot-tip{position:fixed;z-index:24;pointer-events:none;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;
+  padding:5px 10px;border:1px solid rgba(58,214,255,.3);border-radius:50px;background:rgba(7,10,20,.7);backdrop-filter:blur(8px);
+  opacity:0;transform:translate(-50%,-50%);transition:opacity .25s;white-space:nowrap;}
+.robot-tip.show{opacity:.92;}
+</style>
+</head>
+<body style="font-family: &quot;JetBrains Mono&quot;; font-size: 32px; background-color: rgb(5, 71, 15)">
+
+
+
+<!-- atmosphere layers -->
+<div class="bg-atmos"></div>
+<div class="bg-grid"></div>
+<div class="bg-noise"></div>
+<div class="bg-scan"></div>
+
+<!-- corners -->
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<!-- brand -->
+<a class="brand" href="#">
+  <div class="brand-mark">
+    <svg viewBox="0 0 36 36">
+      <polygon class="hx" points="18,2 32,10 32,26 18,34 4,26 4,10"></polygon>
+      <polygon class="hx2" points="18,7 27.5,12.5 27.5,23.5 18,29 8.5,23.5 8.5,12.5"></polygon>
+      <path class="lt" d="M13 14 v8 a3 3 0 0 0 3 3 h4"></path>
+      <circle class="dt" cx="13" cy="14" r="1.6"></circle>
+      <circle class="dt" cx="20" cy="25" r="1.6"></circle>
+      <circle cx="23" cy="12" r="1.3" fill="var(--cyan)"></circle>
+    </svg>
+  </div>
+  <div class="brand-name">
+    <b>CESS DYNAMICS</b>
+    <small>ROBOTICS · OS</small>
+  </div>
+</a>
+
+<!-- status -->
+<div class="status-rail">
+  <div class="pill" id="time-pill">— : —</div>
+  <div class="pill live">ROBOT · ONLINE</div>
+  <div class="pill locked" id="lock-pill">⌬ WORKSPACE · OPEN</div>
+</div>
+
+<!-- robot -->
+<canvas id="robot-canvas" style="opacity: 1"></canvas>
+
+<!-- bubble connector lines container -->
+<div id="lines"></div>
+
+<!-- reticle that follows current target -->
+<div class="reticle" id="reticle">
+  <span class="tick t"></span><span class="tick b"></span>
+  <span class="tick l"></span><span class="tick r"></span>
+</div>
+
+<!-- floating EOAT screen marker -->
+<div class="eoat-marker" id="eoat-marker"></div>
+
+<!-- floating "inspect robot" tip -->
+<div class="robot-tip" id="robot-tip">⬡ CLICK ROBOT · KINEMATICS</div>
+
+<!-- BUBBLES -->
+<div class="bubble" data-tool="gripper" data-href="tools/gripper-selection.html" data-part="eoat">
+  <div class="bubble-orb">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 4v6M17 4v6"></path>
+      <rect x="5" y="10" width="14" height="4" rx="1"></rect>
+      <path d="M8 14v3a4 4 0 0 0 8 0v-3"></path>
+      <circle cx="12" cy="6" r="1.2" fill="currentColor"></circle>
+    </svg>
+  </div>
+  <div class="bubble-label">EOAT</div>
+  <div class="bubble-sub">Gripper Select</div>
+</div>
+
+<div class="bubble" data-tool="io" data-href="tools/io-mapping.html" data-part="base">
+  <div class="bubble-orb">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="6" width="8" height="12" rx="1"></rect>
+      <rect x="13" y="6" width="8" height="12" rx="1"></rect>
+      <path d="M11 9h2M11 12h2M11 15h2"></path>
+      <path d="M6 9h2M6 12h2M6 15h2"></path>
+      <path d="M16 9h2M16 12h2M16 15h2"></path>
+    </svg>
+  </div>
+  <div class="bubble-label">I/O MAP</div>
+  <div class="bubble-sub">Signal Mapping</div>
+</div>
+
+<div class="bubble" data-tool="register" data-href="tools/register-map.html" data-part="forearm">
+  <div class="bubble-orb">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+      <path d="M3 9h18M3 14h18M9 4v16M15 4v16"></path>
+    </svg>
+  </div>
+  <div class="bubble-label">REGISTERS</div>
+  <div class="bubble-sub">Memory Map</div>
+</div>
+
+<div class="bubble" data-tool="flow" data-href="tools/flow-craft.html" data-part="upperarm">
+  <div class="bubble-orb" style="font-family: &quot;Times New Roman&quot;; background-size: auto; background-position: center bottom">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 100px; height: 100px;">
+      <circle cx="6" cy="6" r="2.4"></circle><circle cx="18" cy="6" r="2.4"></circle><circle cx="12" cy="18" r="2.4" style="stroke: rgb(241, 5, 5); stroke-width: 500px"></circle>
+      <path d="M6 8.4v3a2 2 0 0 0 2 2h2.5M18 8.4v3a2 2 0 0 1-2 2h-2.5"></path>
+    </svg>
+  </div>
+  <div class="bubble-label">FLOW CRAFT</div>
+  <div class="bubble-sub">Routine Builder</div>
+</div>
+
+<!-- LOGIN -->
+<div class="login">
+  <div class="login-tag">Engineering · Automation · OS</div>
+  <h1>System<br><span class="accent">Access</span></h1>
+  <p class="sub">Open any floating tool directly — hover a bubble and the arm reveals the matching robot part. <b>Task Flow</b> stays locked until you sign in.</p>
+
+  <form id="login-form" autocomplete="off">
+    <div class="field">
+      <label>Operator ID</label>
+      <input id="user" type="text" placeholder="khush@cessdynamics" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Passkey</label>
+      <input id="pass" type="password" placeholder="••••••••" autocomplete="off">
+    </div>
+    <div class="err" id="err">ACCESS DENIED · INVALID CREDENTIAL</div>
+    <button class="login-btn" id="login-btn" type="submit">ENTER WORKSPACE →</button>
+  </form>
+
+  <div class="tf-divider">Locked · Requires Sign-in</div>
+  <a class="tf-card locked" id="tf-card" href="#/tools/task-flow">
+    <div class="tf-row">
+      <div class="tf-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="6" height="6" rx="1"></rect>
+          <rect x="15" y="3" width="6" height="6" rx="1"></rect>
+          <rect x="9" y="15" width="6" height="6" rx="1"></rect>
+          <path d="M6 9v3a2 2 0 0 0 2 2h2"></path>
+          <path d="M18 9v3a2 2 0 0 1-2 2h-2"></path>
+        </svg>
+      </div>
+      <div class="tf-meta">
+        <div class="tf-name">TASK FLOW</div>
+        <div class="tf-sub" id="tf-sub">Locked · sign in to author task sequences</div>
+      </div>
+      <div class="tf-arrow">→</div>
+    </div>
+  </a>
+
+  <div class="login-foot">
+    <span><span class="ok">⌁</span> ENCRYPTED · SSO READY</span>
+    <span><span class="hint-key">⏎</span> SUBMIT</span>
+  </div>
+</div>
+
+<!-- bottom hint -->
+<div class="hint-bar">
+  <span><span class="k">HOVER</span> tool — reveals robot part</span>
+  <span class="sep"></span>
+  <span><span class="k">CLICK</span> tool — opens it</span>
+  <span class="sep"></span>
+  <span><span class="k">CLICK</span> robot — kinematics</span>
+  <span class="sep"></span>
+  <span>STATUS · <span id="aim-readout" style="color:var(--cyan)">IDLE</span></span>
+</div>
+
+<!-- telemetry -->
+<div class="telemetry">
+  <span>J1</span><b id="t1">+0.00°</b>
+  <span>J2</span><b id="t2">+0.00°</b>
+  <span>J3</span><b id="t3">+0.00°</b>
+  <span>J4</span><b id="t4">+0.00°</b>
+  <span>J5</span><b id="t5">+0.00°</b>
+  <span>J6</span><b id="t6">+0.00°</b>
+  <span>EOAT</span><b id="te">— —</b>
+</div>
+
+<!-- ROBOT KINEMATICS PANEL (opens on robot click) -->
+<div class="robo" id="robo">
+  <div class="robo-head" id="robo-head">
+    <b>⬡ ROBOT · KINEMATICS</b>
+    <button class="twk-x" id="robo-x" title="Close">×</button>
+  </div>
+  <div class="robo-tabs">
+    <button data-tab="control" class="on">CONTROL</button>
+    <button data-tab="dh">DH · FK</button>
+    <button data-tab="jac">JACOBIAN</button>
+    <button data-tab="motion">MOTION</button>
+    <button data-tab="scene">SCENE</button>
+  </div>
+  <div class="robo-body" id="robo-body"></div>
+</div>
+
+<!-- TWEAKS PANEL -->
+<div class="twk" id="twk">
+  <div class="twk-head" id="twk-head">
+    <b>✨ TWEAKS</b>
+    <button class="twk-x" id="twk-x" title="Close">×</button>
+  </div>
+  <div class="twk-body" id="twk-body"></div>
+</div>
+
+<!-- splash -->
+<div class="splash" id="splash">
+  <div class="ring"></div>
+  <div class="txt">INITIALISING · KINEMATICS</div>
+</div>
+
+<script>
+/* =====================================================================
+   CESS DYNAMICS · LANDING ROBOT SCENE
+   - Industrial 6-axis articulated robot (blue + orange, CAD-style edges)
+   - 4 orbiting bubble anchors in 3D, projected to screen for HTML bubbles
+   - IK on J1/J2/J3 + wrist pitch on J5 so the EOAT actually points at target
+   - Auth-gated bubble clicks (khush@cessdynamics / pass123)
+   ===================================================================== */
+(function(){
+'use strict';
+const THREE = window.THREE;
+
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  TOOL · URL CONFIG  ── edit these to point bubbles elsewhere    ║
+   ║  Each key matches a [data-tool] on a .bubble in the markup.     ║
+   ║  Paste an absolute URL (https://…), or a relative file path.    ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+const TOOL_URLS = {
+  gripper:  "tools/gripper-selection.html",   // EOAT · Gripper Selection
+  io:       "tools/io-mapping.html",          // I/O Mapping
+  register: "tools/register-map.html",        // Register Map
+  flow:     "tools/flow-craft.html",          // Flow Craft (bubble)
+  taskflow: "tools/task-flow.html"            // Task Flow (login-gated card)
+};
+
+// apply config to markup so re-pointing tools is a one-line change above
+document.querySelectorAll('.bubble[data-tool]').forEach(b => {
+  const u = TOOL_URLS[b.dataset.tool];
+  if(u) b.dataset.href = u;
+});
+{ const tf = document.getElementById('tf-card');
+  if(tf && TOOL_URLS.taskflow) tf.setAttribute('href', TOOL_URLS.taskflow); }
+
+/* Suppress the harmless cross-origin GPU/shader-compile noise that WebGL emits
+   while programs link during the first ~2.5s (behind the splash). Tightly scoped:
+   only anonymous "Script error." with no filename, only during startup. Real,
+   attributable errors always pass through. */
+const _t0 = performance.now();
+window.addEventListener('error', function(ev){
+  if(performance.now() - _t0 < 2500 && ev && ev.message === 'Script error.' && !ev.filename){
+    ev.stopImmediatePropagation();
+    ev.preventDefault();
+    return true;
+  }
+}, true);
+
+/* =================================================================
+   SCENE / RENDERER / CAMERA
+   ================================================================= */
+const canvas   = document.getElementById('robot-canvas');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance', preserveDrawingBuffer:true});
+window.__renderer = renderer;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace  = THREE.SRGBColorSpace;
+renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.18;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
+camera.position.set(0, 3.2, 8.6);
+camera.lookAt(0, 0.9, 0);
+
+function resize(){
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  // camera position itself is owned by applyTweaks() (set at startup + on every tweak change)
+}
+window.addEventListener('resize', resize); resize();
+
+/* =================================================================
+   LIGHTING
+   ================================================================= */
+scene.add(new THREE.HemisphereLight(0x6a82b8, 0x080a14, 0.55));
+
+const key = new THREE.DirectionalLight(0xffffff, 1.25);
+key.position.set(5, 9, 6);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+const sd = 5;
+key.shadow.camera.left = -sd; key.shadow.camera.right = sd;
+key.shadow.camera.top  =  sd; key.shadow.camera.bottom = -sd;
+key.shadow.camera.near = 1; key.shadow.camera.far = 25;
+key.shadow.bias = -0.0005;
+scene.add(key);
+
+const rim = new THREE.DirectionalLight(0x3ad6ff, 0.85);
+rim.position.set(-7, 4, -5);
+scene.add(rim);
+
+const fill = new THREE.DirectionalLight(0xff7a2a, 0.42);
+fill.position.set(-3, 2, 6);
+scene.add(fill);
+
+const under = new THREE.PointLight(0x3ad6ff, 0.45, 4);
+under.position.set(0, 0.2, 1.5);
+scene.add(under);
+
+/* =================================================================
+   GROUND
+   ================================================================= */
+// shadow catcher
+const shadowPlane = new THREE.Mesh(
+  new THREE.CircleGeometry(8, 64),
+  new THREE.ShadowMaterial({opacity:0.55})
+);
+shadowPlane.rotation.x = -Math.PI/2;
+shadowPlane.receiveShadow = true;
+scene.add(shadowPlane);
+
+// subtle disk under robot
+const disk = new THREE.Mesh(
+  new THREE.CircleGeometry(2.3, 64),
+  new THREE.MeshStandardMaterial({color:0x0a1428, roughness:0.95, metalness:0.05, transparent:true, opacity:0.5})
+);
+disk.rotation.x = -Math.PI/2; disk.position.y = 0.001;
+disk.receiveShadow = true;
+scene.add(disk);
+
+// glowing ring
+const ring = new THREE.Mesh(
+  new THREE.RingGeometry(2.05, 2.2, 64),
+  new THREE.MeshBasicMaterial({color:0x3ad6ff, transparent:true, opacity:0.35, side:THREE.DoubleSide})
+);
+ring.rotation.x = -Math.PI/2; ring.position.y = 0.005;
+scene.add(ring);
+
+// inner cross marks
+for(let i=0; i<4; i++){
+  const tick = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.04, 0.4),
+    new THREE.MeshBasicMaterial({color:0x3ad6ff, transparent:true, opacity:0.35})
+  );
+  tick.rotation.x = -Math.PI/2;
+  tick.rotation.z = i * Math.PI/2;
+  tick.position.set(Math.sin(i*Math.PI/2) * 1.8, 0.006, Math.cos(i*Math.PI/2) * 1.8);
+  scene.add(tick);
+}
+
+/* =================================================================
+   MATERIALS
+   ================================================================= */
+const matBlue   = new THREE.MeshStandardMaterial({color:0x1c4a96, metalness:0.55, roughness:0.36});
+const matBlueD  = new THREE.MeshStandardMaterial({color:0x143868, metalness:0.6,  roughness:0.42});
+const matOrange = new THREE.MeshStandardMaterial({color:0xff6b1c, metalness:0.42, roughness:0.5});
+const matOrangeD= new THREE.MeshStandardMaterial({color:0xc25214, metalness:0.5,  roughness:0.55});
+const matDark   = new THREE.MeshStandardMaterial({color:0x21252e, metalness:0.85, roughness:0.32});
+const matSilver = new THREE.MeshStandardMaterial({color:0xc8ccd2, metalness:0.92, roughness:0.18});
+const matBlack  = new THREE.MeshStandardMaterial({color:0x0d1018, metalness:0.6,  roughness:0.4});
+
+function addEdges(mesh, opts){
+  opts = opts || {};
+  const eg = new THREE.EdgesGeometry(mesh.geometry, opts.angle || 28);
+  const lm = new THREE.LineBasicMaterial({color: opts.color || 0x040b14, transparent:true, opacity: opts.opacity || 0.55});
+  const lines = new THREE.LineSegments(eg, lm);
+  mesh.add(lines);
+  return lines;
+}
+function mk(geo, mat, opts){
+  opts = opts || {};
+  const m = new THREE.Mesh(geo, mat);
+  if(opts.castShadow !== false) m.castShadow = true;
+  if(opts.receiveShadow !== false) m.receiveShadow = true;
+  if(opts.edges !== false) addEdges(m, opts.edges || {});
+  return m;
+}
+
+/* =================================================================
+   BUILD ROBOT — INDUSTRIAL 6-AXIS
+   joint hierarchy: pedestal → j1(yaw) → j2(pitch) → j3(pitch) → j4(roll) → j5(pitch) → j6(roll) → EOAT
+   ================================================================= */
+const robot = new THREE.Group();
+robot.position.x = 0;     // robot at origin
+scene.add(robot);
+
+/* ── PEDESTAL ───────────────────────────── */
+const ped = new THREE.Group();
+robot.add(ped);
+
+const pedRing = mk(new THREE.CylinderGeometry(0.62, 0.7, 0.08, 36), matDark);
+pedRing.position.y = 0.04; ped.add(pedRing);
+
+const pedMain = mk(new THREE.CylinderGeometry(0.52, 0.58, 0.16, 36), matBlue);
+pedMain.position.y = 0.16; ped.add(pedMain);
+
+const pedCollar = mk(new THREE.CylinderGeometry(0.5, 0.5, 0.04, 36), matBlueD);
+pedCollar.position.y = 0.26; ped.add(pedCollar);
+
+const pedTop = mk(new THREE.CylinderGeometry(0.48, 0.48, 0.06, 36), matDark);
+pedTop.position.y = 0.31; ped.add(pedTop);
+
+// bolt circle
+for(let i=0;i<10;i++){
+  const a = i/10 * Math.PI*2;
+  const bolt = mk(new THREE.CylinderGeometry(0.022, 0.022, 0.04, 8), matSilver, {edges:false});
+  bolt.position.set(Math.cos(a)*0.44, 0.34, Math.sin(a)*0.44);
+  ped.add(bolt);
+}
+
+// nameplate (small dark rectangle)
+const plate = mk(new THREE.BoxGeometry(0.22, 0.06, 0.005), matBlack, {edges:false});
+plate.position.set(0, 0.18, 0.585);
+ped.add(plate);
+
+/* ── J1 ROTATING DRUM (yaw around Y) ───────────────────────────── */
+const j1 = new THREE.Group();
+j1.position.y = 0.34;
+ped.add(j1);
+
+const drum = mk(new THREE.CylinderGeometry(0.42, 0.46, 0.5, 36), matBlue);
+drum.position.y = 0.25; j1.add(drum);
+
+const drumStripe = mk(new THREE.CylinderGeometry(0.421, 0.421, 0.06, 36), matOrange, {edges:false});
+drumStripe.position.y = 0.48; j1.add(drumStripe);
+
+const drumCap = mk(new THREE.CylinderGeometry(0.4, 0.4, 0.05, 36), matBlueD);
+drumCap.position.y = 0.52; j1.add(drumCap);
+
+/* shoulder casting (the L-shape that holds J2 pivot) */
+const shoulder = mk(new THREE.BoxGeometry(0.74, 0.42, 0.5), matBlue);
+shoulder.position.set(0, 0.79, 0); j1.add(shoulder);
+
+// bevel block at top (chamfer effect via cylinder)
+const shCham = mk(new THREE.CylinderGeometry(0.25, 0.25, 0.74, 24), matBlue);
+shCham.rotation.z = Math.PI/2;
+shCham.position.set(0, 1.0, 0); j1.add(shCham);
+
+// front-facing extension
+const shExt = mk(new THREE.BoxGeometry(0.32, 0.22, 0.6), matBlueD);
+shExt.position.set(0, 0.95, 0.05); j1.add(shExt);
+
+/* J2 motor caps — orange disc on right side, blue on left */
+const j2CapR = mk(new THREE.CylinderGeometry(0.24, 0.24, 0.12, 32), matOrange);
+j2CapR.rotation.z = Math.PI/2;
+j2CapR.position.set(0.43, 1.0, 0);
+j1.add(j2CapR);
+const j2CapRBolt = mk(new THREE.CylinderGeometry(0.14, 0.14, 0.04, 16), matDark);
+j2CapRBolt.rotation.z = Math.PI/2;
+j2CapRBolt.position.set(0.51, 1.0, 0);
+j1.add(j2CapRBolt);
+// orange ring around it
+const j2CapRRing = mk(new THREE.TorusGeometry(0.245, 0.018, 8, 32), matDark, {edges:false});
+j2CapRRing.rotation.y = Math.PI/2;
+j2CapRRing.position.set(0.495, 1.0, 0);
+j1.add(j2CapRRing);
+
+const j2CapL = mk(new THREE.CylinderGeometry(0.24, 0.24, 0.12, 32), matBlueD);
+j2CapL.rotation.z = Math.PI/2;
+j2CapL.position.set(-0.43, 1.0, 0);
+j1.add(j2CapL);
+const j2CapLDot = mk(new THREE.CylinderGeometry(0.07, 0.07, 0.03, 16), matSilver, {edges:false});
+j2CapLDot.rotation.z = Math.PI/2;
+j2CapLDot.position.set(-0.50, 1.0, 0);
+j1.add(j2CapLDot);
+
+/* ── J2 PIVOT (upper arm rotates around X) ───────────────────────────── */
+const j2 = new THREE.Group();
+j2.position.set(0, 1.0, 0);
+j1.add(j2);
+
+const armLen = 1.45;
+
+// J2 hub (the pivot collar around the arm base)
+const j2Hub = mk(new THREE.CylinderGeometry(0.20, 0.20, 0.46, 32), matBlue);
+j2Hub.rotation.z = Math.PI/2;
+j2.add(j2Hub);
+
+// upper arm — thick rectangular link
+const upperArm = mk(new THREE.BoxGeometry(0.28, armLen, 0.36), matBlue);
+upperArm.position.set(0, armLen/2 + 0.05, 0);
+j2.add(upperArm);
+
+// arm side stripe (orange)
+const armStripe = mk(new THREE.BoxGeometry(0.281, armLen*0.85, 0.06), matOrange, {edges:false});
+armStripe.position.set(0, armLen/2 + 0.05, 0.185);
+j2.add(armStripe);
+
+// rib detail
+for(let i=0; i<3; i++){
+  const rib = mk(new THREE.BoxGeometry(0.30, 0.04, 0.38), matBlueD, {edges:false});
+  rib.position.set(0, 0.3 + i*0.45, 0);
+  j2.add(rib);
+}
+
+// cable conduit on back of arm
+const conduit = mk(new THREE.CylinderGeometry(0.045, 0.045, armLen*0.82, 16), matBlack, {edges:false});
+conduit.position.set(-0.17, armLen/2 + 0.05, -0.16);
+j2.add(conduit);
+for(let i=0; i<3; i++){
+  const clamp = mk(new THREE.TorusGeometry(0.06, 0.012, 8, 16), matSilver, {edges:false});
+  clamp.rotation.y = Math.PI/2;
+  clamp.position.set(-0.17, 0.3 + i*0.45, -0.16);
+  j2.add(clamp);
+}
+
+/* ── J3 ELBOW PIVOT ───────────────────────────── */
+const j3 = new THREE.Group();
+j3.position.set(0, armLen + 0.1, 0);
+j2.add(j3);
+
+// J3 hub - orange motor cluster
+const j3HubBlue = mk(new THREE.CylinderGeometry(0.22, 0.22, 0.42, 32), matBlueD);
+j3HubBlue.rotation.z = Math.PI/2;
+j3.add(j3HubBlue);
+
+const j3CapR = mk(new THREE.CylinderGeometry(0.18, 0.20, 0.16, 32), matOrange);
+j3CapR.rotation.z = Math.PI/2;
+j3CapR.position.set(0.28, 0, 0);
+j3.add(j3CapR);
+const j3CapRBolt = mk(new THREE.CylinderGeometry(0.10, 0.10, 0.04, 16), matDark);
+j3CapRBolt.rotation.z = Math.PI/2;
+j3CapRBolt.position.set(0.38, 0, 0);
+j3.add(j3CapRBolt);
+
+const j3CapL = mk(new THREE.CylinderGeometry(0.18, 0.20, 0.16, 32), matOrange);
+j3CapL.rotation.z = Math.PI/2;
+j3CapL.position.set(-0.28, 0, 0);
+j3.add(j3CapL);
+const j3CapLBolt = mk(new THREE.CylinderGeometry(0.10, 0.10, 0.04, 16), matDark);
+j3CapLBolt.rotation.z = Math.PI/2;
+j3CapLBolt.position.set(-0.38, 0, 0);
+j3.add(j3CapLBolt);
+
+/* forearm — cantilever in +Z, length L3 */
+const foreLen = 1.25;
+const forearm = mk(new THREE.BoxGeometry(0.24, 0.30, foreLen), matBlue);
+forearm.position.set(0, 0, foreLen/2 + 0.05);
+j3.add(forearm);
+
+// forearm side stripe (orange)
+const foreStripe = mk(new THREE.BoxGeometry(0.06, 0.301, foreLen*0.8), matOrange, {edges:false});
+foreStripe.position.set(0.125, 0, foreLen/2 + 0.05);
+j3.add(foreStripe);
+
+// taper toward wrist (smaller block)
+const foreTip = mk(new THREE.BoxGeometry(0.18, 0.22, 0.32), matBlue);
+foreTip.position.set(0, 0, foreLen + 0.05 + 0.16);
+j3.add(foreTip);
+
+// cable bundle along forearm bottom
+const fCable = mk(new THREE.CylinderGeometry(0.03, 0.03, foreLen*0.82, 12), matBlack, {edges:false});
+fCable.rotation.x = Math.PI/2;
+fCable.position.set(0, -0.17, foreLen/2 + 0.05);
+j3.add(fCable);
+
+/* ── J4 WRIST ROLL (around forearm Z axis) ───────────────────────────── */
+const j4 = new THREE.Group();
+j4.position.set(0, 0, foreLen + 0.05 + 0.32);
+j3.add(j4);
+
+// wrist tube (silver)
+const wristTube = mk(new THREE.CylinderGeometry(0.10, 0.10, 0.20, 28), matSilver);
+wristTube.rotation.x = Math.PI/2;
+wristTube.position.set(0, 0, 0.1);
+j4.add(wristTube);
+
+// dark ring
+const wristRing = mk(new THREE.TorusGeometry(0.105, 0.014, 8, 28), matDark, {edges:false});
+wristRing.position.set(0, 0, 0.2);
+j4.add(wristRing);
+
+/* ── J5 WRIST PITCH ───────────────────────────── */
+const j5 = new THREE.Group();
+j5.position.set(0, 0, 0.24);
+j4.add(j5);
+
+// orange transverse housing
+const j5Hub = mk(new THREE.CylinderGeometry(0.115, 0.115, 0.30, 28), matOrange);
+j5Hub.rotation.z = Math.PI/2;
+j5.add(j5Hub);
+
+const j5HubCap = mk(new THREE.CylinderGeometry(0.07, 0.07, 0.32, 16), matDark, {edges:false});
+j5HubCap.rotation.z = Math.PI/2;
+j5.add(j5HubCap);
+
+// front extension
+const j5Front = mk(new THREE.BoxGeometry(0.18, 0.16, 0.16), matOrangeD);
+j5Front.position.set(0, 0, 0.10);
+j5.add(j5Front);
+
+/* ── J6 ROLL ───────────────────────────── */
+const j6 = new THREE.Group();
+j6.position.set(0, 0, 0.20);
+j5.add(j6);
+
+// flange
+const flange = mk(new THREE.CylinderGeometry(0.075, 0.085, 0.06, 28), matSilver);
+flange.rotation.x = Math.PI/2;
+flange.position.set(0, 0, 0.03);
+j6.add(flange);
+
+// bolt circle on flange
+for(let i=0; i<6; i++){
+  const a = i/6 * Math.PI*2;
+  const b = mk(new THREE.CylinderGeometry(0.008, 0.008, 0.03, 8), matDark, {edges:false});
+  b.rotation.x = Math.PI/2;
+  b.position.set(Math.cos(a)*0.05, Math.sin(a)*0.05, 0.05);
+  j6.add(b);
+}
+
+/* ── EOAT — PARALLEL JAW GRIPPER ───────────────────────────── */
+const eoat = new THREE.Group();
+eoat.position.set(0, 0, 0.06);
+j6.add(eoat);
+
+// mount plate
+const palm = mk(new THREE.BoxGeometry(0.20, 0.16, 0.06), matDark);
+palm.position.set(0, 0, 0.03);
+eoat.add(palm);
+
+// body
+const palmBody = mk(new THREE.BoxGeometry(0.16, 0.13, 0.11), matDark);
+palmBody.position.set(0, 0, 0.115);
+eoat.add(palmBody);
+
+// orange accent
+const palmAcc = mk(new THREE.BoxGeometry(0.165, 0.04, 0.11), matOrange, {edges:false});
+palmAcc.position.set(0, 0.085, 0.115);
+eoat.add(palmAcc);
+
+// rails
+for(const x of [-0.05, 0.05]){
+  const rail = mk(new THREE.CylinderGeometry(0.012, 0.012, 0.13, 12), matSilver, {edges:false});
+  rail.rotation.x = Math.PI/2;
+  rail.position.set(x, 0, 0.20);
+  eoat.add(rail);
+}
+
+// indicator LED
+const led = new THREE.Mesh(
+  new THREE.SphereGeometry(0.018, 12, 12),
+  new THREE.MeshBasicMaterial({color:0x3ad6ff})
+);
+led.position.set(0.06, 0.072, 0.07);
+eoat.add(led);
+
+// fingers
+function mkFinger(side){
+  const g = new THREE.Group();
+  const body = mk(new THREE.BoxGeometry(0.045, 0.11, 0.16), matDark);
+  body.position.set(0, 0, 0.08);
+  g.add(body);
+  const pad = mk(new THREE.BoxGeometry(0.028, 0.09, 0.04), matOrange);
+  pad.position.set(side === 'L' ? 0.018 : -0.018, 0, 0.16);
+  g.add(pad);
+  return g;
+}
+const fingerL = mkFinger('L');
+fingerL.position.set(-0.05, 0, 0.24);
+eoat.add(fingerL);
+const fingerR = mkFinger('R');
+fingerR.position.set(0.05, 0, 0.24);
+eoat.add(fingerR);
+
+// tip helper
+const eoatTip = new THREE.Object3D();
+eoatTip.position.set(0, 0, 0.34);
+eoat.add(eoatTip);
+
+const J = {j1, j2, j3, j4, j5, j6, eoat, eoatTip, fingerL, fingerR};
+
+/* =================================================================
+   PART-REVEAL SYSTEM  (Ather-style: hover a tool → reveal robot part)
+   Clone every mesh material so parts can glow / dim independently,
+   classify each mesh into a kinematic group, integrate with Tweaks colors.
+   ================================================================= */
+const PART_GLOW = { eoat:0xff6b1c, base:0x3ad6ff, forearm:0x9b6bff, upperarm:0x3ddc97 };
+var PART_GLOW_REF = PART_GLOW;   // exposed so applyTweaks can repaint per-bubble glow colours
+var floorGlowOn = true;
+
+function getPartGroup(obj){
+  let o = obj, underJ4=false, underJ3=false, underJ2=false;
+  while(o){
+    if(o === eoat || o === j4) underJ4 = true;
+    if(o === j3) underJ3 = true;
+    if(o === j2) underJ2 = true;
+    o = o.parent;
+  }
+  if(underJ4) return 'eoat';
+  if(underJ3) return 'forearm';
+  if(underJ2) return 'upperarm';
+  return 'base';
+}
+
+const tracked = [];
+robot.traverse(o => {
+  if(o.isMesh && o.material && o.material.color){
+    const src = o.material;
+    let kind = 'other', shade = 1;
+    if(src === matBlue){ kind='blue'; }
+    else if(src === matBlueD){ kind='blue'; shade=0.65; }
+    else if(src === matOrange){ kind='orange'; }
+    else if(src === matOrangeD){ kind='orange'; shade=0.75; }
+    o.material = src.clone();
+    o.userData.kind  = kind;
+    o.userData.shade = shade;
+    o.userData.grp   = getPartGroup(o);
+    o.userData.base  = o.material.color.clone();
+    o.userData.dim   = 1;
+    o.userData.emis  = 0;
+    o.material.emissive = new THREE.Color(PART_GLOW[o.userData.grp] || 0x3ad6ff);
+    o.material.emissiveIntensity = 0;
+    tracked.push(o);
+  }
+});
+
+function recolorTracked(){
+  const blue   = new THREE.Color(T.bodyColor);
+  const orange = new THREE.Color(T.accentColor);
+  for(const m of tracked){
+    if(m.userData.kind === 'blue')   m.userData.base.copy(blue).multiplyScalar(m.userData.shade);
+    else if(m.userData.kind === 'orange') m.userData.base.copy(orange).multiplyScalar(m.userData.shade);
+  }
+}
+
+function revealStep(k){
+  for(const m of tracked){
+    let wantDim = 1, wantEmis = 0;
+    if(hoverPart){
+      if(m.userData.grp === hoverPart){ wantDim = 1.28; wantEmis = 0.62; }
+      else { wantDim = 0.26; wantEmis = 0; }
+    }
+    m.userData.dim  += (wantDim  - m.userData.dim ) * k;
+    m.userData.emis += (wantEmis - m.userData.emis) * k;
+    m.material.color.copy(m.userData.base).multiplyScalar(m.userData.dim);
+    // emissive colour follows the live (tweakable) bubble colour for that part
+    const glowHex = PART_GLOW_REF[m.userData.grp];
+    if(glowHex !== undefined) m.material.emissive.setHex(glowHex);
+    m.material.emissiveIntensity = m.userData.emis;
+  }
+  const baseHot = hoverPart === 'base';
+  ring.material.opacity += (((baseHot ? 0.9 : (floorGlowOn ? 0.35 : 0))) - ring.material.opacity) * k;
+  under.intensity += (((baseHot ? 1.6 : 0.45)) - under.intensity) * k;
+}
+
+/* =================================================================
+   BUBBLE 3D ANCHORS — STATIC fixed-coordinate targets
+   ================================================================= */
+const anchorContainer = new THREE.Group();
+anchorContainer.position.copy(robot.position);
+scene.add(anchorContainer);
+
+const bubbleEls = Array.from(document.querySelectorAll('.bubble'));
+
+// Hand-picked positions in robot frame.
+// All within comfortable reach of the arm (≈2.4–2.7 m from shoulder).
+// Spread around screen so the robot has to rotate distinctly for each.
+const BUBBLE_LAYOUTS = {
+  // order: [gripper/EOAT, io/BASE, register/FOREARM, flow/UPPERARM]
+  // SURROUND: 2 on the robot's RIGHT (+X), 2 on the LEFT (−X)
+  arc: [
+    new THREE.Vector3( 2.1, 2.9,  0.6),   // EOAT  — RIGHT, high
+    new THREE.Vector3(-2.1, 1.5,  0.7),   // I/O   — LEFT, mid
+    new THREE.Vector3( 2.0, 0.9,  0.9),   // REG   — RIGHT, low
+    new THREE.Vector3(-2.0, 2.7,  0.5)    // FLOW  — LEFT, high
+  ],
+  tight: [
+    new THREE.Vector3( 1.8, 2.7,  0.6),   // RIGHT high
+    new THREE.Vector3(-1.8, 1.5,  0.7),   // LEFT  mid
+    new THREE.Vector3( 1.7, 0.9,  0.9),   // RIGHT low
+    new THREE.Vector3(-1.7, 2.5,  0.5)    // LEFT  high
+  ],
+  wide: [
+    new THREE.Vector3( 2.6, 3.0,  0.7),   // RIGHT high
+    new THREE.Vector3(-2.6, 1.5,  0.8),   // LEFT  mid
+    new THREE.Vector3( 2.4, 0.7,  1.1),   // RIGHT low
+    new THREE.Vector3(-2.4, 2.8,  0.5)    // LEFT  high
+  ]
+};
+
+const anchors = bubbleEls.map((el, i) => ({
+  el,
+  obj: new THREE.Object3D(),
+  basePos: new THREE.Vector3()
+}));
+anchors.forEach(a => anchorContainer.add(a.obj));
+
+function applyBubbleLayout(name){
+  const pts = BUBBLE_LAYOUTS[name] || BUBBLE_LAYOUTS.arc;
+  for(let i = 0; i < anchors.length; i++){
+    const p = pts[i % pts.length];
+    anchors[i].basePos.copy(p);
+    anchors[i].obj.position.copy(p);
+  }
+}
+applyBubbleLayout('arc');
+
+/* =================================================================
+   IK SOLVER  —  exact tip placement
+   Solve so the EOAT *tip* lands on the bubble (not just the wrist).
+   Approach direction = from shoulder toward bubble (natural reaching pose).
+   ================================================================= */
+
+// Measured rigid lengths along the arm chain at the rest pose.
+const SHOULDER_Y = robot.position.y + 0.34 + 1.0;      // world Y of J2 pivot
+const L_UPPER    = armLen + 0.1;                        // J2 → J3 (shoulder → elbow)  ≈1.55
+const L_FORE     = foreLen + 0.05 + 0.32 + 0.24;        // J3 → J5 (elbow → wrist)     ≈1.86
+const L_TOOL     = 0.20 + 0.06 + 0.34;                  // J5 → EOAT tip               ≈0.60
+
+const jt = {a1:0, a2:0, a3:0, a4:0, a5:0, a6:0}; // joint targets
+const cur= {a1:0, a2:0, a3:0, a4:0, a5:0, a6:0}; // smoothed (lerped) current
+
+function solveIK(target){
+  // target in robot's local frame (robot at robot.position)
+  const tx = target.x - robot.position.x;
+  const ty = target.y - robot.position.y;
+  const tz = target.z - robot.position.z;
+
+  // shoulder (J2 pivot) in robot frame
+  const Sy = SHOULDER_Y - robot.position.y;
+
+  // PRESENTATION APPROACH DIRECTION —
+  // The EOAT "presents" toward the viewer at each bubble: tool +Z aims from the
+  // target back toward the camera, with a downward bias (approachPitch). Because
+  // this orientation is world-referenced (not aligned to the arm's reach line),
+  // the wrist (J4 roll, J5 pitch, J6 roll) must articulate strongly and uniquely
+  // for every target — yet the tip still lands exactly on the bubble.
+  const camLx = camera.position.x - robot.position.x;
+  const camLy = camera.position.y - robot.position.y;
+  const camLz = camera.position.z - robot.position.z;
+  let dx = camLx - tx, dy = camLy - ty, dz = camLz - tz;
+  let dl = Math.hypot(dx, dy, dz) || 1; dx/=dl; dy/=dl; dz/=dl;
+  // apply downward presentation tilt
+  dy -= Math.sin(approachPitch);
+  dl = Math.hypot(dx, dy, dz) || 1; dx/=dl; dy/=dl; dz/=dl;
+
+  // wrist position = tip - L_TOOL * approach direction
+  const wx = tx - L_TOOL * dx;
+  const wy = ty - L_TOOL * dy;
+  const wz = tz - L_TOOL * dz;
+
+  // J1 yaw — rotate arm plane so it contains the wrist
+  const yaw = Math.atan2(wx, wz);
+
+  // wrist in arm plane:  R horizontal, Y vertical, both relative to shoulder
+  const Rw  = Math.sqrt(wx*wx + wz*wz);
+  const dyW = wy - Sy;
+  let   rw  = Math.sqrt(Rw*Rw + dyW*dyW);
+
+  // clamp within (annulus of) reachability
+  const maxR = (L_UPPER + L_FORE) - 0.05;
+  const minR = Math.abs(L_UPPER - L_FORE) + 0.05;
+  rw = Math.max(minR, Math.min(maxR, rw));
+  // recompute Rw/dyW proportionally if we clamped
+  const orig = Math.sqrt(Rw*Rw + dyW*dyW) || 1;
+  const Rw2  = Rw  * (rw/orig);
+  const dyW2 = dyW * (rw/orig);
+
+  // γ = angle of shoulder→wrist line from +Y, toward +R
+  const gamma = Math.atan2(Rw2, dyW2);
+
+  // B = interior angle at shoulder, between upper arm and shoulder-wrist line
+  const cosB = (rw*rw + L_UPPER*L_UPPER - L_FORE*L_FORE) / (2 * L_UPPER * rw);
+  const B = Math.acos(Math.max(-1, Math.min(1, cosB)));
+
+  // elbow-up shoulder pitch
+  const theta2 = gamma - B;
+
+  // forearm direction in arm-plane angle ψ:  cos ψ = (Rw - L_u sin θ₂)/L_f,  sin ψ = (L_u cos θ₂ - dy)/L_f
+  const cosPsi = (Rw2 - L_UPPER * Math.sin(theta2)) / L_FORE;
+  const sinPsi = (L_UPPER * Math.cos(theta2) - dyW2) / L_FORE;
+  const psi    = Math.atan2(sinPsi, cosPsi);
+
+  // j3 rotation is the offset that takes the forearm from j3.rest direction to ψ
+  const phi3 = psi - theta2;
+
+  jt.a1 = yaw;
+  jt.a2 = theta2;
+  jt.a3 = phi3;
+
+  // store the WORLD approach direction for the spherical-wrist solver
+  _approachW.set(dx, dy, dz);
+}
+
+/* ── SPHERICAL-WRIST IK ──────────────────────────────────────────────
+   Given J1–J3 already applied (tip-position exact), orient the tool axis
+   (+Z) to the stored approach direction using J4 roll + J5 pitch, and add
+   a J6 roll. Reads the live j4 world frame so it's always consistent.
+   Aim:  Rz(φ4)·Rx(φ5)·(0,0,1) = d_local   ⇒
+         φ5 = acos(d.z),  φ4 = atan2(d.x, −d.y)
+   This keeps the EOAT pointing AT the bubble while J4/J5/J6 all articulate.
+   ──────────────────────────────────────────────────────────────────── */
+const _approachW = new THREE.Vector3(0,0,1);
+const _dLocal = new THREE.Vector3(), _q4 = new THREE.Quaternion();
+function solveWrist(){
+  J.j4.updateWorldMatrix(true, false);
+  J.j4.getWorldQuaternion(_q4).invert();
+  _dLocal.copy(_approachW).applyQuaternion(_q4).normalize();   // approach dir in j4 frame
+  const dz = Math.max(-1, Math.min(1, _dLocal.z));
+  const phi5 = Math.acos(dz);
+  let phi4 = Math.atan2(_dLocal.x, -_dLocal.y);
+  // J4 roll currently applied is baked into _q4 already, so phi4 is the DELTA roll;
+  // accumulate onto current to get absolute joint target.
+  jt.a4 = cur.a4 + phi4;
+  jt.a5 = phi5;
+  // J6: gentle continuous roll so the flange spins (kept small, doesn't affect aim)
+  jt.a6 = Math.sin(demoT * 0.5) * 0.5;
+  // clamp to mechanical limits
+  jt.a4 = Math.max(-Math.PI, Math.min(Math.PI, jt.a4));
+  jt.a5 = Math.max(-Math.PI*0.64, Math.min(Math.PI*0.64, jt.a5));
+}
+
+/* =================================================================
+   INTERACTION + AUTH
+   ================================================================= */
+const VALID_USER = 'khush@cessdynamics';
+const VALID_PASS = 'pass123';
+
+let activeIdx = -1;     // currently hovered bubble (-1 = idle)
+let hoverPart = null;   // robot part group to reveal on hover
+let isAuthed  = false;
+let idleMode  = 'home';  // 'home' | 'cycle' | 'sweep'
+let jointLerp = 5.5;     // smoothing rate — tweakable
+let demoT     = 0;
+
+const $ = id => document.getElementById(id);
+const reticleEl = $('reticle');
+const aimReadout= $('aim-readout');
+const eoatMark  = $('eoat-marker');
+const errEl     = $('err');
+const btnEl     = $('login-btn');
+const lockPill  = $('lock-pill');
+const tfCard    = $('tf-card');
+const loginEl   = document.querySelector('.login');
+
+bubbleEls.forEach((el, i) => {
+  el.addEventListener('mouseenter', () => {
+    activeIdx = i;
+    hoverPart = el.dataset.part || null;
+    aimReadout.textContent = el.querySelector('.bubble-label').textContent + ' · REVEAL';
+    reticleEl.classList.add('show');
+  });
+  el.addEventListener('mouseleave', () => {
+    activeIdx = -1;
+    hoverPart = null;
+    aimReadout.textContent = 'IDLE';
+    reticleEl.classList.remove('show');
+  });
+  el.addEventListener('click', (e) => {
+    const href = el.dataset.href;
+    if(href) window.location.href = href;   // all bubbles open freely — no auth
+  });
+});
+
+// TASK FLOW card — gated: requires sign-in
+tfCard.addEventListener('click', (e) => {
+  if(!isAuthed){
+    e.preventDefault();
+    shakeLogin();
+  }
+  // when authed, the <a href> navigates normally
+});
+
+function shakeLogin(){
+  loginEl.animate([
+    {transform:'translateY(-50%) translateX(0)'},
+    {transform:'translateY(-50%) translateX(-9px)'},
+    {transform:'translateY(-50%) translateX(9px)'},
+    {transform:'translateY(-50%) translateX(0)'}
+  ], {duration: 330, easing: 'ease-out'});
+  errEl.textContent = '⌬ TASK FLOW LOCKED · SIGN IN FIRST';
+  errEl.classList.add('show');
+  clearTimeout(shakeLogin._t);
+  shakeLogin._t = setTimeout(() => errEl.classList.remove('show'), 1800);
+}
+
+document.getElementById('login-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const u = $('user').value.trim().toLowerCase();
+  const p = $('pass').value;
+  if(u === VALID_USER && p === VALID_PASS){
+    authSuccess(false);
+    try{ localStorage.setItem('cd-auth','1'); }catch(_) {}
+  }else{
+    errEl.textContent = '⨯ ACCESS DENIED · INVALID CREDENTIAL';
+    errEl.classList.add('show');
+    loginEl.animate([
+      {transform:'translateY(-50%) translateX(0)'},
+      {transform:'translateY(-50%) translateX(-10px)'},
+      {transform:'translateY(-50%) translateX(10px)'},
+      {transform:'translateY(-50%) translateX(0)'}
+    ], {duration: 300, easing: 'ease-out'});
+  }
+});
+
+function authSuccess(){
+  isAuthed = true;
+  tfCard.classList.remove('locked');
+  const sub = document.getElementById('tf-sub');
+  if(sub) sub.textContent = 'Procedure builder · SOP authoring · routine compile';
+  lockPill.textContent = '◉ WORKSPACE · UNLOCKED';
+  lockPill.classList.add('unlocked');
+  errEl.classList.remove('show');
+  btnEl.classList.add('success');
+  btnEl.textContent = '✓ ACCESS GRANTED';
+  setTimeout(() => { btnEl.textContent = 'WORKSPACE ENGAGED ⌁'; }, 1100);
+}
+
+// resume session if user previously authed
+try{ if(localStorage.getItem('cd-auth') === '1') authSuccess(); }catch(_) {}
+
+/* =================================================================
+   CLOCK PILL
+   ================================================================= */
+function updateClock(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  $('time-pill').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} LOCAL`;
+}
+setInterval(updateClock, 1000); updateClock();
+
+/* =================================================================
+   ANIMATION LOOP
+   ================================================================= */
+const tmpV  = new THREE.Vector3();
+const tmpT  = new THREE.Vector3();
+const tmpQ  = new THREE.Quaternion();
+let lastT = performance.now();
+
+function fmtDeg(rad){
+  const d = rad * 180 / Math.PI;
+  return (d >= 0 ? '+' : '') + d.toFixed(1) + '°';
+}
+
+/* =================================================================
+   KINEMATICS ENGINE  —  DH model · FK · geometric Jacobian · DLS-IK
+   ================================================================= */
+let ikMode = 'analytic';                 // 'analytic' | 'jacobian' | 'manual'
+const manualAngles = [0,0,0,0,0,0];      // radians, for FK manual mode
+let roboOpen = false;                    // kinematics panel open?
+let approachPitch = 0.42;                // tool down-tilt for presentation (radians) — tweakable
+
+/* ── CURSOR FOLLOW ── the EOAT tracks the mouse (ray → sphere around shoulder) ── */
+const cursorTarget   = new THREE.Vector3(0.6, 2.2, 2.4);
+const _shoulderWorld = new THREE.Vector3(0, SHOULDER_Y, 0);
+const CURSOR_R = 2.7;                     // sphere radius around shoulder
+const _cv = new THREE.Vector3(), _cdir = new THREE.Vector3(), _coc = new THREE.Vector3();
+function updateCursorTarget(clientX, clientY){
+  const ndcx = (clientX / window.innerWidth)  * 2 - 1;
+  const ndcy = -(clientY / window.innerHeight) * 2 + 1;
+  _cv.set(ndcx, ndcy, 0.5).unproject(camera);
+  _cdir.copy(_cv).sub(camera.position).normalize();
+  _coc.copy(camera.position).sub(_shoulderWorld);
+  const b = _coc.dot(_cdir);
+  const c = _coc.dot(_coc) - CURSOR_R * CURSOR_R;
+  const disc = b*b - c;
+  if(disc >= 0){
+    const tNear = -b - Math.sqrt(disc);          // front of sphere (faces camera)
+    const t = tNear > 0.1 ? tNear : (-b + Math.sqrt(disc));
+    cursorTarget.copy(camera.position).add(_cdir.multiplyScalar(t));
+  } else {
+    // ray misses sphere → closest direction, projected onto sphere
+    const tc = Math.max(0, -b);
+    cursorTarget.copy(camera.position).add(_cdir.multiplyScalar(tc))
+                .sub(_shoulderWorld).normalize().multiplyScalar(CURSOR_R).add(_shoulderWorld);
+  }
+}
+window.addEventListener('pointermove', (e) => updateCursorTarget(e.clientX, e.clientY), {passive:true});
+
+// ════════════════════════════════════════════════════════════════════
+//  KINEMATIC MODEL  ·  6R anthropomorphic arm + spherical wrist
+//  Single source of truth: measured link lengths (metres) ← from the build
+// ════════════════════════════════════════════════════════════════════
+const LINK = {
+  base:   0.34,   // floor → joint-1 axis            (pedestal)
+  d1:     1.00,   // joint-1 axis → shoulder (J2)     (drum + shoulder)
+  a2:     1.55,   // upper arm  : shoulder → elbow (J2→J3)
+  d4:     1.86,   // forearm    : elbow → wrist centre (J3→J5)
+  d6:     0.60    // tool       : wrist centre → EOAT tip
+};
+
+// Standard Denavit–Hartenberg table  A_i = Rz(θ_i)·Tz(d_i)·Tx(a_i)·Rx(α_i)
+// θ carries the constant offset that aligns DH zero with the render zero.
+const DH = [
+  { off: 0,          d: LINK.d1, a: 0,      al: -Math.PI/2 },  // J1 base yaw
+  { off: -Math.PI/2, d: 0,       a: LINK.a2, al: 0          },  // J2 shoulder
+  { off: 0,          d: 0,       a: 0,      al: -Math.PI/2 },  // J3 elbow
+  { off: 0,          d: LINK.d4, a: 0,      al:  Math.PI/2 },  // J4 wrist roll
+  { off: 0,          d: 0,       a: 0,      al: -Math.PI/2 },  // J5 wrist pitch
+  { off: 0,          d: LINK.d6, a: 0,      al: 0          }   // J6 flange roll
+];
+
+/* Base transform: maps DH frame-0 (z0 = joint-1 axis) into the world.
+   Joint-1 axis is world +Y, sitting LINK.base above the floor.
+   Column-major 4×4 (THREE.Matrix4 style flat array). */
+const DH_BASE = (() => {
+  const m = new THREE.Matrix4();
+  // frame0 basis: x0=+Z, y0=+X, z0=+Y  →  rotation, then lift by base height
+  m.set( 0,1,0,0,
+         0,0,1,LINK.base,
+         1,0,0,0,
+         0,0,0,1 );
+  return m;
+})();
+
+/* 4×4 DH link transform for joint i at angle q (THREE.Matrix4). */
+function dhMatrix(i, q){
+  const p = DH[i], th = q + p.off, ct = Math.cos(th), st = Math.sin(th),
+        ca = Math.cos(p.al), sa = Math.sin(p.al), a = p.a, d = p.d;
+  const m = new THREE.Matrix4();
+  m.set( ct, -st*ca,  st*sa, a*ct,
+         st,  ct*ca, -ct*sa, a*st,
+          0,     sa,     ca,    d,
+          0,      0,      0,    1 );
+  return m;
+}
+
+/* Forward kinematics from the DH model.
+   Returns cumulative frames (origin p_i + z-axis ẑ_i) and the tool pose.
+   This is the analytic model — provably consistent with the rendered arm. */
+const _mTmp = new THREE.Matrix4(), _pTmp = new THREE.Vector3(), _zTmp = new THREE.Vector3();
+function fkDH(q){
+  const T = DH_BASE.clone();
+  // frame 0 (base)
+  const frames = [{
+    p: new THREE.Vector3().setFromMatrixPosition(T),
+    z: new THREE.Vector3(0,1,0)   // joint-1 axis in world
+  }];
+  for(let i = 0; i < 6; i++){
+    T.multiply(dhMatrix(i, q[i]));
+    const e = T.elements;
+    frames.push({
+      p: new THREE.Vector3(e[12], e[13], e[14]),
+      z: new THREE.Vector3(e[8],  e[9],  e[10]).normalize()  // local z in world
+    });
+  }
+  return { T, frames };  // frames[0..6]; frames[6] = tool/EOAT tip
+}
+
+/* Geometric Jacobian J(q) ∈ ℝ⁶ˣ⁶ built ANALYTICALLY from the DH frames.
+   For each revolute joint i:  Jᵢ = [ ẑ_{i-1} × (p_e − p_{i-1}) ; ẑ_{i-1} ]
+   Returns cols[joint] = [vx,vy,vz, ωx,ωy,ωz]. */
+function jacobianDH(q){
+  const { frames } = fkDH(q);
+  const pe = frames[6].p;
+  const cols = [];
+  for(let i = 0; i < 6; i++){
+    const z = frames[i].z, p = frames[i].p;
+    const r = new THREE.Vector3().subVectors(pe, p);
+    const lin = new THREE.Vector3().crossVectors(z, r);
+    cols.push([lin.x, lin.y, lin.z, z.x, z.y, z.z]);
+  }
+  return cols;
+}
+
+// joint rotation axes in each joint's LOCAL frame (matches the build)
+const KIN = [
+  { obj: J.j1, axis: new THREE.Vector3(0,1,0), apply: a => J.j1.rotation.y = a },
+  { obj: J.j2, axis: new THREE.Vector3(1,0,0), apply: a => J.j2.rotation.x = a },
+  { obj: J.j3, axis: new THREE.Vector3(1,0,0), apply: a => J.j3.rotation.x = a },
+  { obj: J.j4, axis: new THREE.Vector3(0,0,1), apply: a => J.j4.rotation.z = a },
+  { obj: J.j5, axis: new THREE.Vector3(1,0,0), apply: a => J.j5.rotation.x = a },
+  { obj: J.j6, axis: new THREE.Vector3(0,0,1), apply: a => J.j6.rotation.z = a }
+];
+
+// geometric Jacobian (6×6) read from the live joint world transforms — exact for the rendered robot
+const _pe = new THREE.Vector3(), _pos = new THREE.Vector3(), _q = new THREE.Quaternion(), _ax = new THREE.Vector3(), _r = new THREE.Vector3();
+function computeJacobian(){
+  J.eoatTip.getWorldPosition(_pe);
+  const cols = [];
+  for(const j of KIN){
+    j.obj.updateWorldMatrix(true, false);
+    j.obj.getWorldPosition(_pos);
+    j.obj.getWorldQuaternion(_q);
+    _ax.copy(j.axis).applyQuaternion(_q).normalize();
+    _r.copy(_pe).sub(_pos);
+    const lin = _ax.clone().cross(_r);
+    cols.push([lin.x, lin.y, lin.z, _ax.x, _ax.y, _ax.z]);
+  }
+  return cols; // cols[joint] = [vx,vy,vz,wx,wy,wz]
+}
+
+// expose for one-time numeric verification (DH-FK vs rendered chain)
+window.__kinCheck = function(){
+  const qv = [cur.a1,cur.a2,cur.a3,cur.a4,cur.a5,cur.a6];
+  const { frames } = fkDH(qv);
+  J.eoatTip.getWorldPosition(_pe);
+  const d = frames[6].p.clone().sub(_pe);
+  return { dhTip: frames[6].p.toArray().map(v=>+v.toFixed(3)),
+           renderTip: _pe.toArray().map(v=>+v.toFixed(3)),
+           deltaMM: +(d.length()*1000).toFixed(1) };
+};
+
+function inv3(m){
+  const a=m[0][0],b=m[0][1],c=m[0][2],d=m[1][0],e=m[1][1],f=m[1][2],g=m[2][0],h=m[2][1],i=m[2][2];
+  const A=e*i-f*h, B=-(d*i-f*g), C=d*h-e*g;
+  const det=a*A+b*B+c*C, id=det?1/det:0;
+  return [
+    [A*id,(c*h-b*i)*id,(b*f-c*e)*id],
+    [B*id,(a*i-c*g)*id,(c*d-a*f)*id],
+    [C*id,(b*g-a*h)*id,(a*e-b*d)*id]
+  ];
+}
+
+// Damped-Least-Squares resolved-rate IK (position) — one step/frame, drives jt.a*
+function solveIK_DLS(target){
+  const cols = computeJacobian();
+  const e = [target.x-_pe.x, target.y-_pe.y, target.z-_pe.z];
+  const lambda = dlsLambda;
+  const A = [[0,0,0],[0,0,0],[0,0,0]];
+  for(let r=0;r<3;r++) for(let c=0;c<3;c++){
+    let s=0; for(let n=0;n<6;n++) s += cols[n][r]*cols[n][c];
+    A[r][c] = s + (r===c ? lambda*lambda : 0);
+  }
+  const Ai = inv3(A);
+  const y = [
+    Ai[0][0]*e[0]+Ai[0][1]*e[1]+Ai[0][2]*e[2],
+    Ai[1][0]*e[0]+Ai[1][1]*e[1]+Ai[1][2]*e[2],
+    Ai[2][0]*e[0]+Ai[2][1]*e[1]+Ai[2][2]*e[2]
+  ];
+  const dq = [];
+  for(let c=0;c<6;c++) dq[c] = cols[c][0]*y[0] + cols[c][1]*y[1] + cols[c][2]*y[2];
+  const gain = 0.85;
+  jt.a1 = cur.a1 + dq[0]*gain;
+  jt.a2 = cur.a2 + dq[1]*gain;
+  jt.a3 = cur.a3 + dq[2]*gain;
+  jt.a4 = cur.a4 + dq[3]*gain;
+  jt.a5 = cur.a5 + dq[4]*gain;
+  jt.a6 = cur.a6 + dq[5]*gain;
+}
+
+// last-computed Jacobian + manipulability, for the panel readout
+let lastJac = null, lastManip = 0;
+
+/* ── general N×N matrix inverse (Gauss–Jordan) ── */
+function detN(M, n){
+  // LU with partial pivoting; det = ∏ pivots · sign
+  const A = M.map(r => r.slice());
+  let det = 1;
+  for(let col=0; col<n; col++){
+    let piv = col;
+    for(let r=col+1; r<n; r++) if(Math.abs(A[r][col]) > Math.abs(A[piv][col])) piv = r;
+    if(Math.abs(A[piv][col]) < 1e-14) return 0;
+    if(piv !== col){ const t=A[col]; A[col]=A[piv]; A[piv]=t; det = -det; }
+    det *= A[col][col];
+    for(let r=col+1; r<n; r++){
+      const f = A[r][col] / A[col][col];
+      for(let j=col; j<n; j++) A[r][j] -= f*A[col][j];
+    }
+  }
+  return det;
+}
+function invN(M, n){
+  const A = M.map((row,i) => row.concat(Array.from({length:n}, (_,j)=> i===j?1:0)));
+  for(let col=0; col<n; col++){
+    let piv = col;
+    for(let r=col+1; r<n; r++) if(Math.abs(A[r][col]) > Math.abs(A[piv][col])) piv = r;
+    if(Math.abs(A[piv][col]) < 1e-12){ A[col][col] += 1e-9; piv = col; }
+    [A[col], A[piv]] = [A[piv], A[col]];
+    const d = A[col][col];
+    for(let j=0; j<2*n; j++) A[col][j] /= d;
+    for(let r=0; r<n; r++){
+      if(r===col) continue;
+      const f = A[r][col];
+      if(f===0) continue;
+      for(let j=0; j<2*n; j++) A[r][j] -= f*A[col][j];
+    }
+  }
+  return A.map(row => row.slice(n));
+}
+
+/* ── FULL 6-DOF POSE IK ──────────────────────────────────────────────
+   Drives ALL six joints. Solves position (tip → bubble) AND orientation
+   (tool +Z axis → approach direction from shoulder to bubble), so the
+   EOAT genuinely faces the target and J4/J5/J6 articulate too.
+   q̇ = Jᵀ(JJᵀ + λ²I)⁻¹ ẋ  with a 6-vector twist error ẋ = [pos; ori].
+   ──────────────────────────────────────────────────────────────────── */
+const _zc = new THREE.Vector3(), _zd = new THREE.Vector3(), _eo = new THREE.Vector3(), _qe = new THREE.Quaternion();
+function solveIK6(target){
+  const cols = computeJacobian();          // cols[joint] = [vx,vy,vz, wx,wy,wz]
+  J.eoatTip.getWorldPosition(_pe);
+
+  // position error
+  const ep = [target.x-_pe.x, target.y-_pe.y, target.z-_pe.z];
+
+  // desired tool axis = direction from shoulder → bubble (natural reach/point)
+  _zd.copy(target).sub(_shoulderWorld).normalize();
+  // current tool +Z axis in world
+  J.eoatTip.getWorldQuaternion(_qe);
+  _zc.set(0,0,1).applyQuaternion(_qe).normalize();
+  // orientation error (axis·angle ≈ zc × zd), weighted
+  _eo.crossVectors(_zc, _zd);
+  const oriW = 1.15;
+  const e = [ ep[0], ep[1], ep[2], _eo.x*oriW, _eo.y*oriW, _eo.z*oriW ];
+
+  // A = J Jᵀ + λ²I   (6×6)
+  const lambda = 0.28, l2 = lambda*lambda;
+  const A = [];
+  for(let r=0; r<6; r++){
+    A[r] = [];
+    for(let c=0; c<6; c++){
+      let s=0; for(let n=0; n<6; n++) s += cols[n][r]*cols[n][c];
+      A[r][c] = s + (r===c ? l2 : 0);
+    }
+  }
+  const Ai = invN(A, 6);
+  // y = A⁻¹ e
+  const y = [];
+  for(let r=0; r<6; r++){ let s=0; for(let c=0; c<6; c++) s += Ai[r][c]*e[c]; y[r] = s; }
+  // dq = Jᵀ y
+  const gain = 0.9;
+  const dq = [];
+  for(let c=0; c<6; c++){ let s=0; for(let r=0; r<6; r++) s += cols[c][r]*y[r]; dq[c] = s*gain; }
+
+  jt.a1 = cur.a1 + dq[0];
+  jt.a2 = cur.a2 + dq[1];
+  jt.a3 = cur.a3 + dq[2];
+  jt.a4 = cur.a4 + dq[3];
+  jt.a5 = cur.a5 + dq[4];
+  jt.a6 = cur.a6 + dq[5];
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   MOTION · SAFETY · FORCE   (trajectory, jog, twin, limits, τ=JᵀF)
+   ════════════════════════════════════════════════════════════════════ */
+// joint limits (rad)  — mirror of JOINT_META
+const JLIM = [[-180,180],[-95,95],[-120,120],[-180,180],[-115,115],[-180,180]]
+              .map(p => [p[0]*Math.PI/180, p[1]*Math.PI/180]);
+let velLimit  = 3.0;     // max joint speed (rad/s) — tweakable
+let dlsLambda = 0.28;    // singularity-robust damping λ — tweakable
+let limitHit  = [false,false,false,false,false,false];
+let collisionState = 'CLEAR';
+const forceVec = new THREE.Vector3(0,0,0);   // Cartesian force at EOAT (N)
+let lastTau = [0,0,0,0,0,0];
+let twinExternal = null, twinExternalT = 0;
+
+const motion = {
+  mode: 'off',                          // 'off' | 'jog' | 'trajectory' | 'twin'
+  jog:  new THREE.Vector3(0, 2.4, 2.2),
+  jogStep: 0.14,
+  traj: { playing:false, t:0, dur:7, profile:'spline', curve:null, pts:null, loop:true },
+  twin: { playing:false, t:0 }
+};
+
+const MAX_REACH = LINK.a2 + LINK.d4 + LINK.d6;     // ≈ 4.0 m
+const MIN_REACH = Math.abs(LINK.a2 - (LINK.d4)) ;  // inner dead-zone (approx)
+
+/* trajectory: waypoints = home → 4 tools → home, Catmull-Rom or linear */
+function trajWaypoints(){
+  const pts = anchors.map(a => a.obj.getWorldPosition(new THREE.Vector3()));
+  pts.unshift(new THREE.Vector3(0, 2.4, 2.2));
+  pts.push(new THREE.Vector3(0, 2.4, 2.2));
+  return pts;
+}
+function buildTrajectory(){
+  motion.traj.pts = trajWaypoints();
+  motion.traj.curve = new THREE.CatmullRomCurve3(motion.traj.pts, false, 'catmullrom', 0.4);
+}
+function trapezoid(u){            // trapezoidal velocity profile, ramp r
+  const r = 0.3, v = 1/(1-r);
+  if(u < r)   return v*u*u/(2*r);
+  if(u > 1-r){ const x = 1-u; return 1 - v*x*x/(2*r); }
+  return v*(u - r/2);
+}
+const _trajOut = new THREE.Vector3();
+function trajTarget(dt){
+  const T = motion.traj;
+  if(!T.pts) buildTrajectory();
+  T.t += dt;
+  let u = T.t / T.dur;
+  if(u >= 1){ if(T.loop){ T.t = 0; u = 0; } else { u = 1; } }
+  const s = (T.profile === 'linear') ? u : trapezoid(u);
+  if(T.profile === 'spline' && T.curve) return T.curve.getPoint(Math.max(0,Math.min(1,s)), _trajOut);
+  const pts = T.pts, seg = pts.length - 1, x = s*seg, i = Math.min(seg-1, Math.floor(x)), f = x - i;
+  return _trajOut.copy(pts[i]).lerp(pts[i+1], f);
+}
+/* twin: synthetic 6-axis encoder feed (or real data via postMessage) */
+function twinJoints(dt){
+  motion.twin.t += dt; const t = motion.twin.t;
+  return [0.9*Math.sin(t*0.5), 0.45*Math.sin(t*0.7+1), 0.6*Math.sin(t*0.6+2),
+          1.3*Math.sin(t*0.9), 0.7*Math.sin(t*0.8+0.5), 1.6*Math.sin(t*1.1)];
+}
+window.addEventListener('message', (e) => {
+  if(e && e.data && e.data.type === 'robot-joints' && Array.isArray(e.data.q)){
+    twinExternal = e.data.q.slice(0,6).map(Number);
+    twinExternalT = performance.now();
+  }
+});
+
+/* force / compliance:  τ = Jᵀ·F   (wrench = [Fx,Fy,Fz,0,0,0]) */
+function computeTorques(){
+  const cols = jacobianDH([cur.a1,cur.a2,cur.a3,cur.a4,cur.a5,cur.a6]);
+  for(let i=0;i<6;i++) lastTau[i] = cols[i][0]*forceVec.x + cols[i][1]*forceVec.y + cols[i][2]*forceVec.z;
+  return lastTau;
+}
+
+/* apply joint limits + velocity cap to the smoothed angles, then re-apply */
+function clampAndApply(prev, dt){
+  const c = [cur.a1,cur.a2,cur.a3,cur.a4,cur.a5,cur.a6];
+  const vcap = velLimit * dt;
+  for(let i=0;i<6;i++){
+    let v = c[i];
+    // velocity limit
+    const dv = v - prev[i];
+    if(dv >  vcap) v = prev[i] + vcap;
+    if(dv < -vcap) v = prev[i] - vcap;
+    // joint limit
+    limitHit[i] = false;
+    if(v < JLIM[i][0]){ v = JLIM[i][0]; limitHit[i] = true; }
+    if(v > JLIM[i][1]){ v = JLIM[i][1]; limitHit[i] = true; }
+    c[i] = v;
+  }
+  cur.a1=c[0]; cur.a2=c[1]; cur.a3=c[2]; cur.a4=c[3]; cur.a5=c[4]; cur.a6=c[5];
+  J.j1.rotation.y=c[0]; J.j2.rotation.x=c[1]; J.j3.rotation.x=c[2];
+  J.j4.rotation.z=c[3]; J.j5.rotation.x=c[4]; J.j6.rotation.z=c[5];
+}
+
+/* self-collision / floor / reach check */
+const _tipChk = new THREE.Vector3();
+function collisionCheck(){
+  J.eoatTip.getWorldPosition(_tipChk);
+  const horiz = Math.hypot(_tipChk.x - robot.position.x, _tipChk.z - robot.position.z);
+  if(_tipChk.y < 0.06)              collisionState = 'FLOOR';
+  else if(horiz < 0.34 && _tipChk.y < 1.05) collisionState = 'SELF';
+  else                              collisionState = 'CLEAR';
+}
+
+/* ── workspace envelope (toggle) ── */
+const envelope = new THREE.Group();
+const envOuter = new THREE.Mesh(
+  new THREE.SphereGeometry(MAX_REACH, 40, 28),
+  new THREE.MeshBasicMaterial({color:0x3ad6ff, wireframe:true, transparent:true, opacity:0.05})
+);
+const envSkin = new THREE.Mesh(
+  new THREE.SphereGeometry(MAX_REACH, 40, 28),
+  new THREE.MeshBasicMaterial({color:0x3ad6ff, transparent:true, opacity:0.035, side:THREE.BackSide})
+);
+envelope.add(envOuter); envelope.add(envSkin);
+envelope.position.copy(_shoulderWorld);
+envelope.visible = false;
+scene.add(envelope);
+
+/* ── force arrow at the EOAT (compliance viz) ── */
+const forceArrow = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(), 1, 0xff2d55, 0.18, 0.1);
+forceArrow.visible = false;
+scene.add(forceArrow);
+
+/* ── jog ghost marker ── */
+const jogMarker = new THREE.Mesh(
+  new THREE.SphereGeometry(0.07, 16, 16),
+  new THREE.MeshBasicMaterial({color:0x3ddc97, transparent:true, opacity:0.9})
+);
+jogMarker.visible = false;
+scene.add(jogMarker);
+
+/* ════════════════════════════════════════════════════════════════════
+   APPLICATIONS  ·  idle auto-demos driven by the real IK
+   Pick-&-Place · Spot Welding · MIG Welding — smooth scripted routines.
+   ════════════════════════════════════════════════════════════════════ */
+let gripCmd = 0;                                   // 0 = open, 1 = closed (driven by routines)
+
+// ---- spark particle system (shared) ----
+const SPARK_N = 160;
+const sparkGeo = new THREE.BufferGeometry();
+const sparkPos = new Float32Array(SPARK_N*3);
+const sparkCol = new Float32Array(SPARK_N*3);
+const sparkVel = new Float32Array(SPARK_N*3);
+const sparkLife = new Float32Array(SPARK_N);
+for(let i=0;i<SPARK_N;i++){ sparkPos[i*3+1] = -999; }
+sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos,3));
+sparkGeo.setAttribute('color',    new THREE.BufferAttribute(sparkCol,3));
+const sparkMat = new THREE.PointsMaterial({ size:0.05, vertexColors:true, transparent:true,
+  opacity:0.95, blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true });
+const sparks = new THREE.Points(sparkGeo, sparkMat);
+sparks.frustumCulled = false;
+scene.add(sparks);
+let sparkHead = 0;
+function emitSparks(p, n, spread, speed, hot){
+  for(let j=0;j<n;j++){
+    const i = sparkHead; sparkHead = (sparkHead+1)%SPARK_N;
+    sparkPos[i*3]=p.x; sparkPos[i*3+1]=p.y; sparkPos[i*3+2]=p.z;
+    const a=Math.random()*Math.PI*2, e=(Math.random()*0.8+0.2);
+    sparkVel[i*3]   = Math.cos(a)*spread*(0.4+Math.random());
+    sparkVel[i*3+1] = e*speed;
+    sparkVel[i*3+2] = Math.sin(a)*spread*(0.4+Math.random());
+    sparkLife[i] = 0.4 + Math.random()*0.5;
+    const c = hot ? 1 : 0.85;
+    sparkCol[i*3]=1; sparkCol[i*3+1]=c*0.8; sparkCol[i*3+2]=hot?0.6:0.2;
+  }
+}
+function updateSparks(dt){
+  for(let i=0;i<SPARK_N;i++){
+    if(sparkLife[i] <= 0){ if(sparkPos[i*3+1] > -900){ sparkPos[i*3+1] = -999; } continue; }
+    sparkLife[i] -= dt;
+    sparkVel[i*3+1] -= 9.8*dt*0.35;
+    sparkPos[i*3]   += sparkVel[i*3]*dt;
+    sparkPos[i*3+1] += sparkVel[i*3+1]*dt;
+    sparkPos[i*3+2] += sparkVel[i*3+2]*dt;
+    const f = Math.max(0, sparkLife[i]/0.8);
+    sparkCol[i*3]=f; sparkCol[i*3+1]=f*0.7; sparkCol[i*3+2]=f*0.3;
+    if(sparkLife[i] <= 0) sparkPos[i*3+1] = -999;
+  }
+  sparkGeo.attributes.position.needsUpdate = true;
+  sparkGeo.attributes.color.needsUpdate = true;
+}
+
+// arc / weld flash light
+const arcLight = new THREE.PointLight(0xfff3d0, 0, 4, 2);
+scene.add(arcLight);
+
+// ---- molten weld-bead trail (MIG) ----
+const BEAD_N = 90;
+const beads = [];
+const beadMat = new THREE.MeshStandardMaterial({color:0xffb060, emissive:0xff5a10, emissiveIntensity:2, roughness:0.5});
+for(let i=0;i<BEAD_N;i++){
+  const b = new THREE.Mesh(new THREE.SphereGeometry(0.05,8,8), beadMat.clone());
+  b.visible=false; b.userData.life=0; scene.add(b); beads.push(b);
+}
+let beadHead=0;
+function dropBead(p){
+  const b = beads[beadHead]; beadHead=(beadHead+1)%BEAD_N;
+  b.position.copy(p); b.position.y += 0.001; b.visible=true; b.userData.life=1; b.scale.setScalar(1);
+}
+function updateBeads(dt){
+  for(const b of beads){
+    if(!b.visible) continue;
+    b.userData.life -= dt*0.32;
+    if(b.userData.life<=0){ b.visible=false; continue; }
+    const l=b.userData.life;
+    b.material.emissiveIntensity = 0.3 + l*2.2;             // cools as it solidifies
+    b.material.color.setRGB(0.5+0.5*l, 0.35+0.25*l, 0.2);
+    b.scale.setScalar(0.6 + l*0.5);
+  }
+}
+
+// ════ WORK CELL PROPS ════
+const cell = new THREE.Group(); scene.add(cell);
+const TBL = 0.78;            // table-top height — lifts work into clear view
+
+// pedestal work table
+function workTable(x,z,c){
+  const g=new THREE.Group();
+  const legMat=new THREE.MeshStandardMaterial({color:0x10141d,metalness:0.7,roughness:0.5});
+  const top=new THREE.Mesh(new THREE.BoxGeometry(1.15,0.11,1.15),
+    new THREE.MeshStandardMaterial({color:0x222a38,metalness:0.55,roughness:0.5,emissive:c,emissiveIntensity:0.10}));
+  top.position.set(x,TBL,z); top.castShadow=top.receiveShadow=true; g.add(top);
+  [[-0.48,-0.48],[0.48,-0.48],[-0.48,0.48],[0.48,0.48]].forEach(([dx,dz])=>{
+    const leg=new THREE.Mesh(new THREE.BoxGeometry(0.09,TBL,0.09),legMat);
+    leg.position.set(x+dx, TBL/2, z+dz); leg.castShadow=true; g.add(leg);
+  });
+  // glowing target ring on the table top
+  const ring=new THREE.Mesh(new THREE.RingGeometry(0.34,0.46,32),
+    new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:0.8,side:THREE.DoubleSide}));
+  ring.rotation.x=-Math.PI/2; ring.position.set(x,TBL+0.07,z); g.add(ring);
+  return g;
+}
+
+// pick & place — two tables in the clear RIGHT-FRONT zone (login card is on the left)
+const PAD_A = new THREE.Vector3( 2.55, TBL, 0.95);   // source  (far right)
+const PAD_B = new THREE.Vector3( 1.35, TBL, 2.35);   // dest    (right-front, toward camera)
+const ppGroup = new THREE.Group();
+ppGroup.add(workTable(PAD_A.x,PAD_A.z,0x3ddc97));
+ppGroup.add(workTable(PAD_B.x,PAD_B.z,0x3ad6ff));
+const BOX = 0.36, BOX_GAP = 0.38;
+const BOX_BASE = TBL + 0.06 + BOX/2;                 // first box rests on the table top
+const PAYLOADS = [];
+const payloadColors=[0xff6b1c,0x3ad6ff,0x9b6bff];
+for(let i=0;i<3;i++){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(BOX,BOX,BOX),
+    new THREE.MeshStandardMaterial({color:payloadColors[i],metalness:0.3,roughness:0.35,
+      emissive:payloadColors[i],emissiveIntensity:0.55}));
+  m.castShadow=true;
+  m.add(new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry,20),
+    new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:0.6})));
+  m.position.set(PAD_A.x, BOX_BASE+i*BOX_GAP, PAD_A.z);
+  m.userData.home=m.position.clone();
+  ppGroup.add(m); PAYLOADS.push(m);
+}
+cell.add(ppGroup);
+
+// weld station — same prime RIGHT-FRONT zone (pick-place & weld never show together)
+const weldGroup = new THREE.Group();
+const WX = 2.1, WZ = 1.7;                             // weld table centre
+weldGroup.add(workTable(WX, WZ, 0xff7a2a));
+const plateMat=new THREE.MeshStandardMaterial({color:0x9aabbd,metalness:0.6,roughness:0.3,emissive:0x44525f,emissiveIntensity:0.35});
+const plate1=new THREE.Mesh(new THREE.BoxGeometry(1.05,0.09,0.7),plateMat);
+plate1.position.set(WX, TBL+0.12, WZ+0.16); plate1.castShadow=plate1.receiveShadow=true; weldGroup.add(plate1);
+const plate2=new THREE.Mesh(new THREE.BoxGeometry(1.05,0.6,0.09),plateMat);
+plate2.position.set(WX, TBL+0.42, WZ-0.16); plate2.castShadow=plate2.receiveShadow=true; weldGroup.add(plate2);
+const edgeMat=new THREE.LineBasicMaterial({color:0x55ddff,transparent:true,opacity:0.85});
+[plate1,plate2].forEach(p=>{ p.add(new THREE.LineSegments(new THREE.EdgesGeometry(p.geometry,20),edgeMat)); });
+// bright fill lights over the work zone
+const cellLight = new THREE.PointLight(0xffffff, 2.4, 9, 1.3);
+cellLight.position.set(2.0, 3.2, 1.6); scene.add(cellLight);
+const cellLight2 = new THREE.PointLight(0xfff0d8, 1.6, 8, 1.4);
+cellLight2.position.set(1.2, 2.4, 2.6); scene.add(cellLight2);
+// seam where the two plates meet — runs left↔right along the joint
+const SEAM_A=new THREE.Vector3(WX-0.45, TBL+0.16, WZ),  SEAM_B=new THREE.Vector3(WX+0.45, TBL+0.16, WZ);
+const SPOTS=[]; for(let i=0;i<5;i++){ SPOTS.push(new THREE.Vector3().lerpVectors(SEAM_A,SEAM_B,i/4)); }
+const nuggets=[];
+SPOTS.forEach(s=>{
+  const n=new THREE.Mesh(new THREE.SphereGeometry(0.05,10,10),
+    new THREE.MeshStandardMaterial({color:0xd8dbe0,metalness:0.7,roughness:0.6,emissive:0x000000}));
+  n.position.copy(s); n.visible=false; weldGroup.add(n); nuggets.push(n);
+});
+cell.add(weldGroup);
+
+/* ── CAD upload: replace weld workpiece with user's own model ── */
+let customCAD = null;
+function loadCADFile(file){
+  const ext = file.name.split('.').pop().toLowerCase();
+  const reader = new FileReader();
+  reader.onload = function(){
+    let mesh = null;
+    try {
+      if(ext==='stl'){
+        // minimal binary/ascii STL parser
+        const buf = reader.result;
+        const geo = parseSTL(buf);
+        geo.computeVertexNormals();
+        mesh = new THREE.Mesh(geo, plateMat.clone());
+      } else if(ext==='obj'){
+        const text = new TextDecoder().decode(new Uint8Array(reader.result));
+        mesh = parseOBJ(text);
+      } else {
+        alert('Supported: STL, OBJ'); return;
+      }
+    } catch(e){ console.warn('Parse error', e); alert('Could not parse file'); return; }
+    if(!mesh) return;
+    placeCAD(mesh);
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function parseSTL(buf){
+  const dv = new DataView(buf);
+  // try binary first
+  if(buf.byteLength > 84){
+    const nTri = dv.getUint32(80, true);
+    if(84 + nTri*50 === buf.byteLength || 84 + nTri*50 + 2 === buf.byteLength){
+      const pos = new Float32Array(nTri*9);
+      const norm = new Float32Array(nTri*9);
+      for(let i=0;i<nTri;i++){
+        const off = 84 + i*50;
+        const nx=dv.getFloat32(off,true), ny=dv.getFloat32(off+4,true), nz=dv.getFloat32(off+8,true);
+        for(let v=0;v<3;v++){
+          const vo = off+12+v*12;
+          pos[i*9+v*3]   = dv.getFloat32(vo,true);
+          pos[i*9+v*3+1] = dv.getFloat32(vo+4,true);
+          pos[i*9+v*3+2] = dv.getFloat32(vo+8,true);
+          norm[i*9+v*3]=nx; norm[i*9+v*3+1]=ny; norm[i*9+v*3+2]=nz;
+        }
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+      geo.setAttribute('normal', new THREE.BufferAttribute(norm,3));
+      return geo;
+    }
+  }
+  // fallback: ASCII STL
+  const text = new TextDecoder().decode(new Uint8Array(buf));
+  const verts=[], norms=[];
+  let cn=[0,0,1];
+  text.replace(/facet normal\s+([\d.e+-]+)\s+([\d.e+-]+)\s+([\d.e+-]+)/gi, (m,a,b,c)=>{ cn=[+a,+b,+c]; });
+  text.replace(/vertex\s+([\d.e+-]+)\s+([\d.e+-]+)\s+([\d.e+-]+)/gi, (m,a,b,c)=>{
+    verts.push(+a,+b,+c); norms.push(cn[0],cn[1],cn[2]);
+  });
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(verts,3));
+  geo.setAttribute('normal', new THREE.Float32BufferAttribute(norms,3));
+  return geo;
+}
+
+function parseOBJ(text){
+  const vs=[[0,0,0]], ns=[[0,0,1]], faces=[];
+  text.split('\\n').forEach(line=>{
+    const p=line.trim().split(/\\s+/);
+    if(p[0]==='v') vs.push([+p[1],+p[2],+p[3]]);
+    else if(p[0]==='vn') ns.push([+p[1],+p[2],+p[3]]);
+    else if(p[0]==='f'){
+      const fi=[]; for(let i=1;i<p.length;i++){
+        const s=p[i].split('/'); fi.push({v:+s[0], n:s[2]?+s[2]:0});
+      }
+      for(let i=1;i<fi.length-1;i++) faces.push(fi[0],fi[i],fi[i+1]);
+    }
+  });
+  const pos=[], norm=[];
+  faces.forEach(f=>{
+    const v=vs[f.v]||[0,0,0], n=ns[f.n]||[0,0,1];
+    pos.push(v[0],v[1],v[2]); norm.push(n[0],n[1],n[2]);
+  });
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+  geo.setAttribute('normal', new THREE.Float32BufferAttribute(norm,3));
+  geo.computeVertexNormals();
+  return new THREE.Mesh(geo, plateMat.clone());
+}
+
+function placeCAD(obj){
+  // remove old custom + default plates
+  if(customCAD){ weldGroup.remove(customCAD); customCAD=null; }
+  plate1.visible=false; plate2.visible=false;
+  let mesh = obj.isMesh ? obj : (obj.scene || obj);
+  const box=new THREE.Box3().setFromObject(mesh);
+  const size=new THREE.Vector3(); box.getSize(size);
+  const center=new THREE.Vector3(); box.getCenter(center);
+  const maxDim=Math.max(size.x,size.y,size.z)||1;
+  const scale=1.4/maxDim;
+  mesh.scale.setScalar(scale);
+  mesh.position.set(
+    WX - center.x*scale,
+    TBL + 0.06 - (box.min.y*scale),
+    WZ - center.z*scale
+  );
+  mesh.traverse(c=>{ if(c.isMesh){
+    c.castShadow=c.receiveShadow=true;
+    if(!c.material||!c.material.metalness) c.material=plateMat.clone();
+    c.add(new THREE.LineSegments(new THREE.EdgesGeometry(c.geometry,22),edgeMat));
+  }});
+  weldGroup.add(mesh);
+  customCAD=mesh;
+  // recompute weld seam along the top edge of the new bounding box
+  const nb=new THREE.Box3().setFromObject(mesh);
+  SEAM_A.set(nb.min.x+0.05, nb.max.y+0.01, (nb.min.z+nb.max.z)/2);
+  SEAM_B.set(nb.max.x-0.05, nb.max.y+0.01, (nb.min.z+nb.max.z)/2);
+  for(let i=0;i<5;i++) SPOTS[i].lerpVectors(SEAM_A,SEAM_B,i/4);
+  nuggets.forEach((n,i)=>{ n.position.copy(SPOTS[i]); n.visible=false; });
+}
+function resetCAD(){
+  if(customCAD){ weldGroup.remove(customCAD); customCAD=null; }
+  plate1.visible=true; plate2.visible=true;
+  // restore default seam
+  SEAM_A.set(WX-0.45, TBL+0.16, WZ); SEAM_B.set(WX+0.45, TBL+0.16, WZ);
+  for(let i=0;i<5;i++) SPOTS[i].lerpVectors(SEAM_A,SEAM_B,i/4);
+  nuggets.forEach((n,i)=>{ n.position.copy(SPOTS[i]); n.visible=false; });
+}
+
+function showCell(which){           // 'pp' | 'weld' | 'none'
+  ppGroup.visible   = which==='pp';
+  weldGroup.visible = which==='weld';
+}
+showCell('none');
+
+// ════ DIRECTOR (state machine) ════
+const APP_TARGET = new THREE.Vector3(0,2.4,2.2);
+const appQueue = [];
+let carried = null;                 // payload mesh currently gripped
+let appRoutineIx = 0;
+const APP_SEQUENCE = ['pickplace','spotweld','migweld'];
+
+function qMove(pos, grip, speed, dwell, action){
+  appQueue.push({pos:pos.clone(), grip:(grip===undefined?gripCmd:grip), speed:speed||1.4, dwell:dwell||0, action:action||null, t:0});
+}
+function buildPickPlace(reverse){
+  showCell('pp');
+  const src = reverse ? PAD_B : PAD_A;
+  const dst = reverse ? PAD_A : PAD_B;
+  const HOVER = 0.7;
+  // approach from home
+  qMove(new THREE.Vector3(src.x, 1.4, src.z), 0, 2.0, 0.1);
+  PAYLOADS.forEach((box,i)=>{
+    const stackY = BOX_BASE + i*BOX_GAP;
+    const dstY   = BOX_BASE + (PAYLOADS.length-1-i)*BOX_GAP;   // stack in reverse on dest
+    qMove(new THREE.Vector3(src.x, stackY+HOVER, src.z), 0, 1.8, 0.05);     // over object
+    qMove(new THREE.Vector3(src.x, stackY+0.16,  src.z), 0, 1.1, 0.15);     // descend
+    qMove(new THREE.Vector3(src.x, stackY+0.16,  src.z), 1, 0.6, 0.35, ()=>{ carried = box; }); // grip
+    qMove(new THREE.Vector3(src.x, stackY+HOVER, src.z), 1, 1.2, 0.05);     // lift
+    qMove(new THREE.Vector3((src.x+dst.x)/2, TBL+1.5, (src.z+dst.z)/2), 1, 2.2, 0.0); // traverse arc apex
+    qMove(new THREE.Vector3(dst.x, dstY+HOVER, dst.z), 1, 1.8, 0.05);       // over dest
+    qMove(new THREE.Vector3(dst.x, dstY+0.16,  dst.z), 1, 1.1, 0.15);       // descend
+    qMove(new THREE.Vector3(dst.x, dstY+0.16,  dst.z), 0, 0.6, 0.3, ()=>{   // release
+      if(carried){ carried.position.set(dst.x, dstY, dst.z); carried = null; }
+    });
+    qMove(new THREE.Vector3(dst.x, dstY+HOVER, dst.z), 0, 1.2, 0.05);       // retract
+  });
+  qMove(new THREE.Vector3(0,2.4,2.2), 0, 2.0, 0.4);                          // home
+}
+function buildSpotWeld(){
+  showCell('weld');
+  nuggets.forEach(n=>{ n.visible=false; n.material.emissive.setHex(0x000000); });
+  qMove(new THREE.Vector3(SPOTS[0].x, 1.5, SPOTS[0].z+0.4), 0, 2.0, 0.1);
+  SPOTS.forEach((s,i)=>{
+    const approach = s.clone(); approach.z += 0.32; approach.y += 0.05;
+    qMove(approach, 0, 1.8, 0.05);                                          // approach point
+    qMove(s.clone(), 0, 1.0, 0.12);                                         // touch
+    qMove(s.clone(), 0, 1.0, 0.45, ()=>{                                    // FIRE spot weld
+      emitSparks(s, 26, 1.6, 3.2, true);
+      arcLight.position.copy(s); arcLight.intensity = 6; arcLight.color.setHex(0xbfe0ff);
+      nuggets[i].visible = true; nuggets[i].material.emissive.setHex(0xff7a20);
+    });
+    qMove(approach, 0, 1.6, 0.05);                                          // retract
+  });
+  qMove(new THREE.Vector3(0,2.4,2.2), 0, 2.0, 0.4);
+}
+function buildMig(){
+  showCell('weld');
+  nuggets.forEach(n=>{ n.visible=false; });
+  const start = SEAM_A.clone(); start.z += 0.3; start.y += 0.25;
+  qMove(start, 0, 2.0, 0.1);
+  qMove(SEAM_A.clone(), 0, 1.0, 0.25, ()=>{ migOn = true; });               // strike arc
+  // slow constant pass along the seam (bead + sparks emitted in appsUpdate)
+  const STEPS = 7;
+  for(let i=1;i<=STEPS;i++){
+    qMove(new THREE.Vector3().lerpVectors(SEAM_A,SEAM_B,i/STEPS), 0, 0.32, 0.0);
+  }
+  qMove(SEAM_B.clone(), 0, 0.4, 0.2, ()=>{ migOn = false; arcLight.intensity = 0; });
+  const end = SEAM_B.clone(); end.z += 0.3; end.y += 0.25;
+  qMove(end, 0, 1.6, 0.1);
+  qMove(new THREE.Vector3(0,2.4,2.2), 0, 2.0, 0.4);
+}
+let migOn = false, beadTimer = 0;
+
+function startRoutine(name){
+  appQueue.length = 0; carried = null; migOn = false; arcLight.intensity = 0;
+  if(name==='pickplace'){ buildPickPlace(false); }
+  else if(name==='spotweld'){ buildSpotWeld(); }
+  else if(name==='migweld'){ buildMig(); }
+  appCurrentName = name;
+}
+let appCurrentName = '';
+let appActive = false;
+let appMode = '';
+
+function appsTarget(dt, mode){
+  // choose routine set
+  if(!appActive || appMode !== mode){
+    appActive = true; appMode = mode;
+    if(mode==='pick'){ appRoutineIx=0; startRoutine('pickplace'); }
+    else if(mode==='spot'){ startRoutine('spotweld'); }
+    else if(mode==='mig'){ startRoutine('migweld'); }
+    else { appRoutineIx=0; startRoutine(APP_SEQUENCE[0]); }   // 'apps' = full sequence
+  }
+  if(appQueue.length === 0){
+    // routine finished → next
+    if(mode==='apps'){ appRoutineIx=(appRoutineIx+1)%APP_SEQUENCE.length; startRoutine(APP_SEQUENCE[appRoutineIx]); }
+    else if(mode==='pick'){ startRoutine('pickplace'); }     // loop (alternate dir handled below)
+    else if(mode==='spot'){ startRoutine('spotweld'); }
+    else if(mode==='mig'){ startRoutine('migweld'); }
+  }
+  const wp = appQueue[0];
+  if(wp){
+    // constant-speed Cartesian step toward waypoint (smooth — joints lerp on top)
+    const d = APP_TARGET.distanceTo(wp.pos);
+    const step = wp.speed * dt;
+    if(d <= step + 0.012){
+      APP_TARGET.copy(wp.pos);
+      wp.t += dt;
+      gripCmd += (wp.grip - gripCmd) * (1 - Math.exp(-dt*9));
+      if(wp.t >= wp.dwell){
+        if(wp.action) wp.action();
+        appQueue.shift();
+      }
+    } else {
+      APP_TARGET.addScaledVector(tmpV.copy(wp.pos).sub(APP_TARGET).multiplyScalar(1/d), step);
+      gripCmd += (wp.grip - gripCmd) * (1 - Math.exp(-dt*6));
+    }
+  }
+  return APP_TARGET;
+}
+function appsUpdate(dt){
+  updateSparks(dt);
+  updateBeads(dt);
+  // decay arc flash
+  if(arcLight.intensity > 0 && !migOn) arcLight.intensity = Math.max(0, arcLight.intensity - dt*14);
+  // carried payload rides the gripper
+  if(carried){ J.eoatTip.getWorldPosition(tmpV); carried.position.copy(tmpV); }
+  // MIG continuous bead + sparks + arc glow at the tool tip
+  if(migOn){
+    J.eoatTip.getWorldPosition(tmpV);
+    beadTimer += dt;
+    if(beadTimer > 0.05){ beadTimer = 0; dropBead(tmpV); }
+    if(Math.random() < 0.7) emitSparks(tmpV, 3, 1.1, 2.4, true);
+    arcLight.position.copy(tmpV); arcLight.color.setHex(0xfff0c0);
+    arcLight.intensity = 4 + Math.sin(demoT*55)*2.2;     // flicker
+  }
+}
+function appsReset(){
+  appActive=false; appMode=''; appQueue.length=0; carried=null; migOn=false; arcLight.intensity=0;
+  showCell('none');
+  PAYLOADS.forEach(p=>p.position.copy(p.userData.home));
+  nuggets.forEach(n=>n.visible=false);
+}
+const APP_MODES = ['apps','pick','spot','mig'];
+
+function loop(){
+  requestAnimationFrame(loop);
+  try { loopBody(); } catch(e){ window.__loopErr = (e.message||e) + ' @ ' + (e.stack||'').split('\n').slice(1,3).join(' | '); }
+}
+function loopBody(){
+  const now = performance.now();
+  const dt = Math.min(0.05, (now - lastT) / 1000);
+  lastT = now;
+  demoT += dt;
+
+  // snapshot for velocity limiting
+  const _prevQ = [cur.a1,cur.a2,cur.a3,cur.a4,cur.a5,cur.a6];
+
+  /* ── static anchors: no movement needed (set in applyBubbleLayout) ── */
+
+  /* ── idle: gentle wander around current target if none selected ── */
+  let targetPos;
+  if(motion.mode === 'jog'){
+    appActive && appsReset();
+    targetPos = motion.jog;
+  }else if(motion.mode === 'trajectory' && motion.traj.playing){
+    appActive && appsReset();
+    targetPos = trajTarget(dt);
+  }else if(activeIdx >= 0 && anchors[activeIdx]){
+    appActive && appsReset();
+    targetPos = anchors[activeIdx].obj.getWorldPosition(tmpT);
+  }else if(APP_MODES.indexOf(idleMode) >= 0){
+    targetPos = appsTarget(dt, idleMode);     // pick-&-place / spot-weld / MIG demos
+  }else if(idleMode === 'cursor'){
+    appActive && appsReset();
+    targetPos = cursorTarget;            // EOAT follows the mouse
+  }else if(idleMode === 'cycle'){
+    appActive && appsReset();
+    // cycle through bubbles 0..3, pause on each
+    const period = 3.5;
+    const phase = (demoT % (period * anchors.length)) / period;
+    const idx = Math.floor(phase) % anchors.length;
+    targetPos = anchors[idx].obj.getWorldPosition(tmpT);
+  }else if(idleMode === 'sweep'){
+    appActive && appsReset();
+    const t = demoT * 0.35;
+    tmpT.set(Math.sin(t*1.2) * 1.6, 1.8 + Math.sin(t*1.7) * 0.5, 1.8 + Math.cos(t) * 0.7);
+    targetPos = tmpT;
+  }else{
+    appActive && appsReset();
+    // home pose (reach forward and slightly up)
+    tmpT.set(0, 2.4, 2.2);
+    targetPos = tmpT;
+  }
+
+  /* ── solve per mode ── */
+  const k = 1 - Math.exp(-dt * jointLerp);
+  const twinActive = motion.mode === 'twin' && motion.twin.playing;
+  const jogActive  = motion.mode === 'jog';
+  const trajActive = motion.mode === 'trajectory' && motion.traj.playing;
+  if(twinActive){
+    // DIGITAL TWIN — joints driven directly by external/synthetic encoder stream (FK only)
+    const q = (twinExternal && (performance.now() - twinExternalT) < 600) ? twinExternal : twinJoints(dt);
+    jt.a1=q[0]; jt.a2=q[1]; jt.a3=q[2]; jt.a4=q[3]; jt.a5=q[4]; jt.a6=q[5];
+    cur.a1 += (jt.a1-cur.a1)*k; cur.a2 += (jt.a2-cur.a2)*k; cur.a3 += (jt.a3-cur.a3)*k;
+    cur.a4 += (jt.a4-cur.a4)*k; cur.a5 += (jt.a5-cur.a5)*k; cur.a6 += (jt.a6-cur.a6)*k;
+    J.j1.rotation.y=cur.a1; J.j2.rotation.x=cur.a2; J.j3.rotation.x=cur.a3;
+    J.j4.rotation.z=cur.a4; J.j5.rotation.x=cur.a5; J.j6.rotation.z=cur.a6;
+  } else if(jogActive){
+    solveIK_DLS(targetPos);          // Cartesian jog — singularity-robust DLS
+    cur.a1 += (jt.a1-cur.a1)*k; cur.a2 += (jt.a2-cur.a2)*k; cur.a3 += (jt.a3-cur.a3)*k;
+    cur.a4 += (jt.a4-cur.a4)*k; cur.a5 += (jt.a5-cur.a5)*k; cur.a6 += (jt.a6-cur.a6)*k;
+    J.j1.rotation.y=cur.a1; J.j2.rotation.x=cur.a2; J.j3.rotation.x=cur.a3;
+    J.j4.rotation.z=cur.a4; J.j5.rotation.x=cur.a5; J.j6.rotation.z=cur.a6;
+  } else if(ikMode === 'manual' && !trajActive){
+    jt.a1=manualAngles[0]; jt.a2=manualAngles[1]; jt.a3=manualAngles[2];
+    jt.a4=manualAngles[3]; jt.a5=manualAngles[4]; jt.a6=manualAngles[5];
+    cur.a1 += (jt.a1-cur.a1)*k; cur.a2 += (jt.a2-cur.a2)*k; cur.a3 += (jt.a3-cur.a3)*k;
+    cur.a4 += (jt.a4-cur.a4)*k; cur.a5 += (jt.a5-cur.a5)*k; cur.a6 += (jt.a6-cur.a6)*k;
+    J.j1.rotation.y=cur.a1; J.j2.rotation.x=cur.a2; J.j3.rotation.x=cur.a3;
+    J.j4.rotation.z=cur.a4; J.j5.rotation.x=cur.a5; J.j6.rotation.z=cur.a6;
+  } else if(ikMode === 'jacobian'){
+    solveIK_DLS(targetPos);          // position-only resolved-rate (J⁺)
+    cur.a1 += (jt.a1-cur.a1)*k; cur.a2 += (jt.a2-cur.a2)*k; cur.a3 += (jt.a3-cur.a3)*k;
+    cur.a4 += (jt.a4-cur.a4)*k; cur.a5 += (jt.a5-cur.a5)*k; cur.a6 += (jt.a6-cur.a6)*k;
+    J.j1.rotation.y=cur.a1; J.j2.rotation.x=cur.a2; J.j3.rotation.x=cur.a3;
+    J.j4.rotation.z=cur.a4; J.j5.rotation.x=cur.a5; J.j6.rotation.z=cur.a6;
+  } else {
+    // DEFAULT: decoupled exact solution (also used by trajectory playback)
+    solveIK(targetPos);
+    cur.a1 += (jt.a1-cur.a1)*k; cur.a2 += (jt.a2-cur.a2)*k; cur.a3 += (jt.a3-cur.a3)*k;
+    J.j1.rotation.y=cur.a1; J.j2.rotation.x=cur.a2; J.j3.rotation.x=cur.a3;
+    J.j3.updateWorldMatrix(true, true);
+    solveWrist();
+    cur.a4 += (jt.a4-cur.a4)*k; cur.a5 += (jt.a5-cur.a5)*k; cur.a6 += (jt.a6-cur.a6)*k;
+    J.j4.rotation.z=cur.a4; J.j5.rotation.x=cur.a5; J.j6.rotation.z=cur.a6;
+  }
+
+  /* ── safety: joint + velocity limits, then collision check ── */
+  clampAndApply(_prevQ, dt);
+  collisionCheck();
+
+  /* ── force / compliance visualisation ── */
+  if(forceVec.lengthSq() > 1e-6){
+    computeTorques();
+    J.eoatTip.getWorldPosition(tmpV);
+    forceArrow.position.copy(tmpV);
+    forceArrow.setDirection(tmpV.copy(forceVec).normalize());
+    forceArrow.setLength(Math.min(1.6, forceVec.length()*0.05 + 0.3), 0.16, 0.09);
+    forceArrow.visible = true;
+  } else {
+    forceArrow.visible = false;
+  }
+
+  /* ── jog marker ── */
+  if(motion.mode === 'jog'){ jogMarker.position.copy(motion.jog); jogMarker.visible = true; }
+  else jogMarker.visible = false;
+
+  /* ── part reveal ── */
+  revealStep(k);
+
+  /* ── gripper open/close (driven by gripCmd from applications, or hover) ── */
+  const inAppGrip = (APP_MODES.indexOf(idleMode) >= 0) && activeIdx < 0;
+  const targetOpen = inAppGrip ? (0.05 - gripCmd*0.04) : ((activeIdx >= 0) ? 0.025 : 0.045);
+  J.fingerL.position.x += ((-targetOpen) - J.fingerL.position.x) * k * 1.4;
+  J.fingerR.position.x += (( targetOpen) - J.fingerR.position.x) * k * 1.4;
+
+  /* ── project bubbles to screen ── */
+  const w = window.innerWidth, h = window.innerHeight;
+  for(let i = 0; i < anchors.length; i++){
+    const a = anchors[i];
+    a.obj.getWorldPosition(tmpV);
+    tmpV.project(camera);
+    const sx = (tmpV.x * 0.5 + 0.5) * w;
+    const sy = (-tmpV.y * 0.5 + 0.5) * h;
+    a.el.style.left = sx + 'px';
+    a.el.style.top  = sy + 'px';
+    // depth z in clip space: -1 (near) to +1 (far)
+    const depth01 = THREE.MathUtils.clamp((tmpV.z + 1) * 0.5, 0, 1);
+    const alpha = depth01 < 0.92 ? 1 : Math.max(0.3, 1 - (depth01 - 0.92) * 12);
+    a.el.style.opacity = alpha.toFixed(2);
+    a.el.style.zIndex = Math.round(100 - depth01 * 60);
+    // slight scale for depth cue
+    const scale = 1.05 - depth01 * 0.25;
+    a.el.style.transform = `translate(-50%, -50%) scale(${scale.toFixed(3)})`;
+  }
+
+  /* ── reticle on active bubble ── */
+  if(activeIdx >= 0){
+    const a = anchors[activeIdx];
+    reticleEl.style.left = a.el.style.left;
+    reticleEl.style.top  = a.el.style.top;
+  }
+
+  /* ── EOAT marker (where the gripper tip lands on screen) ── */
+  J.eoatTip.getWorldPosition(tmpV);
+  tmpV.project(camera);
+  const ex = (tmpV.x * 0.5 + 0.5) * w;
+  const ey = (-tmpV.y * 0.5 + 0.5) * h;
+  eoatMark.style.left = ex + 'px';
+  eoatMark.style.top  = ey + 'px';
+  eoatMark.classList.toggle('show', activeIdx >= 0);
+
+  /* ── telemetry ── */
+  $('t1').textContent = fmtDeg(cur.a1);
+  $('t2').textContent = fmtDeg(cur.a2);
+  $('t3').textContent = fmtDeg(cur.a3);
+  $('t4').textContent = fmtDeg(cur.a4);
+  $('t5').textContent = fmtDeg(cur.a5);
+  $('t6').textContent = fmtDeg(cur.a6);
+  J.eoatTip.getWorldPosition(tmpV);
+  $('te').textContent = `${tmpV.x.toFixed(2)} ${tmpV.y.toFixed(2)} ${tmpV.z.toFixed(2)}`;
+
+  /* ── kinematics panel live update ── */
+  if(typeof roboUpdate === 'function' && roboOpen) roboUpdate();
+
+  appsUpdate(dt);
+
+  try { renderer.render(scene, camera); }
+  catch(e){ /* skip a frame if three hits a transient recompile */ }
+}
+
+// precompile all shader variants (incl. the emissive reveal glow) so three never
+// recompiles mid-frame — that recompile was the source of transient render errors
+try {
+  for(const m of tracked) m.material.emissiveIntensity = 1;
+  renderer.compile(scene, camera);
+  renderer.render(scene, camera);   // warmup: force shadow-map programs to link
+  renderer.render(scene, camera);
+  for(const m of tracked) m.material.emissiveIntensity = 0;
+} catch(e){}
+
+loop();
+
+// drop splash once first frame committed
+requestAnimationFrame(() => {
+  setTimeout(() => $('splash').classList.add('gone'), 350);
+});
+
+/* =================================================================
+   TWEAKS PANEL  (vanilla + host protocol)
+   ================================================================= */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "bodyColor": "#0c8cba",
+  "accentColor": "#ffffff",
+  "bubbleEoat": "#4c268e",
+  "bubbleIo": "#3ad6ff",
+  "bubbleReg": "#9b6bff",
+  "bubbleFlow": "#3ddc97",
+  "bgColor": "#3b2556",
+  "approachPitch": 24,
+  "layout": "tight",
+  "idle": "cursor",
+  "speed": 11.5,
+  "camDist": 9.5,
+  "camHeight": 3.4,
+  "camAzim": 0,
+  "telemetry": true,
+  "edges": true,
+  "floorGlow": true
+}/*EDITMODE-END*/;
+
+const BODY_COLORS = [
+  {hex:"#1c4a96", name:"Industrial Blue"},
+  {hex:"#0f2c5e", name:"Deep Navy"},
+  {hex:"#f0c020", name:"FANUC Yellow"},
+  {hex:"#dadde2", name:"ABB White"},
+  {hex:"#2a2a30", name:"Graphite"},
+  {hex:"#c0392b", name:"Kuka Red"},
+  {hex:"#1f8a5b", name:"Forest"},
+  {hex:"#7a4cc4", name:"Violet"},
+  {hex:"#0c8cba", name:"Teal"},
+  {hex:"#e85d75", name:"Coral"}
+];
+const ACCENT_COLORS = [
+  {hex:"#ff6b1c", name:"Orange"},
+  {hex:"#ff2d55", name:"Safety Red"},
+  {hex:"#3ddc97", name:"Lime"},
+  {hex:"#3ad6ff", name:"Cyan"},
+  {hex:"#9b6bff", name:"Violet"},
+  {hex:"#ffd400", name:"Hi-Vis"},
+  {hex:"#ff8fa3", name:"Pink"},
+  {hex:"#a8e6cf", name:"Mint"},
+  {hex:"#ffffff", name:"White"},
+  {hex:"#202326", name:"Stealth"}
+];
+const BG_COLORS = [
+  {hex:"#05070f", name:"Void Black"},
+  {hex:"#0a0e1a", name:"Deep Space"},
+  {hex:"#0c1424", name:"Navy Night"},
+  {hex:"#101015", name:"Charcoal"},
+  {hex:"#0b1410", name:"Forest Dark"},
+  {hex:"#140b14", name:"Plum Dark"},
+  {hex:"#1a1208", name:"Amber Dark"},
+  {hex:"#e9eef5", name:"Studio Light"}
+];
+
+let T = Object.assign({}, TWEAK_DEFAULTS);
+
+function setTweak(key, val){
+  if(typeof key === 'object'){ Object.assign(T, key); }
+  else { T[key] = val; }
+  applyTweaks();
+  try{ window.parent.postMessage({type:'__edit_mode_set_keys', edits: (typeof key==='object'?key:{[key]:val})}, '*'); }catch(_){}
+}
+
+function applyTweaks(){
+  // body color — change every blue material in-place
+  matBlue.color.set(T.bodyColor);
+  // derived darker shade for matBlueD
+  const c = new THREE.Color(T.bodyColor);
+  const darker = c.clone().multiplyScalar(0.65);
+  matBlueD.color.copy(darker);
+
+  // accent
+  matOrange.color.set(T.accentColor);
+  const aD = new THREE.Color(T.accentColor).multiplyScalar(0.75);
+  matOrangeD.color.copy(aD);
+
+  // propagate colors to the per-mesh cloned materials (reveal system)
+  if(typeof recolorTracked === 'function') recolorTracked();
+
+  // page background colour (+ derived scene fog/atmos tint)
+  if(T.bgColor){
+    document.documentElement.style.setProperty('--bg', T.bgColor);
+    document.body.style.background = T.bgColor;
+    const isLight = (parseInt(T.bgColor.slice(1,3),16) + parseInt(T.bgColor.slice(3,5),16) + parseInt(T.bgColor.slice(5,7),16)) > 380;
+    document.documentElement.style.setProperty('--ink', isLight ? '#10141c' : '#e9eef7');
+    document.documentElement.style.setProperty('--dim', isLight ? '#5a6577' : '#7b8597');
+  }
+
+  // bubble colours — paint each orb individually
+  const bubbleMap = { gripper: T.bubbleEoat, io: T.bubbleIo, register: T.bubbleReg, flow: T.bubbleFlow };
+  document.querySelectorAll('.bubble').forEach(b => {
+    const hex = bubbleMap[b.dataset.tool];
+    if(!hex) return;
+    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), bl = parseInt(hex.slice(5,7),16);
+    const dark = `rgb(${Math.round(r*0.18)},${Math.round(g*0.18)},${Math.round(bl*0.18)})`;
+    const darker2 = `rgb(${Math.round(r*0.04)},${Math.round(g*0.04)},${Math.round(bl*0.04)})`;
+    const ringRgba = `rgba(${r},${g},${bl},.55)`;
+    const glowRgba = `rgba(${r},${g},${bl},.55)`;
+    b.style.setProperty('--orb-c1', dark);
+    b.style.setProperty('--orb-c2', darker2);
+    b.style.setProperty('--orb-ring', ringRgba);
+    b.style.setProperty('--orb-glow', glowRgba);
+    // update reveal-glow colour for the matching robot part
+    const partKey = b.dataset.part;
+    if(partKey && typeof PART_GLOW_REF === 'object'){
+      PART_GLOW_REF[partKey] = parseInt(hex.slice(1), 16);
+    }
+  });
+
+  // bubble layout
+  applyBubbleLayout(T.layout);
+
+  // idle mode
+  idleMode = T.idle;
+
+  // animation speed
+  jointLerp = T.speed;
+
+  // wrist presentation tilt (drives J4/J5/J6 articulation)
+  if(typeof T.approachPitch === 'number') approachPitch = T.approachPitch * Math.PI / 180;
+
+  // camera position
+  const az = (T.camAzim || 0) * Math.PI / 180;
+  const d = (typeof T.camDist === 'number' && T.camDist) || 8.6;
+  const ch = (typeof T.camHeight === 'number') ? T.camHeight : 3.2;
+  camera.position.set(Math.sin(az) * d * 0.05, ch, d);
+  camera.lookAt(0, 0.9, 0);
+
+  // telemetry
+  document.querySelector('.telemetry').style.display = T.telemetry ? '' : 'none';
+
+  // edges
+  scene.traverse(o => {
+    if(o.isLineSegments) o.visible = T.edges;
+  });
+
+  // floor glow ring
+  floorGlowOn = T.floorGlow;
+  ring.visible = T.floorGlow;
+  disk.visible = T.floorGlow;
+}
+
+/* ───── render panel rows ───── */
+function renderTweaks(){
+  const body = document.getElementById('twk-body');
+  body.innerHTML = '';
+
+  body.appendChild(section('ROBOT'));
+  body.appendChild(swatchRow('Body color', T.bodyColor, BODY_COLORS,
+    v => { setTweak('bodyColor', v); refreshSwatchRow(); }));
+  body.appendChild(swatchRow('Accent color', T.accentColor, ACCENT_COLORS,
+    v => { setTweak('accentColor', v); refreshSwatchRow(); }));
+  body.appendChild(sliderRow('Joint smoothing', T.speed, 1.5, 12, 0.5, 'rate',
+    v => setTweak('speed', v)));
+
+  body.appendChild(section('TARGETS'));
+  body.appendChild(segRow('Bubble layout', T.layout, [['arc','ARC'],['wide','WIDE'],['tight','TIGHT']],
+    v => setTweak('layout', v)));
+  body.appendChild(segRow('Idle behavior', T.idle, [['cursor','CURSOR'],['home','HOLD'],['cycle','CYCLE'],['sweep','SWEEP']],
+    v => setTweak('idle', v)));
+  body.appendChild(segRow('Application', T.idle, [['apps','AUTO'],['pick','PICK'],['spot','SPOT'],['mig','MIG']],
+    v => setTweak('idle', v)));
+
+  body.appendChild(section('CAMERA'));
+  body.appendChild(sliderRow('Distance', T.camDist, 6, 13, 0.1, '',
+    v => setTweak('camDist', v)));
+  body.appendChild(sliderRow('Height',   T.camHeight, 1.5, 6, 0.1, '',
+    v => setTweak('camHeight', v)));
+  body.appendChild(sliderRow('Azimuth',  T.camAzim, -30, 30, 1, '°',
+    v => setTweak('camAzim', v)));
+
+  body.appendChild(section('VIEW'));
+  body.appendChild(toggleRow('Telemetry HUD', T.telemetry,
+    v => setTweak('telemetry', v)));
+  body.appendChild(toggleRow('CAD edge lines', T.edges,
+    v => setTweak('edges', v)));
+  body.appendChild(toggleRow('Floor glow ring', T.floorGlow,
+    v => setTweak('floorGlow', v)));
+
+  body.appendChild(section('SESSION'));
+  const reset = document.createElement('button');
+  reset.className = 'twk-btn';
+  reset.textContent = 'Reset to defaults';
+  reset.onclick = () => { Object.assign(T, TWEAK_DEFAULTS); applyTweaks(); renderTweaks(); };
+  body.appendChild(reset);
+}
+
+function section(label){
+  const d = document.createElement('div');
+  d.className = 'twk-sect';
+  d.textContent = label;
+  return d;
+}
+
+function sliderRow(label, val, min, max, step, unit, onChange){
+  const row = document.createElement('div'); row.className = 'twk-row';
+  const lbl = document.createElement('div'); lbl.className = 'twk-lbl';
+  const name = document.createElement('span'); name.textContent = label;
+  const valEl = document.createElement('span'); valEl.className = 'twk-val';
+  valEl.textContent = (typeof val === 'number' ? val.toFixed(step < 1 ? 1 : 0) : val) + (unit ? unit : '');
+  lbl.append(name, valEl);
+  const slider = document.createElement('input');
+  slider.type = 'range'; slider.className = 'twk-slider';
+  slider.min = min; slider.max = max; slider.step = step; slider.value = val;
+  slider.oninput = () => {
+    const v = parseFloat(slider.value);
+    valEl.textContent = v.toFixed(step < 1 ? 1 : 0) + (unit ? unit : '');
+    onChange(v);
+  };
+  row.append(lbl, slider);
+  return row;
+}
+
+function segRow(label, val, options, onChange){
+  const row = document.createElement('div'); row.className = 'twk-row';
+  const lbl = document.createElement('div'); lbl.className = 'twk-lbl';
+  const name = document.createElement('span'); name.textContent = label;
+  lbl.appendChild(name);
+  const seg = document.createElement('div'); seg.className = 'twk-seg';
+  options.forEach(([v, txt]) => {
+    const b = document.createElement('button');
+    b.textContent = txt;
+    if(v === val) b.classList.add('on');
+    b.onclick = () => {
+      seg.querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      onChange(v);
+    };
+    seg.appendChild(b);
+  });
+  row.append(lbl, seg);
+  return row;
+}
+
+let _lastSwatchUpdate = null;
+function swatchRow(label, val, palette, onChange){
+  const row = document.createElement('div'); row.className = 'twk-row';
+  const lbl = document.createElement('div'); lbl.className = 'twk-lbl';
+  const name = document.createElement('span'); name.textContent = label;
+  const valEl = document.createElement('span'); valEl.className = 'twk-val';
+  const meta = palette.find(p => p.hex === val);
+  valEl.textContent = meta ? meta.name : val;
+  lbl.append(name, valEl);
+  const sw = document.createElement('div'); sw.className = 'twk-swatches';
+  palette.forEach(p => {
+    const c = document.createElement('div'); c.className = 'twk-sw';
+    c.style.background = p.hex;
+    c.title = p.name;
+    if(p.hex === val) c.classList.add('on');
+    c.onclick = () => {
+      sw.querySelectorAll('.twk-sw').forEach(x => x.classList.remove('on'));
+      c.classList.add('on');
+      valEl.textContent = p.name;
+      onChange(p.hex);
+    };
+    sw.appendChild(c);
+  });
+  row.append(lbl, sw);
+  return row;
+}
+function refreshSwatchRow(){ /* no-op — local state in renderTweaks handles names */ }
+
+/* Free-hex input row — type or paste any colour */
+function hexRow(label, val, onChange){
+  const row = document.createElement('div'); row.className='twk-row twk-row-h';
+  const lbl = document.createElement('span'); lbl.style.fontSize='12px'; lbl.style.fontWeight='500'; lbl.textContent = label;
+  const wrap = document.createElement('div'); wrap.style.cssText='display:flex;gap:6px;align-items:center;';
+  const sw = document.createElement('div'); sw.className='twk-sw'; sw.style.background=val; sw.style.width='24px'; sw.style.height='24px';
+  const cp = document.createElement('input'); cp.type='color'; cp.value=val;
+  cp.style.cssText='position:absolute;opacity:0;width:1px;height:1px;';
+  const inp = document.createElement('input'); inp.type='text'; inp.value=val; inp.spellcheck=false;
+  inp.style.cssText='width:78px;padding:4px 7px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;color:var(--ink);font:500 11px/1 \"JetBrains Mono\",monospace;outline:none;text-transform:uppercase;';
+  sw.style.cursor='pointer';
+  sw.onclick = () => cp.click();
+  cp.oninput = () => { inp.value = cp.value; sw.style.background = cp.value; onChange(cp.value); };
+  inp.oninput = () => {
+    let v = inp.value.trim();
+    if(!v.startsWith('#')) v = '#'+v;
+    if(/^#[0-9a-f]{6}$/i.test(v)){ sw.style.background = v; cp.value = v; onChange(v); }
+  };
+  wrap.append(sw, cp, inp);
+  row.append(lbl, wrap);
+  return row;
+}
+
+function toggleRow(label, val, onChange){
+  const row = document.createElement('div'); row.className = 'twk-row twk-row-h';
+  const lbl = document.createElement('span'); lbl.style.fontSize = '12px'; lbl.style.fontWeight = '500'; lbl.textContent = label;
+  const tog = document.createElement('div'); tog.className = 'twk-toggle' + (val ? ' on' : '');
+  tog.onclick = () => {
+    tog.classList.toggle('on');
+    onChange(tog.classList.contains('on'));
+  };
+  row.append(lbl, tog);
+  return row;
+}
+
+/* ───── show/hide via host protocol ───── */
+const twkEl = document.getElementById('twk');
+function showTwk(){ twkEl.classList.add('open'); }
+function hideTwk(){ twkEl.classList.remove('open'); }
+
+document.getElementById('twk-x').addEventListener('click', () => {
+  hideTwk();
+  try{ window.parent.postMessage({type:'__edit_mode_dismissed'}, '*'); }catch(_){}
+});
+
+window.addEventListener('message', (e) => {
+  const t = e?.data?.type;
+  if(t === '__activate_edit_mode') showTwk();
+  else if(t === '__deactivate_edit_mode') hideTwk();
+});
+try{ window.parent.postMessage({type:'__edit_mode_available'}, '*'); }catch(_){}
+
+// draggable header
+(function dragHead(){
+  const head = document.getElementById('twk-head');
+  let dragging = false, sx, sy, px, py;
+  head.addEventListener('mousedown', (e) => {
+    if(e.target.closest('.twk-x')) return;
+    dragging = true;
+    sx = e.clientX; sy = e.clientY;
+    const r = twkEl.getBoundingClientRect();
+    px = r.left; py = r.top;
+    twkEl.style.right = 'auto';
+    twkEl.style.transform = 'none';
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => {
+    if(!dragging) return;
+    twkEl.style.left = (px + e.clientX - sx) + 'px';
+    twkEl.style.top  = (py + e.clientY - sy) + 'px';
+  });
+  window.addEventListener('mouseup', () => { dragging = false; });
+})();
+
+renderTweaks();
+applyTweaks();
+
+/* =================================================================
+   ROBOT KINEMATICS PANEL  (opens on robot click)
+   ================================================================= */
+const roboEl   = document.getElementById('robo');
+const roboBody = document.getElementById('robo-body');
+const robotTip = document.getElementById('robot-tip');
+let roboTab = 'control';
+
+const JOINT_META = [
+  { n:'J1', d:'Base · yaw',      min:-180, max:180 },
+  { n:'J2', d:'Shoulder · pitch', min:-95,  max:95  },
+  { n:'J3', d:'Elbow · pitch',    min:-120, max:120 },
+  { n:'J4', d:'Wrist · roll',     min:-180, max:180 },
+  { n:'J5', d:'Wrist · pitch',    min:-115, max:115 },
+  { n:'J6', d:'Flange · roll',    min:-180, max:180 }
+];
+
+let roboRefs = {};   // live-updated DOM handles for the active tab
+
+function openRobo(){
+  roboOpen = true;
+  roboEl.classList.add('open');
+  buildRoboTab();
+}
+function closeRobo(){
+  roboOpen = false;
+  roboEl.classList.remove('open');
+}
+// safety-net updater (in case rAF is throttled): refresh panel while open
+setInterval(() => { if(roboOpen && typeof roboUpdate === 'function') roboUpdate(); }, 120);
+document.getElementById('robo-x').addEventListener('click', closeRobo);
+
+// tabs
+roboEl.querySelectorAll('.robo-tabs button').forEach(b => {
+  b.addEventListener('click', () => {
+    roboEl.querySelectorAll('.robo-tabs button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    roboTab = b.dataset.tab;
+    buildRoboTab();
+  });
+});
+
+function buildRoboTab(){
+  roboBody.innerHTML = '';
+  roboRefs = {};
+  if(roboTab === 'control') buildControl();
+  else if(roboTab === 'dh') buildDH();
+  else if(roboTab === 'scene') buildScene();
+  else if(roboTab === 'motion') buildMotion();
+  else buildJac();
+}
+
+/* ── SCENE TAB ── in-HTML appearance / colour / camera controls ── */
+function buildScene(){
+  roboBody.appendChild(section('ROBOT LIVERY · BODY'));
+  roboBody.appendChild(swatchRow('Preset', T.bodyColor, BODY_COLORS, v => setTweak('bodyColor', v)));
+  roboBody.appendChild(hexRow('Custom hex', T.bodyColor, v => setTweak('bodyColor', v)));
+
+  roboBody.appendChild(section('ROBOT LIVERY · ACCENT'));
+  roboBody.appendChild(swatchRow('Preset', T.accentColor, ACCENT_COLORS, v => setTweak('accentColor', v)));
+  roboBody.appendChild(hexRow('Custom hex', T.accentColor, v => setTweak('accentColor', v)));
+
+  roboBody.appendChild(section('BUBBLE COLOURS'));
+  roboBody.appendChild(hexRow('EOAT bubble',     T.bubbleEoat, v => setTweak('bubbleEoat', v)));
+  roboBody.appendChild(hexRow('I/O bubble',      T.bubbleIo,   v => setTweak('bubbleIo',   v)));
+  roboBody.appendChild(hexRow('Registers',       T.bubbleReg,  v => setTweak('bubbleReg',  v)));
+  roboBody.appendChild(hexRow('Flow Craft',      T.bubbleFlow, v => setTweak('bubbleFlow', v)));
+
+  roboBody.appendChild(section('BACKGROUND'));
+  roboBody.appendChild(swatchRow('Preset', T.bgColor || '#05070f', BG_COLORS, v => setTweak('bgColor', v)));
+  roboBody.appendChild(hexRow('Custom hex', T.bgColor || '#05070f', v => setTweak('bgColor', v)));
+
+  roboBody.appendChild(section('BUBBLES & MOTION'));
+  roboBody.appendChild(segRow('Layout',  T.layout, [['arc','SURROUND'],['wide','WIDE'],['tight','TIGHT']], v => setTweak('layout', v)));
+  roboBody.appendChild(segRow('Idle',    T.idle,   [['cursor','CURSOR'],['home','HOLD'],['cycle','CYCLE'],['sweep','SWEEP']], v => setTweak('idle', v)));
+  roboBody.appendChild(segRow('Application', T.idle, [['apps','AUTO'],['pick','PICK & PLACE'],['spot','SPOT WELD'],['mig','MIG WELD']], v => setTweak('idle', v)));
+  roboBody.appendChild(sliderRow('Joint smoothing', T.speed, 1.5, 14, 0.5, '', v => setTweak('speed', v)));
+  roboBody.appendChild(sliderRow('Wrist approach tilt', (T.approachPitch ?? 24), 0, 70, 1, '°', v => setTweak('approachPitch', v)));
+
+  roboBody.appendChild(section('CAMERA'));
+  roboBody.appendChild(sliderRow('Distance', T.camDist,   6,   14, 0.1, '',  v => setTweak('camDist',   v)));
+  roboBody.appendChild(sliderRow('Height',   T.camHeight, 1.5, 6,  0.1, '',  v => setTweak('camHeight', v)));
+  roboBody.appendChild(sliderRow('Azimuth',  T.camAzim,  -40,  40, 1,   '°', v => setTweak('camAzim',   v)));
+
+  roboBody.appendChild(section('VIEW'));
+  roboBody.appendChild(toggleRow('Telemetry HUD',  T.telemetry, v => setTweak('telemetry', v)));
+  roboBody.appendChild(toggleRow('CAD edge lines', T.edges,     v => setTweak('edges',     v)));
+  roboBody.appendChild(toggleRow('Floor glow ring',T.floorGlow, v => setTweak('floorGlow', v)));
+
+  const r = document.createElement('button'); r.className='twk-btn'; r.style.marginTop='6px'; r.textContent='Reset livery';
+  r.onclick = () => {
+    setTweak({
+      bodyColor:TWEAK_DEFAULTS.bodyColor, accentColor:TWEAK_DEFAULTS.accentColor,
+      bubbleEoat:TWEAK_DEFAULTS.bubbleEoat, bubbleIo:TWEAK_DEFAULTS.bubbleIo,
+      bubbleReg:TWEAK_DEFAULTS.bubbleReg, bubbleFlow:TWEAK_DEFAULTS.bubbleFlow
+    });
+    buildRoboTab();
+  };
+  roboBody.appendChild(r);
+}
+
+/* ── CONTROL TAB ── */
+function buildControl(){
+  // mode segmented
+  const sect1 = document.createElement('div'); sect1.className='robo-sect'; sect1.textContent='SOLVER MODE'; roboBody.appendChild(sect1);
+  const mode = document.createElement('div'); mode.className='robo-mode';
+  const modes = [
+    ['analytic','EXACT','Pos + wrist aim'],
+    ['jacobian','DLS','Jacobian J⁺'],
+    ['manual','FK','Manual joints']
+  ];
+  modes.forEach(([v,a,b2]) => {
+    const btn = document.createElement('button');
+    btn.innerHTML = a + '<small>' + b2 + '</small>';
+    if(v === ikMode) btn.classList.add('on');
+    btn.onclick = () => {
+      ikMode = v;
+      if(v === 'manual'){ // seed manual angles from current pose
+        manualAngles[0]=cur.a1; manualAngles[1]=cur.a2; manualAngles[2]=cur.a3;
+        manualAngles[3]=cur.a4; manualAngles[4]=cur.a5; manualAngles[5]=cur.a6;
+      }
+      mode.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+      btn.classList.add('on');
+      updateJointDisabled();
+    };
+    mode.appendChild(btn);
+  });
+  roboBody.appendChild(mode);
+
+  // joint sliders
+  const sect2 = document.createElement('div'); sect2.className='robo-sect'; sect2.textContent='JOINT ANGLES (q₁…q₆)'; roboBody.appendChild(sect2);
+  roboRefs.jval = []; roboRefs.jsl = [];
+  JOINT_META.forEach((jm, i) => {
+    const row = document.createElement('div'); row.className='jrow';
+    const h = document.createElement('div'); h.className='jrow-h';
+    const nm = document.createElement('span'); nm.className='jn'; nm.innerHTML = jm.n + ' <small>'+jm.d+'</small>';
+    const vv = document.createElement('span'); vv.className='jv'; vv.textContent='+0.0°';
+    h.append(nm, vv);
+    const sl = document.createElement('input'); sl.type='range'; sl.className='jslider';
+    sl.min=jm.min; sl.max=jm.max; sl.step=0.5; sl.value=0;
+    sl.oninput = () => {
+      if(ikMode !== 'manual') return;
+      manualAngles[i] = parseFloat(sl.value) * Math.PI/180;
+    };
+    row.append(h, sl);
+    roboBody.appendChild(row);
+    roboRefs.jval.push(vv); roboRefs.jsl.push(sl);
+  });
+  updateJointDisabled();
+
+  // limits & safety
+  const sect3 = document.createElement('div'); sect3.className='robo-sect'; sect3.textContent='LIMITS & SAFETY'; roboBody.appendChild(sect3);
+  roboBody.appendChild(sliderRow('Max joint speed', velLimit, 0.5, 8, 0.1, ' r/s', v => velLimit = v));
+  const sg = document.createElement('div'); sg.className='robo-grid';
+  const s1=document.createElement('span'); s1.textContent='Joint limits';
+  const s1v=document.createElement('b'); s1v.id='safe-lim'; s1v.textContent='OK'; s1v.style.color='var(--green)';
+  const s2=document.createElement('span'); s2.textContent='Collision';
+  const s2v=document.createElement('b'); s2v.id='safe-col'; s2v.textContent='CLEAR'; s2v.style.color='var(--green)';
+  sg.append(s1,s1v,s2,s2v); roboBody.appendChild(sg);
+  roboRefs.safeLim=s1v; roboRefs.safeCol=s2v;
+
+  const note = document.createElement('div'); note.className='robo-note';
+  note.innerHTML = '<b>EXACT</b> closed-form (pos + spherical wrist) · <b>DLS</b> Jacobian J⁺ · <b>FK</b> drives joints directly. Angles are clamped to joint limits and the per-step velocity cap; collision watches floor & base. The EOAT follows your <b>cursor</b> and any hovered tool.';
+  roboBody.appendChild(note);
+
+  const reset = document.createElement('button'); reset.className='twk-btn'; reset.style.marginTop='2px'; reset.textContent='Home pose';
+  reset.onclick = () => { for(let i=0;i<6;i++) manualAngles[i]=0; if(ikMode!=='manual'){ikMode='manual'; buildRoboTab();} };
+  roboBody.appendChild(reset);
+}
+
+function updateJointDisabled(){
+  if(!roboRefs.jsl) return;
+  const dis = ikMode !== 'manual';
+  roboRefs.jsl.forEach(sl => sl.disabled = dis);
+}
+
+/* ── DH · FK TAB ── */
+function buildDH(){
+  const s1 = document.createElement('div'); s1.className='robo-sect'; s1.textContent='DENAVIT–HARTENBERG TABLE'; roboBody.appendChild(s1);
+  const tbl = document.createElement('table'); tbl.className='mtx';
+  tbl.innerHTML = '<tr><th>i</th><th>θᵢ</th><th>dᵢ (m)</th><th>aᵢ (m)</th><th>αᵢ</th></tr>';
+  DH.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    const offTxt = p.off === 0 ? '' : (p.off < 0 ? '−90°' : '+90°');
+    const al = Math.round(p.al*180/Math.PI);
+    tr.innerHTML = `<td>${i+1}</td><td>q${i+1}${offTxt}</td><td>${p.d.toFixed(2)}</td><td>${p.a.toFixed(2)}</td><td>${al>0?'+':''}${al}°</td>`;
+    tbl.appendChild(tr);
+  });
+  roboBody.appendChild(tbl);
+
+  const legend = document.createElement('div'); legend.className='robo-note';
+  legend.innerHTML =
+    'Each joint = 4 numbers. <b>θ</b> joint angle (the variable) · <b>d</b> offset along zᵢ₋₁ · '+
+    '<b>a</b> link length along xᵢ · <b>α</b> twist between axes.<br>'+
+    'Link sizes: base '+LINK.base.toFixed(2)+' · shoulder '+LINK.d1.toFixed(2)+
+    ' · upper-arm '+LINK.a2.toFixed(2)+' · forearm '+LINK.d4.toFixed(2)+' · tool '+LINK.d6.toFixed(2)+' m.';
+  roboBody.appendChild(legend);
+
+  const s2 = document.createElement('div'); s2.className='robo-sect'; s2.textContent='FORWARD KINEMATICS · T = B·∏ Aᵢ(qᵢ)'; roboBody.appendChild(s2);
+  const grid = document.createElement('div'); grid.className='robo-grid';
+  const rows = [['X','fx','m'],['Y','fy','m'],['Z','fz','m'],['Roll','fr','°'],['Pitch','fp','°'],['Yaw','fyw','°']];
+  roboRefs.fk = {};
+  rows.forEach(([lbl,key,u]) => {
+    const sp = document.createElement('span'); sp.textContent = lbl + ' ('+u+')';
+    const b = document.createElement('b'); b.textContent='—'; b.id='fk-'+key;
+    grid.append(sp, b); roboRefs.fk[key] = b;
+  });
+  roboBody.appendChild(grid);
+
+  const s3 = document.createElement('div'); s3.className='robo-sect'; s3.textContent='MODEL VALIDATION'; roboBody.appendChild(s3);
+  const grid2 = document.createElement('div'); grid2.className='robo-grid';
+  const sp = document.createElement('span'); sp.textContent='DH-FK vs rendered arm';
+  const b = document.createElement('b'); b.textContent='—'; b.id='fk-delta';
+  grid2.append(sp, b); roboRefs.fkDelta = b;
+  roboBody.appendChild(grid2);
+
+  const note = document.createElement('div'); note.className='robo-note';
+  note.innerHTML = 'FK multiplies the six homogeneous link transforms (plus a base transform) to get the tool pose from the joint angles. The Δ above confirms this analytic model reproduces the rendered 3-D arm exactly.';
+  roboBody.appendChild(note);
+}
+
+/* ── JACOBIAN TAB ── */
+function buildJac(){
+  const s1 = document.createElement('div'); s1.className='robo-sect'; s1.textContent='GEOMETRIC JACOBIAN  J(q) ∈ ℝ⁶ˣ⁶'; roboBody.appendChild(s1);
+  const tbl = document.createElement('table'); tbl.className='mtx';
+  tbl.innerHTML = '<tr><th></th><th>q₁</th><th>q₂</th><th>q₃</th><th>q₄</th><th>q₅</th><th>q₆</th></tr>';
+  const rowLbls = ['vx','vy','vz','ωx','ωy','ωz'];
+  roboRefs.jac = [];
+  for(let r=0;r<6;r++){
+    const tr = document.createElement('tr');
+    const td0 = document.createElement('td'); td0.textContent = rowLbls[r]; tr.appendChild(td0);
+    const cells = [];
+    for(let c=0;c<6;c++){
+      const td = document.createElement('td'); td.textContent='0.00'; tr.appendChild(td); cells.push(td);
+    }
+    tbl.appendChild(tr); roboRefs.jac.push(cells);
+  }
+  roboBody.appendChild(tbl);
+
+  const s2 = document.createElement('div'); s2.className='robo-sect'; s2.textContent='SINGULARITY & CONDITIONING'; roboBody.appendChild(s2);
+  const grid = document.createElement('div'); grid.className='robo-grid';
+  const m1 = document.createElement('span'); m1.textContent='Manipulability w';
+  const m1v = document.createElement('b'); m1v.textContent='—'; m1v.id='jac-manip';
+  const c1 = document.createElement('span'); c1.textContent='Condition κ(J)';
+  const c1v = document.createElement('b'); c1v.textContent='—'; c1v.id='jac-cond';
+  const f1 = document.createElement('span'); f1.textContent='State';
+  const f1v = document.createElement('b'); f1v.textContent='—'; f1v.id='jac-state';
+  grid.append(m1, m1v, c1, c1v, f1, f1v);
+  roboRefs.manip = m1v; roboRefs.cond = c1v; roboRefs.state = f1v;
+  roboBody.appendChild(grid);
+
+  // singularity-robust damping
+  roboBody.appendChild(section('SINGULARITY-ROBUST IK'));
+  roboBody.appendChild(sliderRow('DLS damping λ', dlsLambda, 0, 0.8, 0.01, '', v => dlsLambda = v));
+
+  // force / compliance  τ = Jᵀ·F
+  roboBody.appendChild(section('FORCE / COMPLIANCE  τ = Jᵀ·F'));
+  const faxes=[['Fx','x'],['Fy','y'],['Fz','z']];
+  faxes.forEach(([lbl,ax])=>{
+    roboBody.appendChild(sliderRow(lbl+' (N)', forceVec[ax], -40, 40, 1, '', v=>{ forceVec[ax]=v; }));
+  });
+  const tg = document.createElement('table'); tg.className='mtx'; tg.style.marginTop='2px';
+  tg.innerHTML = '<tr><th>τ₁</th><th>τ₂</th><th>τ₃</th><th>τ₄</th><th>τ₅</th><th>τ₆</th></tr>';
+  const trow = document.createElement('tr'); roboRefs.tau=[];
+  for(let i=0;i<6;i++){ const td=document.createElement('td'); td.textContent='0.0'; trow.appendChild(td); roboRefs.tau.push(td); }
+  tg.appendChild(trow); roboBody.appendChild(tg);
+  const fnote=document.createElement('div'); fnote.className='robo-note';
+  fnote.innerHTML='Set a Cartesian force at the tool; joint torques τ = Jᵀ·F are the loads each motor must hold. This is the basis of force & compliance control. A red arrow shows F on the arm.';
+  roboBody.appendChild(fnote);
+}
+
+/* ── MOTION TAB ── trajectory · Cartesian jog · workspace · digital twin ── */
+function buildMotion(){
+  // ---- Trajectory planning ----
+  roboBody.appendChild(section('TRAJECTORY PLANNER'));
+  const prof = document.createElement('div'); prof.className='robo-mode';
+  [['spline','SPLINE','Catmull-Rom'],['trapezoid','TRAPEZOID','Lin + ease'],['linear','LINEAR','Const vel']].forEach(([v,a,b])=>{
+    const btn=document.createElement('button'); btn.innerHTML=a+'<small>'+b+'</small>';
+    if(v===motion.traj.profile) btn.classList.add('on');
+    btn.onclick=()=>{ motion.traj.profile=v; prof.querySelectorAll('button').forEach(x=>x.classList.remove('on')); btn.classList.add('on'); buildTrajectory(); };
+    prof.appendChild(btn);
+  });
+  roboBody.appendChild(prof);
+  roboBody.appendChild(sliderRow('Cycle time', motion.traj.dur, 2, 16, 0.5, ' s', v=>motion.traj.dur=v));
+  const trow = document.createElement('div'); trow.className='twk-row';
+  const tlbl = document.createElement('div'); tlbl.className='twk-lbl';
+  const tn=document.createElement('span'); tn.textContent='Progress'; const tv=document.createElement('span'); tv.className='twk-val'; tv.id='traj-prog'; tv.textContent='0%';
+  tlbl.append(tn,tv); trow.appendChild(tlbl);
+  const bar=document.createElement('div'); bar.style.cssText='height:5px;border-radius:3px;background:rgba(255,107,28,.14);overflow:hidden;';
+  const fill=document.createElement('div'); fill.id='traj-fill'; fill.style.cssText='height:100%;width:0;background:var(--orange);box-shadow:0 0 8px var(--orange);transition:width .1s linear;'; bar.appendChild(fill);
+  trow.appendChild(bar); roboBody.appendChild(trow);
+  const playBtn=document.createElement('button'); playBtn.className='twk-btn'; playBtn.id='traj-play';
+  playBtn.textContent = motion.traj.playing ? '■ STOP PATH' : '▶ RUN PATH';
+  playBtn.onclick=()=>{
+    if(motion.traj.playing){ motion.traj.playing=false; motion.mode='off'; }
+    else { buildTrajectory(); motion.traj.t=0; motion.traj.playing=true; motion.mode='trajectory'; motion.twin.playing=false; }
+    playBtn.textContent = motion.traj.playing ? '■ STOP PATH' : '▶ RUN PATH';
+  };
+  roboBody.appendChild(playBtn);
+
+  // ---- Cartesian jog ----
+  roboBody.appendChild(section('CARTESIAN JOG  (drag tool in XYZ)'));
+  const jogToggle=document.createElement('div'); jogToggle.className='twk-row twk-row-h';
+  const jl=document.createElement('span'); jl.style.cssText='font-size:12px;font-weight:500'; jl.textContent='Jog mode';
+  const jt2=document.createElement('div'); jt2.className='twk-toggle'+(motion.mode==='jog'?' on':'');
+  jt2.onclick=()=>{ if(motion.mode==='jog'){motion.mode='off';jt2.classList.remove('on');} else {
+    J.eoatTip.getWorldPosition(motion.jog); motion.mode='jog'; motion.traj.playing=false; motion.twin.playing=false; jt2.classList.add('on'); } };
+  jogToggle.append(jl,jt2); roboBody.appendChild(jogToggle);
+  const axes=[['X','x'],['Y','y'],['Z','z']];
+  axes.forEach(([lbl,ax])=>{
+    const row=document.createElement('div'); row.className='twk-row twk-row-h'; row.style.gap='8px';
+    const nm=document.createElement('span'); nm.style.cssText='font:600 12px/1 Orbitron,sans-serif;width:14px;color:var(--cyan)'; nm.textContent=lbl;
+    const minus=document.createElement('button'); minus.className='twk-btn'; minus.style.cssText='flex:1;padding:7px'; minus.textContent='−';
+    const val=document.createElement('span'); val.className='twk-val'; val.id='jog-'+ax; val.style.cssText='width:54px;text-align:center'; val.textContent=motion.jog[ax].toFixed(2);
+    const plus=document.createElement('button'); plus.className='twk-btn'; plus.style.cssText='flex:1;padding:7px'; plus.textContent='+';
+    const nudge=(s)=>{ if(motion.mode!=='jog'){ J.eoatTip.getWorldPosition(motion.jog); motion.mode='jog'; motion.traj.playing=false; jt2.classList.add('on'); } motion.jog[ax]+=s*motion.jogStep; };
+    minus.onclick=()=>nudge(-1); plus.onclick=()=>nudge(1);
+    row.append(nm,minus,val,plus); roboBody.appendChild(row);
+  });
+  roboBody.appendChild(sliderRow('Jog step', motion.jogStep, 0.02, 0.4, 0.02, ' m', v=>motion.jogStep=v));
+
+  // ---- Workspace envelope ----
+  roboBody.appendChild(section('WORKSPACE & REACH'));
+  roboBody.appendChild(toggleRow('Reach envelope', envelope.visible, v=>{ envelope.visible=v; }));
+  const rg=document.createElement('div'); rg.className='robo-grid';
+  rg.innerHTML=`<span>Max reach</span><b>${MAX_REACH.toFixed(2)} m</b><span>Payload arm</span><b>6-DOF</b>`;
+  roboBody.appendChild(rg);
+
+  // ---- CAD upload for custom weld workpiece ----
+  roboBody.appendChild(section('CUSTOM WORKPIECE (upload CAD)'));
+  const cadNote=document.createElement('div'); cadNote.className='robo-note'; cadNote.style.marginBottom='6px';
+  cadNote.innerHTML='Upload your own <b>STL · OBJ · GLTF/GLB</b> and the robot will weld along its top edge. The model is auto-scaled and placed at the weld station.';
+  roboBody.appendChild(cadNote);
+  const cadRow=document.createElement('div'); cadRow.style.cssText='display:flex;gap:6px;';
+  const cadInp=document.createElement('input'); cadInp.type='file'; cadInp.accept='.stl,.obj,.gltf,.glb';
+  cadInp.style.cssText='flex:1;font:400 11px/1 "JetBrains Mono",monospace;color:var(--cyan);background:rgba(255,255,255,.03);border:1px dashed var(--line);border-radius:8px;padding:9px;cursor:pointer;';
+  cadInp.onchange=()=>{ if(cadInp.files[0]) loadCADFile(cadInp.files[0]); };
+  const cadReset=document.createElement('button'); cadReset.className='twk-btn'; cadReset.style.cssText='flex:0 0 auto;padding:9px 12px;'; cadReset.textContent='RESET';
+  cadReset.onclick=()=>{ resetCAD(); cadInp.value=''; };
+  cadRow.append(cadInp,cadReset); roboBody.appendChild(cadRow);
+
+  // ---- Digital twin ----
+  roboBody.appendChild(section('DIGITAL TWIN'));
+  const twinBtn=document.createElement('button'); twinBtn.className='twk-btn'; twinBtn.id='twin-play';
+  twinBtn.textContent = motion.twin.playing ? '■ DISCONNECT FEED' : '▶ CONNECT SIM FEED';
+  twinBtn.onclick=()=>{
+    if(motion.twin.playing){ motion.twin.playing=false; motion.mode='off'; }
+    else { motion.twin.t=0; motion.twin.playing=true; motion.mode='twin'; motion.traj.playing=false; }
+    twinBtn.textContent = motion.twin.playing ? '■ DISCONNECT FEED' : '▶ CONNECT SIM FEED';
+    const s=document.getElementById('twin-state'); if(s){ s.textContent=motion.twin.playing?'● STREAMING':'○ OFFLINE'; s.style.color=motion.twin.playing?'var(--green)':'var(--dim)'; }
+  };
+  roboBody.appendChild(twinBtn);
+  const tg=document.createElement('div'); tg.className='robo-grid';
+  const ts=document.createElement('span'); ts.textContent='Feed status'; const tsv=document.createElement('b'); tsv.id='twin-state'; tsv.textContent=motion.twin.playing?'● STREAMING':'○ OFFLINE'; tsv.style.color=motion.twin.playing?'var(--green)':'var(--dim)';
+  tg.append(ts,tsv); roboBody.appendChild(tg);
+  const note=document.createElement('div'); note.className='robo-note';
+  note.innerHTML='Mirrors a physical robot live. Pipe real encoder data in with <b>postMessage({type:"robot-joints", q:[…6 rad]})</b> — it overrides the sim feed automatically.';
+  roboBody.appendChild(note);
+}
+
+/* ── live updater (called from loop while open) ── */
+const _euler = new THREE.Euler();
+function roboUpdate(){
+  // joint angle readouts (always)
+  if(roboRefs.jval){
+    const cs = [cur.a1,cur.a2,cur.a3,cur.a4,cur.a5,cur.a6];
+    for(let i=0;i<6;i++){
+      roboRefs.jval[i].textContent = fmtDeg(cs[i]);
+      roboRefs.jval[i].style.color = limitHit[i] ? 'var(--red)' : '';
+      if(ikMode !== 'manual' && roboRefs.jsl[i] !== document.activeElement){
+        roboRefs.jsl[i].value = (cs[i]*180/Math.PI).toFixed(1);
+      }
+    }
+  }
+  // safety status (CONTROL tab)
+  if(roboRefs.safeLim){
+    const any = limitHit.some(Boolean);
+    roboRefs.safeLim.textContent = any ? 'AT LIMIT' : 'OK';
+    roboRefs.safeLim.style.color = any ? 'var(--orange)' : 'var(--green)';
+  }
+  if(roboRefs.safeCol){
+    roboRefs.safeCol.textContent = collisionState;
+    roboRefs.safeCol.style.color = collisionState==='CLEAR' ? 'var(--green)' : 'var(--red)';
+  }
+  // τ torques (JACOBIAN tab)
+  if(roboRefs.tau){
+    for(let i=0;i<6;i++) roboRefs.tau[i].textContent = lastTau[i].toFixed(1);
+  }
+  // motion tab live (trajectory progress / jog xyz)
+  if(roboTab === 'motion'){
+    const tp = document.getElementById('traj-prog'), tf = document.getElementById('traj-fill');
+    if(tp && tf){ const pct = motion.traj.playing ? Math.round((motion.traj.t/motion.traj.dur)*100)%101 : 0; tp.textContent = pct+'%'; tf.style.width = pct+'%'; }
+    ['x','y','z'].forEach(ax=>{ const e=document.getElementById('jog-'+ax); if(e) e.textContent = motion.jog[ax].toFixed(2); });
+  }
+  // FK pose — computed analytically from the DH model (T = B·∏Aᵢ)
+  if(roboRefs.fk){
+    const qv = [cur.a1,cur.a2,cur.a3,cur.a4,cur.a5,cur.a6];
+    const { T } = fkDH(qv);
+    _mTmp.copy(T);
+    tmpV.setFromMatrixPosition(_mTmp);
+    tmpQ.setFromRotationMatrix(_mTmp);
+    _euler.setFromQuaternion(tmpQ, 'XYZ');
+    roboRefs.fk.fx.textContent = tmpV.x.toFixed(3);
+    roboRefs.fk.fy.textContent = tmpV.y.toFixed(3);
+    roboRefs.fk.fz.textContent = tmpV.z.toFixed(3);
+    roboRefs.fk.fr.textContent  = (_euler.x*180/Math.PI).toFixed(1);
+    roboRefs.fk.fp.textContent  = (_euler.y*180/Math.PI).toFixed(1);
+    roboRefs.fk.fyw.textContent = (_euler.z*180/Math.PI).toFixed(1);
+    if(roboRefs.fkDelta){
+      J.eoatTip.getWorldPosition(_pos);
+      const mm = tmpV.distanceTo(_pos) * 1000;
+      roboRefs.fkDelta.textContent = '✓ Δ ' + mm.toFixed(1) + ' mm';
+    }
+  }
+  // Jacobian — analytic from DH frames, with manipulability + conditioning
+  if(roboRefs.jac){
+    const qv = [cur.a1,cur.a2,cur.a3,cur.a4,cur.a5,cur.a6];
+    const cols = jacobianDH(qv);                 // cols[joint] = [vx,vy,vz,ωx,ωy,ωz]
+    for(let r=0;r<6;r++) for(let c=0;c<6;c++){
+      const v = cols[c][r];
+      const cell = roboRefs.jac[r][c];
+      cell.textContent = v.toFixed(2);
+      cell.classList.toggle('zero', Math.abs(v) < 0.005);
+    }
+    // Build full 6×6 J (rows = twist, cols = joints)
+    const Jm = [];
+    for(let r=0;r<6;r++){ Jm[r]=[]; for(let c=0;c<6;c++) Jm[r][c]=cols[c][r]; }
+    // manipulability  w = |det J|  ( = √det(JJᵀ) for square J )
+    const detJ = detN(Jm, 6);
+    const w = Math.abs(detJ);
+    if(roboRefs.manip) roboRefs.manip.textContent = w.toFixed(3);
+    // Frobenius condition number κ = ‖J‖_F · ‖J⁻¹‖_F
+    let kappa = Infinity;
+    if(w > 1e-6){
+      const Ji = invN(Jm, 6);
+      let nf=0, nif=0;
+      for(let r=0;r<6;r++) for(let c=0;c<6;c++){ nf+=Jm[r][c]*Jm[r][c]; nif+=Ji[r][c]*Ji[r][c]; }
+      kappa = Math.sqrt(nf)*Math.sqrt(nif);
+    }
+    if(roboRefs.cond) roboRefs.cond.textContent = isFinite(kappa) ? kappa.toFixed(1) : '∞';
+    if(roboRefs.state){
+      let st='NOMINAL', col='var(--green)';
+      if(w < 0.05 || kappa > 60){ st='NEAR SINGULAR'; col='var(--red)'; }
+      else if(w < 0.4 || kappa > 25){ st='DEXTERITY LOW'; col='var(--orange)'; }
+      roboRefs.state.textContent = st; roboRefs.state.style.color = col;
+    }
+  }
+}
+
+/* ── raycast: click robot → open panel; hover robot → tip ── */
+const _ray = new THREE.Raycaster();
+function ndc(ev){
+  const r = canvas.getBoundingClientRect();
+  return { x:((ev.clientX-r.left)/r.width)*2-1, y:-((ev.clientY-r.top)/r.height)*2+1, cx:ev.clientX, cy:ev.clientY };
+}
+canvas.addEventListener('click', (ev) => {
+  const p = ndc(ev);
+  _ray.setFromCamera({x:p.x,y:p.y}, camera);
+  if(_ray.intersectObject(robot, true).length){
+    roboOpen ? closeRobo() : openRobo();
+  }
+});
+let _tipRAF = 0;
+canvas.addEventListener('mousemove', (ev) => {
+  if(_tipRAF) return;
+  _tipRAF = requestAnimationFrame(() => {
+    _tipRAF = 0;
+    if(roboOpen || hoverPart){ robotTip.classList.remove('show'); return; }
+    const p = ndc(ev);
+    _ray.setFromCamera({x:p.x,y:p.y}, camera);
+    const hit = _ray.intersectObject(robot, true).length > 0;
+    canvas.style.cursor = hit ? 'pointer' : 'default';
+    if(hit){
+      robotTip.style.left = p.cx + 'px';
+      robotTip.style.top  = (p.cy - 26) + 'px';
+      robotTip.classList.add('show');
+    } else {
+      robotTip.classList.remove('show');
+    }
+  });
+});
+canvas.addEventListener('mouseleave', () => robotTip.classList.remove('show'));
+
+// draggable kinematics panel
+(function dragRobo(){
+  const head = document.getElementById('robo-head');
+  let drag=false, sx, sy, px, py;
+  head.addEventListener('mousedown', (e) => {
+    if(e.target.closest('.twk-x')) return;
+    drag=true; sx=e.clientX; sy=e.clientY;
+    const r=roboEl.getBoundingClientRect(); px=r.left; py=r.top;
+    roboEl.style.bottom='auto'; e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => {
+    if(!drag) return;
+    roboEl.style.left=(px+e.clientX-sx)+'px';
+    roboEl.style.top =(py+e.clientY-sy)+'px';
+  });
+  window.addEventListener('mouseup', () => drag=false);
+})();
+
+})();
+
+</script>
+
+
+
+</body></html>

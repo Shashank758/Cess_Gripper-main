@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile — CESS Dynamics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #15171D;
+    --paper: #1D2028;
+    --orange: #C67A2A;
+    --primary-blue: #2962FF;
+    --secondary-blue: #4D7CFE;
+    --steel: #D1D5DB;
+    --steel-soft: rgba(209, 213, 219, 0.6);
+    --line: rgba(255, 255, 255, 0.08);
+    --white: #FFFFFF;
+    --red: #FF3B30;
+    --green: #34C759;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--ink);
+    color: var(--steel);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: radial-gradient(ellipse 900px 600px at 50% 0%, rgba(41, 98, 255, 0.05), transparent 60%),
+                linear-gradient(180deg, #15171D 0%, #0C0E11 100%);
+  }
+
+  h1, h2, h3, .logo {
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ NAV ============ */
+  nav {
+    width: 100%;
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--steel);
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .back-btn:hover { color: var(--primary-blue); }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.01em;
+  }
+  .logo-mark {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  /* ============ MAIN CONTENT ============ */
+  .profile-wrapper {
+    width: 100%;
+    max-width: 540px;
+    margin: 40px auto;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .profile-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .profile-header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .profile-header p {
+    color: var(--steel-soft);
+    font-size: 15px;
+  }
+
+  .auth-card {
+    background: rgba(29, 32, 40, 0.6);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 40px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .auth-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--steel);
+    margin-bottom: 8px;
+  }
+
+  .form-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+  .form-input:focus {
+    border-color: var(--primary-blue);
+    background: rgba(41, 98, 255, 0.02);
+    box-shadow: 0 0 0 4px rgba(41, 98, 255, 0.1);
+  }
+  .form-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .btn-submit {
+    width: 100%;
+    background: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 32px;
+  }
+  .btn-submit:hover {
+    background: var(--secondary-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(41, 98, 255, 0.3);
+  }
+
+  .alert {
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    animation: fadeUp 0.3s ease forwards;
+  }
+  .alert-error {
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    color: #FF453A;
+  }
+  .alert-success {
+    background: rgba(52, 199, 89, 0.1);
+    border: 1px solid rgba(52, 199, 89, 0.2);
+    color: #32D74B;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <a href="home.html" class="back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Back to Home
+    </a>
+    <div class="logo">
+      <img src="dynamics.jpg" alt="CESS Dynamics Logo" class="logo-mark">
+      CESS Dynamics
+    </div>
+    <div style="width: 100px;"></div> <!-- placeholder to center logo -->
+  </nav>
+
+  <div class="profile-wrapper">
+    <div class="profile-header">
+      <h1>Your Profile</h1>
+      <p>Manage your account settings and preferences.</p>
+    </div>
+
+    <div class="auth-card">
+      <div id="alertBox" class="alert"></div>
+
+      <form id="profileForm">
+        <div class="form-group">
+          <label class="form-label">Email Address (Read Only)</label>
+          <input type="email" id="profEmail" class="form-input" disabled>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Registration Date</label>
+          <input type="text" id="profRegDate" class="form-input" disabled>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="profFullName" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Company Name</label>
+          <input type="text" id="profCompanyName" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mobile Number</label>
+          <input type="tel" id="profMobile" class="form-input" required>
+        </div>
+        
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 30px 0;">
+        <h3 style="margin-bottom: 20px; font-size: 16px;">Change Password</h3>
+
+        <div class="form-group">
+          <label class="form-label">New Password (Leave blank to keep current)</label>
+          <input type="password" id="profPassword" class="form-input" placeholder="••••••••">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm New Password</label>
+          <input type="password" id="profConfirmPassword" class="form-input" placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Save Changes
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    const alertBox = document.getElementById('alertBox');
+    
+    function showAlert(message, type) {
+      alertBox.className = 'alert alert-' + type;
+      let icon = type === 'success' 
+        ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+        : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+      
+      alertBox.innerHTML = icon + message;
+      alertBox.style.display = 'flex';
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        const res = await apiFetch('/api/users/profile');
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById('profEmail').value = data.email;
+          document.getElementById('profRegDate').value = new Date(data.createdAt).toLocaleDateString();
+          document.getElementById('profFullName').value = data.fullName;
+          document.getElementById('profCompanyName').value = data.companyName;
+          document.getElementById('profMobile').value = data.mobileNumber;
+        } else {
+          localStorage.removeItem('token');
+          window.location.href = 'login.html';
+        }
+      } catch (err) {
+        showAlert('Error loading profile data.', 'error');
+      }
+    });
+
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const fullName = document.getElementById('profFullName').value;
+      const companyName = document.getElementById('profCompanyName').value;
+      const mobileNumber = document.getElementById('profMobile').value;
+      const password = document.getElementById('profPassword').value;
+      const confirmPassword = document.getElementById('profConfirmPassword').value;
+
+      if (password && password !== confirmPassword) {
+        return showAlert('Passwords do not match.', 'error');
+      }
+
+      const btn = e.target.querySelector('.btn-submit');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span style="display:inline-block;animation:spin 1s linear infinite;">↻</span> Saving...';
+
+      const payload = { fullName, companyName, mobileNumber };
+      if (password) payload.password = password;
+
+      const token = localStorage.getItem('token');
+      try {
+        const res = await apiFetch('/api/users/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showAlert('Profile updated successfully.', 'success');
+          // Update local storage user data
+          const userStr = localStorage.getItem('user');
+          if (userStr) {
+            let user = JSON.parse(userStr);
+            user.fullName = data.user.fullName;
+            user.companyName = data.user.companyName;
+            localStorage.setItem('user', JSON.stringify(user));
+          }
+          document.getElementById('profPassword').value = '';
+          document.getElementById('profConfirmPassword').value = '';
+        } else {
+          showAlert(data.message || 'Update failed', 'error');
+        }
+      } catch (err) {
+        showAlert('Server Error. Please try again later.', 'error');
+      } finally {
+        btn.innerHTML = originalText;
+      }
+    });
+  </script>
+</body>
+</html>

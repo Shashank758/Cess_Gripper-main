@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register Map — PLC / Robot / CNC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & BASE ─────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F8F7F4;
+  --surface:#FFFFFF;
+  --surface2:#F2F1EE;
+  --surface3:#E8E7E3;
+  --border:#DDD9D2;
+  --border2:#C8C4BC;
+  --text:#1A1916;
+  --text2:#6B6860;
+  --text3:#9E9B93;
+  --accent:#1A56DB;
+  --accent-bg:#EEF2FF;
+  --accent-text:#1E40AF;
+  --green:#0F6E56;
+  --green-bg:#E1F5EE;
+  --amber:#854F0B;
+  --amber-bg:#FAEEDA;
+  --red:#A32D2D;
+  --red-bg:#FCEBEB;
+  --purple:#534AB7;
+  --purple-bg:#EEEDFE;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --r:6px;
+  --r2:10px;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;min-height:100vh}
+h1,h2,h3,h4,h5{font-weight:500;line-height:1.3}
+input,select,textarea,button{font-family:var(--sans);font-size:13px}
+code{font-family:var(--mono)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ─── LAYOUT ────────────────────────────────────────── */
+.shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;position:sticky;top:0;height:100vh}
+.main{padding:28px 32px;overflow-x:auto}
+
+/* ─── SIDEBAR ───────────────────────────────────────── */
+.sb-logo{padding:20px 20px 16px;border-bottom:1px solid var(--border)}
+.sb-logo-mark{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.sb-logo-icon{width:28px;height:28px;background:var(--text);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.sb-logo-icon svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.sb-logo-name{font-size:14px;font-weight:600;letter-spacing:-0.3px}
+.sb-logo-sub{font-size:11px;color:var(--text3)}
+.sb-section{padding:14px 20px;border-bottom:1px solid var(--border)}
+.sb-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.sb-field{margin-bottom:10px}
+.sb-field label{display:block;font-size:11px;color:var(--text2);margin-bottom:4px}
+.sb-field input,.sb-field select{width:100%;padding:6px 9px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text)}
+.sb-field input:focus,.sb-field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,86,219,.08)}
+.proto-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-top:4px}
+.proto-card-head{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;user-select:none}
+.proto-card-head:hover{background:var(--surface2)}
+.proto-icon{width:28px;height:28px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono)}
+.proto-name{font-size:12px;font-weight:500;flex:1}
+.proto-badge{font-size:10px;padding:1px 6px;border-radius:20px;font-weight:500}
+.proto-arrow{font-size:12px;color:var(--text3);transition:transform .2s}
+.proto-body{display:none;padding:10px 12px;border-top:1px solid var(--border);font-size:12px;line-height:1.7;color:var(--text2)}
+.proto-body.open{display:block}
+.proto-body.open ~ .proto-card-head .proto-arrow{transform:rotate(180deg)}
+.proto-range{display:flex;gap:6px;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px}
+.proto-range:last-child{border-bottom:none}
+.range-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.range-addr{font-family:var(--mono);font-size:10px;color:var(--text2);min-width:90px}
+.range-name{color:var(--text);font-weight:500}
+.range-rw{font-size:10px;color:var(--text3)}
+
+/* ─── MAIN HEADER ───────────────────────────────────── */
+.page-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.page-title{font-size:22px;font-weight:600;letter-spacing:-0.5px}
+.page-sub{font-size:13px;color:var(--text2);margin-top:2px}
+.actions{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;font-size:12px;font-weight:500;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s}
+.btn:hover{background:var(--surface2);border-color:var(--border2)}
+.btn-primary{background:var(--text);color:#fff;border-color:var(--text)}
+.btn-primary:hover{background:#333;border-color:#333}
+.btn-danger{color:var(--red);border-color:#F7C1C1}
+.btn-danger:hover{background:var(--red-bg)}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ─── STATS BAR ─────────────────────────────────────── */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:22px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px}
+.stat-n{font-size:26px;font-weight:600;letter-spacing:-1px;font-family:var(--mono);color:var(--text)}
+.stat-l{font-size:11px;color:var(--text3);margin-top:2px}
+.stat-sub{font-size:10px;color:var(--accent);margin-top:1px;font-family:var(--mono)}
+
+/* ─── TABS ───────────────────────────────────────────── */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab{background:none;border:none;border-bottom:2px solid transparent;padding:8px 18px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:color .15s}
+.tab.on{color:var(--text);border-bottom-color:var(--text)}
+.tab:hover:not(.on){color:var(--text)}
+.tab-cnt{font-size:10px;opacity:.5;margin-left:4px}
+
+/* ─── TOOLBAR ────────────────────────────────────────── */
+.toolbar{display:flex;gap:6px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.toolbar-search{padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);width:200px}
+.toolbar-search:focus{outline:none;border-color:var(--accent)}
+.toolbar-select{padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text)}
+.sp{flex:1}
+
+/* ─── REGISTER TABLE ─────────────────────────────────── */
+.group-block{margin-bottom:22px;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.group-head{display:flex;align-items:center;gap:8px;padding:11px 16px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.group-label{font-size:12px;font-weight:600}
+.group-note{font-size:11px;color:var(--text3);flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.device-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+.dt-plc{background:var(--accent-bg);color:var(--accent-text)}
+.dt-robot{background:var(--green-bg);color:var(--green)}
+.dt-cnc{background:var(--amber-bg);color:var(--amber)}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--surface)}
+th{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);text-align:left;padding:9px 14px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:12px;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFAF8}
+.addr-cell{font-family:var(--mono);font-size:12px;font-weight:500}
+.addr-modbus{color:#1E40AF}
+.addr-eip{color:#0F6E56}
+.addr-profinet{color:#7C3AED}
+.addr-opcua{color:#B45309}
+.addr-cclink{color:#BE185D}
+.name-cell{font-family:var(--mono);font-size:11px;color:var(--text)}
+.type-pill{display:inline-block;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;background:var(--surface3);color:var(--text2);letter-spacing:.03em}
+.acc-R{color:var(--green);font-weight:600}
+.acc-RW{color:var(--accent-text);font-weight:600}
+.acc-W{color:var(--amber);font-weight:600}
+.desc-cell{color:var(--text2);font-size:11px;max-width:200px}
+.chips{display:flex;flex-wrap:wrap;gap:3px}
+.chip{font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;cursor:default;display:inline-flex;align-items:center;gap:4px}
+.cp0{background:#EAF3DE;color:#27500A}.cp1{background:#E6F1FB;color:#0C447C}
+.cp2{background:#FAEEDA;color:#633806}.cp3{background:#FBEAF0;color:#72243E}
+.cp4{background:#E1F5EE;color:#085041}.cp5{background:#F1EFE8;color:#444441}
+.cp6{background:#EEEDFE;color:#3C3489}.cp7{background:#FAECE7;color:#4A1B0C}
+.chip-del{cursor:pointer;opacity:.5;font-size:9px;margin-left:1px}
+.chip-del:hover{opacity:1}
+.chip-add{font-size:10px;color:var(--text3);cursor:pointer;padding:2px 6px;border:1px dashed var(--border);border-radius:3px}
+.chip-add:hover{background:var(--surface2)}
+.empty-state{padding:24px;text-align:center;color:var(--text3);font-size:12px}
+
+/* ─── PROTOCOL ADDRESS COLUMNS ──────────────────────── */
+.addr-multi{display:flex;flex-direction:column;gap:2px}
+.addr-line{display:flex;align-items:center;gap:5px;font-size:10px}
+.addr-proto-label{font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;min-width:54px;color:var(--text3)}
+
+/* ─── DEEP DIVE ACCORDION ───────────────────────────── */
+.deep-dive{margin-top:30px}
+.dd-title{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.dd-item{border:1px solid var(--border);border-radius:var(--r2);margin-bottom:10px;overflow:hidden}
+.dd-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;background:var(--surface)}
+.dd-head:hover{background:var(--surface2)}
+.dd-icon{width:32px;height:32px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0}
+.dd-head-title{font-size:13px;font-weight:600}
+.dd-head-sub{font-size:11px;color:var(--text3)}
+.dd-arrow{margin-left:auto;color:var(--text3);transition:transform .2s;font-size:14px}
+.dd-body{display:none;padding:20px 20px 20px 62px;border-top:1px solid var(--border);background:var(--surface)}
+.dd-body.open{display:block}
+.dd-section{margin-bottom:18px}
+.dd-section h4{font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.dd-section p{font-size:12px;line-height:1.8;color:var(--text2);margin-bottom:8px}
+.dd-section code{font-family:var(--mono);font-size:11px;background:var(--surface2);padding:1px 5px;border-radius:3px;color:var(--text)}
+.dd-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:11px}
+.dd-table th{text-align:left;padding:7px 10px;background:var(--surface2);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);border-bottom:1px solid var(--border)}
+.dd-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.dd-table tr:last-child td{border-bottom:none}
+.dd-table code{font-family:var(--mono);font-size:10px;background:var(--surface2);padding:1px 4px;border-radius:2px;color:var(--text)}
+.note-box{background:var(--accent-bg);border:1px solid #BFDBFE;border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--accent-text);line-height:1.7;margin-top:8px}
+.warn-box{background:var(--amber-bg);border:1px solid #FDE68A;border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--amber);line-height:1.7;margin-top:8px}
+.good-box{background:var(--green-bg);border:1px solid #A7F3D0;border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--green);line-height:1.7;margin-top:8px}
+.reg-range-vis{display:flex;gap:0;height:28px;border-radius:var(--r);overflow:hidden;margin:10px 0}
+.rrv-seg{display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:.04em;color:#fff;flex:1}
+
+/* ─── SOP ────────────────────────────────────────────── */
+.sop-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:22px 24px;margin-bottom:24px}
+.sop-block h3{font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sop-steps{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sop-step{display:flex;gap:12px}
+.sop-num{min-width:26px;height:26px;background:var(--text);color:#fff;border-radius:50%;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.sop-content h4{font-size:12px;font-weight:600;margin-bottom:4px}
+.sop-content p{font-size:11px;color:var(--text2);line-height:1.7}
+.sop-content code{font-family:var(--mono);font-size:10px;background:var(--surface2);padding:1px 4px;border-radius:2px}
+
+/* ─── MODAL ──────────────────────────────────────────── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border-radius:var(--r2);border:1px solid var(--border);padding:24px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto}
+.modal h3{font-size:15px;font-weight:600;margin-bottom:18px}
+.modal-close{float:right;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);margin-top:-4px}
+.modal-close:hover{color:var(--text)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid.full{grid-template-columns:1fr}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:11px;font-weight:500;color:var(--text2)}
+.fg input,.fg select,.fg textarea{padding:7px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:12px}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,86,219,.08)}
+.fg textarea{resize:vertical;min-height:60px}
+.addr-fields{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin:8px 0}
+.addr-fields-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:10px}
+.addr-fields .form-grid{margin-bottom:0}
+.vm-editor{margin:10px 0}
+.vm-editor-title{font-size:11px;font-weight:500;color:var(--text2);margin-bottom:8px}
+.vm-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.vm-row input{flex:1;padding:5px 8px;border:1px solid var(--border);border-radius:var(--r);font-size:11px;background:var(--bg);color:var(--text)}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* ─── PRINT / EXPORT ─────────────────────────────────── */
+@media print{
+  .sidebar,.modal-overlay,.toolbar,.actions,.btn,.sop-block{display:none!important}
+  .shell{display:block}
+  .main{padding:16px}
+  .group-block{break-inside:avoid;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-mark">
+      <div class="sb-logo-icon">
+        <svg viewBox="0 0 16 16"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+      </div>
+      <span class="sb-logo-name">Register Map</span>
+    </div>
+    <div class="sb-logo-sub">PLC · Robot · CNC · Multi-protocol</div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Project</div>
+    <div class="sb-field"><label>Client / Project</label><input id="sb-client" placeholder="e.g. Acme Auto Line 3" oninput="updateHeader()"></div>
+    <div class="sb-field"><label>Site / Machine</label><input id="sb-site" placeholder="e.g. Station 04 — Turn-Mill"></div>
+    <div class="sb-field"><label>Engineer</label><input id="sb-eng" placeholder="Your name"></div>
+    <div class="sb-field"><label>Rev</label><input id="sb-rev" placeholder="A" style="width:60px"></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Primary Protocol</div>
+    <div class="sb-field">
+      <select id="sb-proto" onchange="switchProto()">
+        <option value="modbus">Modbus TCP / RTU</option>
+        <option value="eip">EtherNet/IP (CIP)</option>
+        <option value="profinet">PROFINET</option>
+        <option value="opcua">OPC-UA</option>
+        <option value="cclink">CC-Link IE Field</option>
+        <option value="slmp">SLMP (Mitsubishi)</option>
+      </select>
+    </div>
+    <div class="sb-field"><label>PLC IP Address</label><input id="sb-ip" placeholder="192.168.1.10"></div>
+    <div class="sb-field"><label id="lbl-uid">Modbus Unit ID</label><input id="sb-uid" placeholder="1" style="width:60px"></div>
+  </div>
+
+  <!-- Protocol address range legend -->
+  <div class="sb-section" id="sb-proto-legend"></div>
+
+  <div class="sb-section" style="border-bottom:none;flex:1">
+    <div class="sb-label">Quick Reference</div>
+    <div style="font-size:11px;color:var(--text2);line-height:1.8">
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>R</span><span style="color:var(--green);font-weight:600">Read only → PLC</span></div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>RW</span><span style="color:var(--accent-text);font-weight:600">Read + Write (both)</span></div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>W</span><span style="color:var(--amber);font-weight:600">Write only from PLC</span></div>
+      <div style="padding:10px 0 4px;font-weight:600;color:var(--text);font-size:11px">Data types</div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span><code>BOOL</code></span><span>1 bit, 0 or 1</span></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span><code>INT</code></span><span>16-bit signed</span></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span><code>UINT</code></span><span>16-bit unsigned</span></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span><code>DWORD</code></span><span>32-bit (2 regs)</span></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span><code>FLOAT</code></span><span>32-bit IEEE 754</span></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span><code>STRING</code></span><span>n × 16-bit regs</span></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main">
+
+  <div class="page-head">
+    <div>
+      <h1 class="page-title" id="ph-title">Register Map</h1>
+      <div class="page-sub" id="ph-sub">PLC / Robot / CNC Communication Register Reference</div>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="printPage()">
+        <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print / PDF
+      </button>
+      <button class="btn" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Export CSV
+      </button>
+      <button class="btn" onclick="exportJSON()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export JSON
+      </button>
+      <button class="btn btn-primary" onclick="loadTemplate()">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        Load Standard Template
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" id="stats-bar"></div>
+
+  <!-- SOP -->
+  <div class="sop-block">
+    <h3>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Standard Operating Procedure
+    </h3>
+    <div class="sop-steps">
+      <div class="sop-step">
+        <div class="sop-num">1</div>
+        <div class="sop-content"><h4>Fill project info (sidebar)</h4><p>Enter client name, site, engineer and revision. These stamp every export so documents are traceable. Set the protocol and PLC IP — the address column will show the correct format per protocol.</p></div>
+      </div>
+      <div class="sop-step">
+        <div class="sop-num">2</div>
+        <div class="sop-content"><h4>Load or build the map</h4><p>Click <strong>Load Standard Template</strong> for a ready-made PLC→Robot→CNC layout. Customize groups and registers. For a new client, load template then add/delete rows to match the actual PLC program.</p></div>
+      </div>
+      <div class="sop-step">
+        <div class="sop-num">3</div>
+        <div class="sop-content"><h4>Complete every value map</h4><p>Click <strong>+ value</strong> on any register to add what each number means — <code>0 = Home</code>, <code>1 = Pallet Pick</code>, etc. Every position/status register <em>must</em> be fully mapped. Undocumented values cause wrong behavior after power restore.</p></div>
+      </div>
+      <div class="sop-step">
+        <div class="sop-num">4</div>
+        <div class="sop-content"><h4>Power-cut recovery registers</h4><p><code>POWER_RESTORE_STATE</code> stores the robot's last safe position before any move. After power comes back, the HMI operator sets <code>HMI_HOME_CMD = 1</code>. PLC reads the saved state and issues the correct move command.</p></div>
+      </div>
+      <div class="sop-step">
+        <div class="sop-num">5</div>
+        <div class="sop-content"><h4>Address numbering rules</h4><p>For Modbus: use <strong>40001-series</strong> for all command/status registers (holding registers, R/W 16-bit). Use <strong>30001-series</strong> for read-only sensors. Use <strong>00001-series</strong> coils for single-bit discrete outputs. See the Protocol Deep Dive below for other protocols.</p></div>
+      </div>
+      <div class="sop-step">
+        <div class="sop-num">6</div>
+        <div class="sop-content"><h4>Export and version control</h4><p>Export JSON for version control (Git, SharePoint). Export CSV for client documentation. Print/PDF for site commissioning binder. File naming: <code>RegisterMap_&lt;ClientCode&gt;_R&lt;Rev&gt;.json</code></p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tabs" id="tab-bar"></div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <button class="btn" onclick="openAddGroup()">
+      <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+      New Group
+    </button>
+    <button class="btn" onclick="openAddReg()">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Register
+    </button>
+    <div class="sp"></div>
+    <input class="toolbar-search" placeholder="Search name, address, description…" oninput="filterAndRender()" id="search-box">
+    <select class="toolbar-select" onchange="filterAndRender()" id="type-filter">
+      <option value="">All types</option>
+      <option>BOOL</option><option>INT</option><option>UINT</option>
+      <option>DWORD</option><option>FLOAT</option><option>STRING</option>
+    </select>
+    <select class="toolbar-select" onchange="filterAndRender()" id="acc-filter">
+      <option value="">All access</option>
+      <option value="R">R — Read only</option>
+      <option value="RW">RW — Read/Write</option>
+      <option value="W">W — Write only</option>
+    </select>
+  </div>
+
+  <!-- Register content -->
+  <div id="reg-content"></div>
+
+  <!-- ═══ PROTOCOL DEEP DIVE ═══ -->
+  <div class="deep-dive">
+    <div class="dd-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Protocol Deep Dive — Why These Addresses?
+    </div>
+
+    <!-- MODBUS -->
+    <div class="dd-item">
+      <div class="dd-head" onclick="toggleDD(this)">
+        <div class="dd-icon" style="background:#EEF2FF;color:#1E40AF">MB</div>
+        <div>
+          <div class="dd-head-title">Modbus TCP / RTU — Why 40001?</div>
+          <div class="dd-head-sub">IEC 61158 · Most common PLC↔Robot protocol · Port 502 (TCP)</div>
+        </div>
+        <div class="dd-arrow">▼</div>
+      </div>
+      <div class="dd-body">
+        <div class="dd-section">
+          <h4>The Modbus Data Model — 4 separate tables</h4>
+          <p>Modbus defines <strong>four distinct address spaces</strong>, each with its own purpose. The first digit (or prefix) tells you which table you're in:</p>
+          <div class="reg-range-vis">
+            <div class="rrv-seg" style="background:#3B82F6">0x Coils</div>
+            <div class="rrv-seg" style="background:#10B981">1x D.Input</div>
+            <div class="rrv-seg" style="background:#8B5CF6">3x In.Regs</div>
+            <div class="rrv-seg" style="background:#F59E0B;flex:2">4x Holding Regs ← most used</div>
+          </div>
+          <table class="dd-table">
+            <thead><tr><th>Prefix</th><th>Range</th><th>Type</th><th>Access</th><th>FC (read)</th><th>FC (write)</th><th>Best used for</th></tr></thead>
+            <tbody>
+              <tr><td><code>0x</code></td><td>00001–09999</td><td>Coil — 1 bit</td><td>R/W</td><td>FC 01</td><td>FC 05/15</td><td>Discrete output bits (relays, solenoids)</td></tr>
+              <tr><td><code>1x</code></td><td>10001–19999</td><td>Discrete Input — 1 bit</td><td>R only</td><td>FC 02</td><td>—</td><td>Digital sensor inputs</td></tr>
+              <tr><td><code>3x</code></td><td>30001–39999</td><td>Input Register — 16-bit</td><td>R only</td><td>FC 04</td><td>—</td><td>Analog sensor values, encoder counts</td></tr>
+              <tr><td><code>4x</code></td><td>40001–49999</td><td>Holding Register — 16-bit</td><td>R/W</td><td>FC 03</td><td>FC 06/16</td><td>Commands, status, parameters — all comms</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>Why does 40001 actually mean address 0 on the wire?</h4>
+          <p>The "40001" notation is a <strong>human-readable reference number</strong>, not the actual Modbus PDU address. The Modbus standard is zero-based on the wire:</p>
+          <p>Reference 40001 → PDU address <code>0x0000</code> (zero)<br>
+          Reference 40002 → PDU address <code>0x0001</code><br>
+          Reference 40100 → PDU address <code>0x0063</code></p>
+          <p>So when programming your Modbus master (PLC), subtract 40001 from the reference number to get the actual register address to put in your FC03/FC16 request. Most HMI and PLC software does this automatically.</p>
+          <div class="note-box">Always confirm with the robot/CNC supplier whether they use 1-based (40001 = register 1) or 0-based (40001 = register 0) addressing in their documentation. This single mismatch causes the most commissioning errors.</div>
+        </div>
+        <div class="dd-section">
+          <h4>Why use 40001-series for robot/CNC comms?</h4>
+          <p>Holding registers (4x) are used for all PLC↔Robot↔CNC communication because they are:</p>
+          <p>• <strong>Bidirectional</strong> — PLC can read (FC03) and write (FC06/16)<br>
+          • <strong>16-bit wide</strong> — holds integers, status words, command codes<br>
+          • <strong>Pairable</strong> — two consecutive registers = 32-bit DWORD or IEEE 754 float<br>
+          • <strong>Universally supported</strong> — every Modbus device implements FC03/FC16<br>
+          • <strong>Block readable</strong> — FC16 can write up to 123 registers in one request</p>
+        </div>
+        <div class="dd-section">
+          <h4>Standard register block layout for this project</h4>
+          <table class="dd-table">
+            <thead><tr><th>Block</th><th>Addresses</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>Robot Status</td><td>40001–40050</td><td>Robot reads here, PLC monitors</td></tr>
+              <tr><td>PLC→Robot Cmd</td><td>40101–40150</td><td>PLC writes here, robot reads</td></tr>
+              <tr><td>CNC Status</td><td>40201–40250</td><td>CNC writes, PLC reads</td></tr>
+              <tr><td>PLC→CNC Cmd</td><td>40301–40350</td><td>PLC writes, CNC reads</td></tr>
+              <tr><td>HMI / System</td><td>40401–40450</td><td>HMI flags, mode, power restore</td></tr>
+              <tr><td>Fault Codes</td><td>40501–40550</td><td>Alarm/fault register bank</td></tr>
+              <tr><td>Recipe / Params</td><td>41001–41999</td><td>Part program params, offsets</td></tr>
+            </tbody>
+          </table>
+          <div class="good-box">Leave gaps of 50 between blocks. Adding a register never requires renumbering the whole table. Use 41001+ for recipe/parameter data to keep it clearly separate from real-time status.</div>
+        </div>
+        <div class="dd-section">
+          <h4>Modbus TCP vs Modbus RTU</h4>
+          <table class="dd-table">
+            <thead><tr><th></th><th>Modbus TCP</th><th>Modbus RTU</th></tr></thead>
+            <tbody>
+              <tr><td>Physical</td><td>Ethernet (RJ45)</td><td>RS-485 / RS-232</td></tr>
+              <tr><td>Port</td><td>502</td><td>N/A (serial)</td></tr>
+              <tr><td>Speed</td><td>100 Mbps / 1 Gbps</td><td>9600–115200 baud</td></tr>
+              <tr><td>Frame</td><td>MBAP header + PDU</td><td>Address + PDU + CRC</td></tr>
+              <tr><td>Multi-master</td><td>Yes</td><td>No (single master)</td></tr>
+              <tr><td>Unit ID</td><td>Often 1 or 255</td><td>1–247 (slave address)</td></tr>
+              <tr><td>Use today</td><td>Modern robots, CNCs</td><td>Legacy PLCs, drives</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- EtherNet/IP -->
+    <div class="dd-item">
+      <div class="dd-head" onclick="toggleDD(this)">
+        <div class="dd-icon" style="background:#E1F5EE;color:#085041">EIP</div>
+        <div>
+          <div class="dd-head-title">EtherNet/IP (CIP) — Tags, not numbers</div>
+          <div class="dd-head-sub">ODVA standard · Allen-Bradley / Rockwell · FANUC Focas · Port 44818</div>
+        </div>
+        <div class="dd-arrow">▼</div>
+      </div>
+      <div class="dd-body">
+        <div class="dd-section">
+          <h4>No register numbers — it uses named tags</h4>
+          <p>EtherNet/IP uses the <strong>Common Industrial Protocol (CIP)</strong>. Instead of numeric register addresses, you address data by <strong>tag name</strong> — a symbolic string that maps to a memory location in the controller. This is fundamentally different from Modbus.</p>
+          <table class="dd-table">
+            <thead><tr><th>Concept</th><th>Modbus equivalent</th><th>EtherNet/IP format</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Controller tag</td><td>Holding register</td><td>String tag name</td><td><code>RobotPosition</code></td></tr>
+              <tr><td>Program tag</td><td>—</td><td>Program:Name.Tag</td><td><code>Program:Main.CmdRobot</code></td></tr>
+              <tr><td>Array element</td><td>Reg + offset</td><td>Tag[index]</td><td><code>RobotData[0]</code></td></tr>
+              <tr><td>UDT member</td><td>—</td><td>Tag.Member</td><td><code>Robot.Status.Position</code></td></tr>
+              <tr><td>I/O Assembly</td><td>Register block</td><td>Class 0x04, Instance</td><td>Output: Inst 100, Input: Inst 150</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>Implicit vs Explicit messaging</h4>
+          <p><strong>Implicit (I/O) messaging</strong> — cyclic, real-time. A "connection" is established and data is exchanged every scan cycle automatically. Used for high-speed status/command exchange between PLC and robot. Assembly objects define the data layout.</p>
+          <p><strong>Explicit messaging</strong> — request/response, on-demand. PLC sends a CIP read/write request; device responds. Used for parameter reads, recipe uploads, alarm retrieval. Slower but flexible.</p>
+          <div class="note-box">For robot comms, use <strong>Implicit messaging</strong> with the robot vendor's I/O assembly objects. The vendor's manual will define Output Assembly instance (PLC writes → Robot) and Input Assembly instance (Robot writes → PLC reads).</div>
+        </div>
+        <div class="dd-section">
+          <h4>Tag naming convention for this project</h4>
+          <table class="dd-table">
+            <thead><tr><th>Tag Name</th><th>Type</th><th>Direction</th><th>Equivalent Modbus</th></tr></thead>
+            <tbody>
+              <tr><td><code>Robot_Position</code></td><td>INT</td><td>R (robot→PLC)</td><td>40001</td></tr>
+              <tr><td><code>Robot_Status</code></td><td>INT</td><td>R</td><td>40002</td></tr>
+              <tr><td><code>Cmd_Robot</code></td><td>INT</td><td>RW (PLC→robot)</td><td>40101</td></tr>
+              <tr><td><code>Cmd_Robot_Ack</code></td><td>BOOL</td><td>R</td><td>40102</td></tr>
+              <tr><td><code>CNC_Status</code></td><td>INT</td><td>R (CNC→PLC)</td><td>40201</td></tr>
+              <tr><td><code>Cmd_CNC</code></td><td>INT</td><td>RW (PLC→CNC)</td><td>40301</td></tr>
+              <tr><td><code>HMI_HomeCmd</code></td><td>BOOL</td><td>RW (HMI→PLC)</td><td>40403</td></tr>
+              <tr><td><code>Power_RestoreState</code></td><td>INT</td><td>RW</td><td>40404</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>CIP path structure</h4>
+          <p>When connecting to a device, you specify a CIP path: <code>1,0</code> means backplane, slot 0. <code>1,0,1,1</code> means backplane slot 0, then forward to slot 1. For direct Ethernet devices (like a FANUC robot), the path is typically just the IP address — no backplane path needed.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFINET -->
+    <div class="dd-item">
+      <div class="dd-head" onclick="toggleDD(this)">
+        <div class="dd-icon" style="background:#EEEDFE;color:#3C3489">PN</div>
+        <div>
+          <div class="dd-head-title">PROFINET — Slot/Subslot/Byte model</div>
+          <div class="dd-head-sub">IEC 61158 · Siemens-led · Real-time classes RT, IRT · Port 34964</div>
+        </div>
+        <div class="dd-arrow">▼</div>
+      </div>
+      <div class="dd-body">
+        <div class="dd-section">
+          <h4>How PROFINET addresses data</h4>
+          <p>PROFINET does not use register numbers or tag names. Data is addressed using a <strong>slot / subslot / byte offset</strong> model defined by the device's <strong>GSDML file</strong>. The GSDML (device descriptor) tells the PLC what modules (slots) the device has and what data is at each offset.</p>
+          <table class="dd-table">
+            <thead><tr><th>Concept</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Slot</td><td>Physical or virtual module position</td><td>Slot 1 = Robot I/O module</td></tr>
+              <tr><td>Subslot</td><td>Sub-position within a slot</td><td>Subslot 1 = first submodule</td></tr>
+              <tr><td>Byte offset</td><td>Byte position in the I/O data area</td><td>Offset 0 = first byte</td></tr>
+              <tr><td>Process Image</td><td>PLC memory area mapped from PROFINET I/O</td><td>IB0, QB0 in Siemens</td></tr>
+              <tr><td>GSDML</td><td>XML descriptor file from device vendor</td><td>Imported into TIA Portal / STEP 7</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>Output (PLC→Robot) vs Input (Robot→PLC)</h4>
+          <p>In PROFINET, <strong>Output</strong> means data flowing from the PLC controller to the field device (robot). <strong>Input</strong> means data flowing from the field device back to the PLC. This is opposite to how you'd describe it from the robot's perspective.</p>
+          <p>A typical robot PROFINET I-Device (Intelligent Device) layout:</p>
+          <table class="dd-table">
+            <thead><tr><th>Direction</th><th>PLC view</th><th>Robot view</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>Output</td><td>Writes to QB0…QB15</td><td>Reads from input area</td><td>Command word, mode, setpoints</td></tr>
+              <tr><td>Input</td><td>Reads from IB0…IB15</td><td>Writes to output area</td><td>Status word, position, alarms</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>PROFINET real-time classes</h4>
+          <p><strong>RT (Real-Time)</strong> — standard, cycle times 1–512 ms. Sufficient for robot command/status. Uses Ethernet multicast, no special hardware needed.</p>
+          <p><strong>IRT (Isochronous Real-Time)</strong> — cycle times down to 250 µs. Required for motion synchronization (e.g. robot path following CNC axis). Requires IRT-capable switches (e.g. Siemens SCALANCE X).</p>
+          <div class="warn-box">For simple pick-and-place automation, RT is sufficient. If the robot is doing synchronized axis motion with CNC (e.g. in-process loading), specify IRT from the start — adding it later requires hardware changes.</div>
+        </div>
+        <div class="dd-section">
+          <h4>PROFINET device naming</h4>
+          <p>Every PROFINET device has a <strong>Device Name</strong> (ASCII, e.g. <code>fanuc-robot-01</code>) that must be unique on the network segment. The PLC assigns the device name and IP address during startup using DCP (Discovery and Configuration Protocol). The name is stored in the device's non-volatile memory.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPC-UA -->
+    <div class="dd-item">
+      <div class="dd-head" onclick="toggleDD(this)">
+        <div class="dd-icon" style="background:#FAEEDA;color:#633806">UA</div>
+        <div>
+          <div class="dd-head-title">OPC-UA — Node IDs and browse paths</div>
+          <div class="dd-head-sub">IEC 62541 · Platform-neutral · MES/SCADA integration · Port 4840</div>
+        </div>
+        <div class="dd-arrow">▼</div>
+      </div>
+      <div class="dd-body">
+        <div class="dd-section">
+          <h4>What makes OPC-UA different</h4>
+          <p>OPC-UA is not a fieldbus — it is a <strong>data modeling and transport protocol</strong> designed for vertical integration (PLC → SCADA → MES → ERP). It is used alongside a fieldbus (Modbus, PROFINET, etc.), not instead of it. The PLC exposes its data as OPC-UA nodes, and upper systems subscribe to them.</p>
+          <table class="dd-table">
+            <thead><tr><th>Layer</th><th>Protocol</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>Field level</td><td>PROFINET / Modbus / EIP</td><td>PLC ↔ Robot ↔ CNC real-time exchange</td></tr>
+              <tr><td>Control level</td><td>OPC-UA server on PLC</td><td>PLC exposes data to SCADA / HMI</td></tr>
+              <tr><td>MES / ERP level</td><td>OPC-UA client</td><td>Reads cycle counts, faults, KPIs</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>Node ID formats</h4>
+          <p>Every data point in OPC-UA has a <strong>Node ID</strong> consisting of a namespace index and an identifier:</p>
+          <table class="dd-table">
+            <thead><tr><th>Format</th><th>Syntax</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Numeric</td><td><code>ns=&lt;ns&gt;;i=&lt;id&gt;</code></td><td><code>ns=2;i=1001</code></td></tr>
+              <tr><td>String</td><td><code>ns=&lt;ns&gt;;s=&lt;name&gt;</code></td><td><code>ns=2;s=Robot.Position</code></td></tr>
+              <tr><td>Browse path</td><td><code>/Objects/PLC/Robot/Position</code></td><td>Human-readable path in node tree</td></tr>
+            </tbody>
+          </table>
+          <p>Namespace 0 is reserved by OPC Foundation. Your PLC data lives in namespace 2 (or higher). The numeric ID maps to the register/tag in the PLC — the PLC's OPC-UA server defines the mapping.</p>
+        </div>
+        <div class="dd-section">
+          <h4>Subscriptions vs polling</h4>
+          <p>OPC-UA clients <strong>subscribe</strong> to nodes with a publishing interval (e.g. 500 ms). The server only sends data when it changes (deadband filtering). This is far more efficient than Modbus polling where you read even if nothing changed.</p>
+          <div class="note-box">OPC-UA over TSN (Time-Sensitive Networking) is the emerging standard for combining OPC-UA with real-time control, potentially replacing PROFINET and EtherNet/IP in future installations.</div>
+        </div>
+        <div class="dd-section">
+          <h4>Security in OPC-UA</h4>
+          <p>OPC-UA has built-in security: <strong>authentication</strong> (username/password or certificates), <strong>signing</strong> (data integrity), and <strong>encryption</strong> (confidentiality). For SCADA integration, always use at minimum <em>Sign &amp; Encrypt</em> mode with certificate-based authentication. This is mandatory for IEC 62443 compliance.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CC-Link IE -->
+    <div class="dd-item">
+      <div class="dd-head" onclick="toggleDD(this)">
+        <div class="dd-icon" style="background:#FBEAF0;color:#72243E">CC</div>
+        <div>
+          <div class="dd-head-title">CC-Link IE Field — Link registers (W) and relays (B)</div>
+          <div class="dd-head-sub">Mitsubishi-led · CLPA standard · 1 Gbps · Common in Mitsubishi / FANUC / Yaskawa lines</div>
+        </div>
+        <div class="dd-arrow">▼</div>
+      </div>
+      <div class="dd-body">
+        <div class="dd-section">
+          <h4>Address spaces in CC-Link IE</h4>
+          <p>CC-Link IE Field uses a memory-mapped approach with two main address spaces — link relays (bit data) and link registers (word data). Addresses are in hexadecimal:</p>
+          <table class="dd-table">
+            <thead><tr><th>Type</th><th>Range</th><th>Width</th><th>Access</th><th>Use</th></tr></thead>
+            <tbody>
+              <tr><td><code>RX</code> / <code>RY</code></td><td>RX0000–RXFFFF</td><td>1 bit</td><td>RX: slave→master, RY: master→slave</td><td>Digital I/O, handshake bits</td></tr>
+              <tr><td><code>RWr</code> / <code>RWw</code></td><td>RWr0000–RWrFFFF</td><td>16-bit word</td><td>RWr: slave→master, RWw: master→slave</td><td>Status, commands, parameters</td></tr>
+              <tr><td><code>B</code></td><td>B0000–BFFFF</td><td>1 bit</td><td>Shared across all stations</td><td>Global signals, interlocks</td></tr>
+              <tr><td><code>W</code></td><td>W0000–WFFFF</td><td>16-bit word</td><td>Shared across all stations</td><td>Data exchange between stations</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>Station numbers</h4>
+          <p>Each device (robot, CNC, drives) has a <strong>station number</strong> (1–120). The master PLC (station 0) allocates a block of RX/RY/RWr/RWw addresses per station based on the configured point count. Each station's data occupies a contiguous, non-overlapping block.</p>
+          <p>Example allocation with 32 points per station:</p>
+          <table class="dd-table">
+            <thead><tr><th>Station</th><th>Device</th><th>RY (out)</th><th>RX (in)</th><th>RWw (out)</th><th>RWr (in)</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>FANUC Robot</td><td>RY0000–RY001F</td><td>RX0000–RX001F</td><td>RWw0–RWw7</td><td>RWr0–RWr7</td></tr>
+              <tr><td>2</td><td>Fanuc CNC</td><td>RY0020–RY003F</td><td>RX0020–RX003F</td><td>RWw8–RWwF</td><td>RWr8–RWrF</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>Cyclic vs transient transmission</h4>
+          <p><strong>Cyclic</strong> — automatic, every scan cycle. RX/RY/RWr/RWw are exchanged without any explicit request. The PLC always has fresh data. This is equivalent to Modbus polling but automatic.</p>
+          <p><strong>Transient</strong> — on demand, using SEND/RECV instructions. Used for recipe uploads, parameter changes, alarm history retrieval.</p>
+          <div class="note-box">CC-Link IE is dominant in Japanese OEM equipment (Fanuc, Yaskawa, Mitsubishi, DMG Mori). If the robot or CNC is Japanese-made, check whether CC-Link IE is already available as an option before choosing Modbus — it will give faster cycle times and tighter integration.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLMP / Mitsubishi -->
+    <div class="dd-item">
+      <div class="dd-head" onclick="toggleDD(this)">
+        <div class="dd-icon" style="background:#F1EFE8;color:#444441">SL</div>
+        <div>
+          <div class="dd-head-title">SLMP — Seamless Message Protocol (Mitsubishi)</div>
+          <div class="dd-head-sub">Mitsubishi MELSEC · D / M / Y register model · TCP or UDP · Port 5000</div>
+        </div>
+        <div class="dd-arrow">▼</div>
+      </div>
+      <div class="dd-body">
+        <div class="dd-section">
+          <h4>Register types in Mitsubishi PLCs</h4>
+          <p>Mitsubishi MELSEC PLCs use named device types instead of numeric prefixes. SLMP (formerly MC Protocol) gives direct access to any device:</p>
+          <table class="dd-table">
+            <thead><tr><th>Device</th><th>Range</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>D</code></td><td>D0–D32767</td><td>16-bit word</td><td>Data register — general purpose, R/W</td></tr>
+              <tr><td><code>W</code></td><td>W0–W1FFF</td><td>16-bit word</td><td>Link register (CC-Link shared)</td></tr>
+              <tr><td><code>M</code></td><td>M0–M8191</td><td>1 bit</td><td>Internal relay — general purpose bit</td></tr>
+              <tr><td><code>B</code></td><td>B0–B1FFF</td><td>1 bit</td><td>Link relay (CC-Link shared bit)</td></tr>
+              <tr><td><code>Y</code></td><td>Y0–Y1FF</td><td>1 bit</td><td>Output relay (physical output)</td></tr>
+              <tr><td><code>X</code></td><td>X0–X1FF</td><td>1 bit</td><td>Input relay (physical input)</td></tr>
+              <tr><td><code>R</code></td><td>R0–R32767</td><td>16-bit word</td><td>File register (extended, retentive)</td></tr>
+              <tr><td><code>ZR</code></td><td>ZR0–ZR999999</td><td>16-bit word</td><td>Extended file register (large data)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>Mapping SLMP to Modbus concepts</h4>
+          <p>When a third-party system (HMI, robot) connects to a Mitsubishi PLC via SLMP:</p>
+          <table class="dd-table">
+            <thead><tr><th>Modbus concept</th><th>Mitsubishi equivalent</th><th>Example address</th></tr></thead>
+            <tbody>
+              <tr><td>Holding register (40001-series)</td><td>D register</td><td><code>D100</code></td></tr>
+              <tr><td>Coil (bit output)</td><td>M or Y relay</td><td><code>M100</code>, <code>Y10</code></td></tr>
+              <tr><td>Discrete input</td><td>X relay</td><td><code>X10</code></td></tr>
+              <tr><td>Input register (read-only word)</td><td>D register (by convention)</td><td><code>D200</code> (read only)</td></tr>
+            </tbody>
+          </table>
+          <div class="note-box">SLMP uses 3E frame format over TCP. The command code 0x0401 (batch read in word units) and 0x1401 (batch write) are the equivalents of Modbus FC03 and FC16. You can read/write D, M, W, B, X, Y in a single request.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Power restore deep dive -->
+    <div class="dd-item">
+      <div class="dd-head" onclick="toggleDD(this)">
+        <div class="dd-icon" style="background:#FCEBEB;color:#791F1F">PR</div>
+        <div>
+          <div class="dd-head-title">Power Restore &amp; Homing Logic — How it works</div>
+          <div class="dd-head-sub">Critical safety sequence · Applies to all protocols · Must be programmed in PLC</div>
+        </div>
+        <div class="dd-arrow">▼</div>
+      </div>
+      <div class="dd-body">
+        <div class="dd-section">
+          <h4>The problem: robot could be anywhere when power cuts</h4>
+          <p>When power is cut — whether from an emergency stop, mains failure, or planned shutdown — the robot may stop mid-trajectory. On power restore, the PLC and HMI have no idea where the robot is physically unless a register was tracking this. Sending a "go to position" command without knowing where the robot is can cause a collision.</p>
+        </div>
+        <div class="dd-section">
+          <h4>The register solution</h4>
+          <table class="dd-table">
+            <thead><tr><th>Register</th><th>Modbus addr</th><th>Written by</th><th>When written</th></tr></thead>
+            <tbody>
+              <tr><td><code>POWER_RESTORE_STATE</code></td><td>40404</td><td>PLC</td><td>After every confirmed move — stores last COMPLETED position index</td></tr>
+              <tr><td><code>ROBOT_POS</code></td><td>40001</td><td>Robot</td><td>Every scan — current position (may be mid-move, unreliable after e-stop)</td></tr>
+              <tr><td><code>HMI_HOME_CMD</code></td><td>40403</td><td>HMI operator</td><td>Manually set after power restore, after verifying it is safe to home</td></tr>
+              <tr><td><code>POWER_RESTORE_FLAG</code></td><td>40103</td><td>PLC (on boot)</td><td>Automatically set by PLC on startup if previous state was not "clean stop"</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dd-section">
+          <h4>Homing sequence — step by step</h4>
+          <p><strong>Step 1 — Power restores</strong>: PLC boots. It reads <code>POWER_RESTORE_STATE</code> from retentive memory (battery-backed or FRAM). If it is not 0 (Home), it sets <code>POWER_RESTORE_FLAG = 1</code>.</p>
+          <p><strong>Step 2 — HMI shows warning</strong>: HMI detects <code>POWER_RESTORE_FLAG = 1</code> and shows "Last known position: [Transition — Pallet→CNC]. Robot must home before running. Confirm it is safe, then press HOME."</p>
+          <p><strong>Step 3 — Operator confirms and presses HOME</strong>: Operator visually confirms robot position, verifies no obstruction. Presses HOME on HMI. HMI sets <code>HMI_HOME_CMD = 1</code>.</p>
+          <p><strong>Step 4 — PLC issues command</strong>: PLC checks <code>POWER_RESTORE_STATE</code>. If it was at a CNC position, PLC first issues <code>CMD_ROBOT = 6</code> (go CNC unload path), waits for ACK, then issues <code>CMD_ROBOT = 1</code> (go home). If it was at pallet, it goes directly home. The path depends on the saved state.</p>
+          <p><strong>Step 5 — Robot confirms home</strong>: Robot sets <code>ROBOT_POS = 0</code>. PLC clears <code>POWER_RESTORE_FLAG</code>, sets <code>POWER_RESTORE_STATE = 1</code> (clean/at home). System is ready for auto mode.</p>
+          <div class="warn-box">Never write <code>POWER_RESTORE_STATE</code> speculatively or before the move is confirmed complete. Write it only when the robot's ACK register confirms the position. Writing it during a move gives a false safe state.</div>
+          <div class="good-box">Use retentive (battery-backed) PLC memory for <code>POWER_RESTORE_STATE</code>. On Siemens S7 this is a DB with "Non-optimized" and "Retain" flags. On Allen-Bradley this is Retain attribute on the tag. On Mitsubishi this is file register R or battery-backed D range.</div>
+        </div>
+        <div class="dd-section">
+          <h4>Position index value map (standard)</h4>
+          <table class="dd-table">
+            <thead><tr><th>Value</th><th>Position name</th><th>Safe to go direct to Home?</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>Home</td><td>Yes — already there</td></tr>
+              <tr><td>1</td><td>Pallet pick approach</td><td>Yes — open space</td></tr>
+              <tr><td>2</td><td>Pallet place approach</td><td>Yes — open space</td></tr>
+              <tr><td>3</td><td>Transition — pallet to CNC door</td><td>Yes — open space, no collision risk</td></tr>
+              <tr><td>4</td><td>CNC door wait position</td><td>Yes — outside machine</td></tr>
+              <tr><td>5</td><td>CNC load position</td><td>NO — inside machine, door may be closed. Must retract first</td></tr>
+              <tr><td>6</td><td>CNC unload position</td><td>NO — inside machine. Must retract first</td></tr>
+              <tr><td>7</td><td>Transition — CNC to pallet</td><td>Yes — open space</td></tr>
+              <tr><td>9</td><td>Unsafe / unknown</td><td>NO — must manually jog to safe position</td></tr>
+              <tr><td>99</td><td>Fault / error</td><td>NO — clear fault first</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end deep-dive -->
+
+</main>
+</div>
+
+<!-- ═══════════════ MODAL ═══════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-box"></div>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────
+let nid=1, activeTab='all', groups=[];
+const uid=()=>nid++;
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const cc=['cp0','cp1','cp2','cp3','cp4','cp5','cp6','cp7'];
+
+// ─── PROTOCOL CONFIG ─────────────────────────────────
+const PROTOS = {
+  modbus:{
+    name:'Modbus TCP/RTU',
+    legend:[
+      {color:'#3B82F6',range:'00001–09999',name:'Coils',rw:'R/W bit'},
+      {color:'#10B981',range:'10001–19999',name:'Discrete Inputs',rw:'R bit'},
+      {color:'#8B5CF6',range:'30001–39999',name:'Input Registers',rw:'R word'},
+      {color:'#F59E0B',range:'40001–49999',name:'Holding Registers',rw:'R/W word'},
+    ],
+    addrLabel:'Reg Address',
+    uidLabel:'Unit ID',
+    addrClass:'addr-modbus',
+    addrPrefix:'',
+  },
+  eip:{
+    name:'EtherNet/IP (CIP)',
+    legend:[
+      {color:'#0F6E56',range:'Controller tag',name:'Tag name',rw:'R/W'},
+      {color:'#1D9E75',range:'Program:Main.tag',name:'Program tag',rw:'R/W'},
+      {color:'#5DCAA5',range:'Tag[0]',name:'Array element',rw:'R/W'},
+      {color:'#9FE1CB',range:'Tag.Member',name:'UDT member',rw:'R/W'},
+    ],
+    addrLabel:'Tag Name',
+    uidLabel:'CIP Path',
+    addrClass:'addr-eip',
+    addrPrefix:'',
+  },
+  profinet:{
+    name:'PROFINET',
+    legend:[
+      {color:'#7C3AED',range:'Slot.Subslot.Offset',name:'I/O data',rw:'Mixed'},
+      {color:'#A78BFA',range:'IB0…IBn',name:'Input bytes (→PLC)',rw:'R'},
+      {color:'#DDD6FE',range:'QB0…QBn',name:'Output bytes (PLC→)',rw:'W'},
+      {color:'#EDE9FE',range:'GSDML',name:'Device descriptor',rw:'—'},
+    ],
+    addrLabel:'Slot/Subslot/Offset',
+    uidLabel:'Device Name',
+    addrClass:'addr-profinet',
+    addrPrefix:'',
+  },
+  opcua:{
+    name:'OPC-UA',
+    legend:[
+      {color:'#B45309',range:'ns=2;i=1001',name:'Numeric NodeID',rw:'Mixed'},
+      {color:'#D97706',range:'ns=2;s=Tag',name:'String NodeID',rw:'Mixed'},
+      {color:'#F59E0B',range:'Sub 500ms',name:'Subscription',rw:'R'},
+      {color:'#FCD34D',range:'FC 0x0A',name:'Method call',rw:'W'},
+    ],
+    addrLabel:'Node ID',
+    uidLabel:'Port',
+    addrClass:'addr-opcua',
+    addrPrefix:'',
+  },
+  cclink:{
+    name:'CC-Link IE Field',
+    legend:[
+      {color:'#BE185D',range:'RWw0000–FFFF',name:'Link Reg (out)',rw:'W (master→slave)'},
+      {color:'#DB2777',range:'RWr0000–FFFF',name:'Link Reg (in)',rw:'R (slave→master)'},
+      {color:'#F472B6',range:'RY0000–FFFF',name:'Link Relay (out)',rw:'W bit'},
+      {color:'#FBCFE8',range:'RX0000–FFFF',name:'Link Relay (in)',rw:'R bit'},
+    ],
+    addrLabel:'RWw/RWr/RX/RY',
+    uidLabel:'Station No.',
+    addrClass:'addr-cclink',
+    addrPrefix:'',
+  },
+  slmp:{
+    name:'SLMP (Mitsubishi)',
+    legend:[
+      {color:'#6B7280',range:'D0–D32767',name:'Data register',rw:'R/W word'},
+      {color:'#9CA3AF',range:'M0–M8191',name:'Internal relay',rw:'R/W bit'},
+      {color:'#D1D5DB',range:'X0–X1FF',name:'Input relay',rw:'R bit'},
+      {color:'#374151',range:'Y0–Y1FF',name:'Output relay',rw:'W bit'},
+    ],
+    addrLabel:'Device Address',
+    uidLabel:'Network No.',
+    addrClass:'addr-modbus',
+    addrPrefix:'',
+  },
+};
+
+function currProto(){return document.getElementById('sb-proto').value}
+
+// ─── SIDEBAR LEGEND ──────────────────────────────────
+function renderLegend(){
+  const p=PROTOS[currProto()];
+  const uid_lbl=document.getElementById('lbl-uid');
+  if(uid_lbl)uid_lbl.textContent=p.uidLabel;
+  const el=document.getElementById('sb-proto-legend');
+  el.innerHTML=`<div class="sb-label">${p.name} — Address Ranges</div>`+
+    p.legend.map(r=>`
+      <div class="proto-range">
+        <div class="range-dot" style="background:${r.color}"></div>
+        <div class="range-addr">${r.range}</div>
+        <div style="flex:1"><div class="range-name">${r.name}</div><div class="range-rw">${r.rw}</div></div>
+      </div>
+    `).join('');
+}
+
+function switchProto(){renderLegend();renderAll();}
+
+// ─── TEMPLATE ─────────────────────────────────────────
+function loadTemplate(){
+  if(groups.length&&!confirm('Replace current map with standard template?'))return;
+  nid=1;
+  groups=[
+    {id:uid(),name:'Robot position status',device:'robot',note:'Robot controller writes every scan. PLC reads to monitor.',registers:[
+      {id:uid(),
+       addrs:{modbus:'40001',eip:'Robot_Position',profinet:'1.1.0',opcua:'ns=2;i=1001',cclink:'RWr0000',slmp:'D100'},
+       name:'ROBOT_POS',type:'INT',acc:'R',desc:'Current robot position index — written by robot, read by PLC and HMI',
+       vm:[{v:0,l:'Home'},{v:1,l:'Pallet pick approach'},{v:2,l:'Pallet place approach'},{v:3,l:'Transition → CNC door'},{v:4,l:'CNC door wait'},{v:5,l:'CNC load (inside machine)'},{v:6,l:'CNC unload (inside machine)'},{v:7,l:'Transition → pallet'},{v:99,l:'Error / unknown'}]},
+      {id:uid(),
+       addrs:{modbus:'40002',eip:'Robot_Status',profinet:'1.1.2',opcua:'ns=2;i=1002',cclink:'RWr0001',slmp:'D101'},
+       name:'ROBOT_STATUS',type:'INT',acc:'R',desc:'Robot operating state',
+       vm:[{v:0,l:'Idle'},{v:1,l:'Running — auto'},{v:2,l:'Waiting for PLC input'},{v:3,l:'Fault'},{v:4,l:'E-stop'},{v:5,l:'Program paused'}]},
+      {id:uid(),
+       addrs:{modbus:'40003',eip:'Robot_Speed',profinet:'1.1.4',opcua:'ns=2;i=1003',cclink:'RWr0002',slmp:'D102'},
+       name:'ROBOT_SPEED_OVR',type:'FLOAT',acc:'RW',desc:'Speed override 0.0–100.0% — can be set from HMI',vm:[]},
+      {id:uid(),
+       addrs:{modbus:'40005',eip:'Robot_CycleCount',profinet:'1.1.8',opcua:'ns=2;i=1005',cclink:'RWr0004',slmp:'D104'},
+       name:'ROBOT_CYCLE_COUNT',type:'DWORD',acc:'R',desc:'Total cycles completed (32-bit, two consecutive registers/words)',vm:[]},
+      {id:uid(),
+       addrs:{modbus:'40007',eip:'Robot_AlarmCode',profinet:'1.1.12',opcua:'ns=2;i=1007',cclink:'RWr0006',slmp:'D106'},
+       name:'ROBOT_ALARM_CODE',type:'INT',acc:'R',desc:'Active alarm/fault code — 0 = no alarm',vm:[{v:0,l:'No alarm'},{v:1,l:'Joint limit'},{v:2,l:'Collision'},{v:3,l:'Servo fault'},{v:4,l:'Communication timeout'},{v:9,l:'E-stop activated'}]},
+    ]},
+    {id:uid(),name:'PLC commands → Robot',device:'plc',note:'PLC master writes here. Robot reads. Handshake via ACK register.',registers:[
+      {id:uid(),
+       addrs:{modbus:'40101',eip:'Cmd_Robot',profinet:'1.2.0',opcua:'ns=2;i=1101',cclink:'RWw0000',slmp:'D200'},
+       name:'CMD_ROBOT',type:'INT',acc:'RW',desc:'Motion/action command from PLC to robot. Write command, wait for ACK, then clear to 0.',
+       vm:[{v:0,l:'No command (idle)'},{v:1,l:'Go home'},{v:2,l:'Go pallet pick approach'},{v:3,l:'Go pallet place approach'},{v:4,l:'Go CNC load'},{v:5,l:'Go CNC unload'},{v:6,l:'Go CNC door wait position'},{v:7,l:'Go transition pallet→CNC'},{v:8,l:'Go transition CNC→pallet'},{v:10,l:'Reset fault / alarm'},{v:20,l:'Start automatic cycle'},{v:21,l:'Stop automatic cycle'},{v:99,l:'E-stop all'}]},
+      {id:uid(),
+       addrs:{modbus:'40102',eip:'Cmd_Robot_Ack',profinet:'1.2.2',opcua:'ns=2;i=1102',cclink:'RWr0010',slmp:'D201'},
+       name:'CMD_ROBOT_ACK',type:'BOOL',acc:'R',desc:'Robot sets this = 1 when command received and motion started. PLC should wait for ACK before writing next command.',
+       vm:[{v:0,l:'Not acknowledged'},{v:1,l:'Acknowledged — executing'}]},
+      {id:uid(),
+       addrs:{modbus:'40103',eip:'Power_RestoreFlag',profinet:'1.2.4',opcua:'ns=2;i=1103',cclink:'RWw0002',slmp:'D202'},
+       name:'POWER_RESTORE_FLAG',type:'BOOL',acc:'RW',desc:'PLC sets this on boot if last shutdown was not clean. HMI shows homing warning while this = 1.',
+       vm:[{v:0,l:'Normal — no action needed'},{v:1,l:'Homing required after power restore'}]},
+      {id:uid(),
+       addrs:{modbus:'40104',eip:'Robot_Enable',profinet:'1.2.6',opcua:'ns=2;i=1104',cclink:'RWw0003',slmp:'D203'},
+       name:'ROBOT_ENABLE',type:'BOOL',acc:'RW',desc:'PLC enables/disables robot servo power via this bit',
+       vm:[{v:0,l:'Servos off'},{v:1,l:'Servos on — robot ready'}]},
+    ]},
+    {id:uid(),name:'CNC status',device:'cnc',note:'CNC writes here every scan. PLC reads to know machine state.',registers:[
+      {id:uid(),
+       addrs:{modbus:'40201',eip:'CNC_Status',profinet:'2.1.0',opcua:'ns=2;i=2001',cclink:'RWr0020',slmp:'D300'},
+       name:'CNC_STATUS',type:'INT',acc:'R',desc:'CNC machine operating state',
+       vm:[{v:0,l:'Idle / ready'},{v:1,l:'Program running'},{v:2,l:'Program stopped'},{v:3,l:'Door open'},{v:4,l:'Door closed'},{v:5,l:'Cycle complete — part ready'},{v:6,l:'Alarm active'},{v:7,l:'E-stop'},{v:8,l:'Spindle on'},{v:9,l:'Chuck open'},{v:10,l:'Chuck closed'}]},
+      {id:uid(),
+       addrs:{modbus:'40202',eip:'CNC_Door',profinet:'2.1.2',opcua:'ns=2;i=2002',cclink:'RWr0021',slmp:'D301'},
+       name:'CNC_DOOR',type:'BOOL',acc:'R',desc:'Safety door status',
+       vm:[{v:0,l:'Door closed — safe to enter'},{v:1,l:'Door open'}]},
+      {id:uid(),
+       addrs:{modbus:'40203',eip:'CNC_ChuckState',profinet:'2.1.4',opcua:'ns=2;i=2003',cclink:'RWr0022',slmp:'D302'},
+       name:'CNC_CHUCK',type:'INT',acc:'R',desc:'Chuck / fixture state',
+       vm:[{v:0,l:'Chuck released / open'},{v:1,l:'Chuck clamped'},{v:2,l:'Fault — neither open nor clamped'}]},
+      {id:uid(),
+       addrs:{modbus:'40204',eip:'CNC_PartCount',profinet:'2.1.6',opcua:'ns=2;i=2004',cclink:'RWr0023',slmp:'D303'},
+       name:'CNC_PART_COUNT',type:'DWORD',acc:'R',desc:'Parts completed this shift (32-bit)',vm:[]},
+      {id:uid(),
+       addrs:{modbus:'40206',eip:'CNC_AlarmCode',profinet:'2.1.10',opcua:'ns=2;i=2006',cclink:'RWr0025',slmp:'D305'},
+       name:'CNC_ALARM_CODE',type:'INT',acc:'R',desc:'Active alarm number — 0 = no alarm. Refer to CNC alarm manual.',vm:[{v:0,l:'No alarm'},{v:100,l:'Servo alarm'},{v:200,l:'Spindle alarm'},{v:300,l:'Program error'},{v:400,l:'Tool alarm'},{v:500,l:'Communication error'}]},
+      {id:uid(),
+       addrs:{modbus:'40207',eip:'CNC_ProgramNo',profinet:'2.1.12',opcua:'ns=2;i=2007',cclink:'RWr0026',slmp:'D306'},
+       name:'CNC_PROGRAM_NO',type:'INT',acc:'R',desc:'Currently selected / running part program number',vm:[]},
+    ]},
+    {id:uid(),name:'PLC commands → CNC',device:'plc',note:'PLC writes to control CNC door, chuck, cycle start.',registers:[
+      {id:uid(),
+       addrs:{modbus:'40301',eip:'Cmd_CNC',profinet:'2.2.0',opcua:'ns=2;i=3001',cclink:'RWw0010',slmp:'D400'},
+       name:'CMD_CNC',type:'INT',acc:'RW',desc:'Command from PLC to CNC. Write command, wait for CNC status to confirm.',
+       vm:[{v:0,l:'No command'},{v:1,l:'Open door'},{v:2,l:'Close door'},{v:3,l:'Open chuck'},{v:4,l:'Close chuck'},{v:5,l:'Cycle start'},{v:6,l:'Feed hold'},{v:7,l:'Reset alarm'},{v:8,l:'Select program (use CMD_CNC_PARAM for number)'},{v:99,l:'Emergency stop'}]},
+      {id:uid(),
+       addrs:{modbus:'40302',eip:'Cmd_CNC_Ack',profinet:'2.2.2',opcua:'ns=2;i=3002',cclink:'RWr0030',slmp:'D401'},
+       name:'CMD_CNC_ACK',type:'BOOL',acc:'R',desc:'CNC acknowledges command received',
+       vm:[{v:0,l:'Not acknowledged'},{v:1,l:'Acknowledged'}]},
+      {id:uid(),
+       addrs:{modbus:'40303',eip:'Cmd_CNC_Param',profinet:'2.2.4',opcua:'ns=2;i=3003',cclink:'RWw0012',slmp:'D402'},
+       name:'CMD_CNC_PARAM',type:'INT',acc:'RW',desc:'Parameter for last command (e.g. program number when CMD_CNC = 8)',vm:[]},
+    ]},
+    {id:uid(),name:'System / HMI flags',device:'plc',note:'Shared system-level control bits. HMI reads and writes these.',registers:[
+      {id:uid(),
+       addrs:{modbus:'40401',eip:'Sys_Mode',profinet:'3.1.0',opcua:'ns=2;i=4001',cclink:'RWw0020',slmp:'D500'},
+       name:'SYS_MODE',type:'INT',acc:'RW',desc:'System operating mode — HMI or supervisor writes, all devices follow',
+       vm:[{v:0,l:'Off / disabled'},{v:1,l:'Manual (jog)'},{v:2,l:'Semi-automatic'},{v:3,l:'Full automatic'},{v:4,l:'Setup mode'},{v:5,l:'Teaching mode'},{v:9,l:'Maintenance mode'}]},
+      {id:uid(),
+       addrs:{modbus:'40402',eip:'Sys_Fault',profinet:'3.1.2',opcua:'ns=2;i=4002',cclink:'RWr0040',slmp:'D501'},
+       name:'SYS_FAULT',type:'BOOL',acc:'R',desc:'System-level fault — any device fault present',
+       vm:[{v:0,l:'No fault — system OK'},{v:1,l:'Fault active — check alarm registers'}]},
+      {id:uid(),
+       addrs:{modbus:'40403',eip:'HMI_HomeCmd',profinet:'3.1.4',opcua:'ns=2;i=4003',cclink:'RWw0022',slmp:'D502'},
+       name:'HMI_HOME_CMD',type:'BOOL',acc:'RW',desc:'HMI HOME button — operator sets this after confirming it is safe to home. PLC clears after homing complete.',
+       vm:[{v:0,l:'Idle — no homing commanded'},{v:1,l:'Home requested by operator'}]},
+      {id:uid(),
+       addrs:{modbus:'40404',eip:'Power_RestoreState',profinet:'3.1.6',opcua:'ns=2;i=4004',cclink:'RWw0023',slmp:'D503'},
+       name:'POWER_RESTORE_STATE',type:'INT',acc:'RW',desc:'RETENTIVE — stores last confirmed robot position before power cut. PLC writes after every confirmed move completion. Read on power-up to determine safe homing path.',
+       vm:[{v:0,l:'Unknown / cold start'},{v:1,l:'At home — clean stop'},{v:2,l:'At pallet area — safe to home direct'},{v:3,l:'In transition — safe to home direct'},{v:4,l:'At CNC door wait — safe to home direct'},{v:5,l:'Inside CNC — MUST retract before home'},{v:6,l:'Inside CNC — MUST retract before home'},{v:9,l:'Unsafe — manually jog to safe position first'}]},
+      {id:uid(),
+       addrs:{modbus:'40405',eip:'Sys_CycleTime',profinet:'3.1.8',opcua:'ns=2;i=4005',cclink:'RWr0042',slmp:'D504'},
+       name:'SYS_CYCLE_TIME_MS',type:'UINT',acc:'R',desc:'Last full cycle time in milliseconds. Logged by PLC at end of each complete cycle.',vm:[]},
+      {id:uid(),
+       addrs:{modbus:'40406',eip:'Sys_ShiftCount',profinet:'3.1.10',opcua:'ns=2;i=4006',cclink:'RWr0043',slmp:'D505'},
+       name:'SYS_SHIFT_COUNT',type:'DWORD',acc:'R',desc:'Parts completed this shift (32-bit counter, reset by HMI shift start)',vm:[]},
+    ]},
+    {id:uid(),name:'Fault / alarm register bank',device:'plc',note:'Individual fault bits and codes. Extend as needed per client alarm list.',registers:[
+      {id:uid(),
+       addrs:{modbus:'40501',eip:'Fault_RobotComms',profinet:'3.2.0',opcua:'ns=2;i=5001',cclink:'RWr0050',slmp:'D600'},
+       name:'FAULT_ROBOT_COMMS',type:'BOOL',acc:'R',desc:'PLC has lost communication with robot controller (watchdog timeout)',
+       vm:[{v:0,l:'Comms OK'},{v:1,l:'Comms fault — check cable and robot controller'}]},
+      {id:uid(),
+       addrs:{modbus:'40502',eip:'Fault_CNCComms',profinet:'3.2.2',opcua:'ns=2;i=5002',cclink:'RWr0051',slmp:'D601'},
+       name:'FAULT_CNC_COMMS',type:'BOOL',acc:'R',desc:'PLC has lost communication with CNC',
+       vm:[{v:0,l:'Comms OK'},{v:1,l:'Comms fault'}]},
+      {id:uid(),
+       addrs:{modbus:'40503',eip:'Fault_SafetyCircuit',profinet:'3.2.4',opcua:'ns=2;i=5003',cclink:'RWr0052',slmp:'D602'},
+       name:'FAULT_SAFETY',type:'BOOL',acc:'R',desc:'Safety circuit open — light curtain, door interlock, or safety PLC fault',
+       vm:[{v:0,l:'Safety circuit OK'},{v:1,l:'Safety circuit open — clear before restart'}]},
+      {id:uid(),
+       addrs:{modbus:'40504',eip:'Fault_Watchdog',profinet:'3.2.6',opcua:'ns=2;i=5004',cclink:'RWr0053',slmp:'D603'},
+       name:'FAULT_WATCHDOG',type:'BOOL',acc:'R',desc:'Watchdog counter fault — comms healthy check counter stopped incrementing',
+       vm:[{v:0,l:'Watchdog OK'},{v:1,l:'Watchdog fault — reboot communication'}]},
+    ]},
+    {id:uid(),name:'Recipe / parameter block',device:'plc',note:'Part-specific parameters. Written from HMI or SCADA at job changeover.',registers:[
+      {id:uid(),
+       addrs:{modbus:'41001',eip:'Recipe_PartNo',profinet:'4.1.0',opcua:'ns=2;i=6001',cclink:'RWw0100',slmp:'D1000'},
+       name:'RECIPE_PART_NO',type:'INT',acc:'RW',desc:'Active part program / recipe number',vm:[]},
+      {id:uid(),
+       addrs:{modbus:'41002',eip:'Recipe_PalletRows',profinet:'4.1.2',opcua:'ns=2;i=6002',cclink:'RWw0101',slmp:'D1001'},
+       name:'RECIPE_PALLET_ROWS',type:'INT',acc:'RW',desc:'Pallet grid rows for this part',vm:[]},
+      {id:uid(),
+       addrs:{modbus:'41003',eip:'Recipe_PalletCols',profinet:'4.1.4',opcua:'ns=2;i=6003',cclink:'RWw0102',slmp:'D1002'},
+       name:'RECIPE_PALLET_COLS',type:'INT',acc:'RW',desc:'Pallet grid columns for this part',vm:[]},
+      {id:uid(),
+       addrs:{modbus:'41004',eip:'Recipe_CycleTimeTarget',profinet:'4.1.6',opcua:'ns=2;i=6004',cclink:'RWw0103',slmp:'D1003'},
+       name:'RECIPE_CYCLE_TARGET_MS',type:'UINT',acc:'RW',desc:'Target cycle time in milliseconds for this part',vm:[]},
+    ]},
+  ];
+  activeTab='all';
+  renderAll();
+}
+
+// ─── RENDER ────────────────────────────────────────────
+function renderAll(){
+  renderStats();
+  renderTabs();
+  filterAndRender();
+}
+
+function updateHeader(){
+  const client=document.getElementById('sb-client').value;
+  document.getElementById('ph-title').textContent=client?`Register Map — ${client}`:'Register Map';
+}
+
+function renderStats(){
+  const all=groups.flatMap(g=>g.registers);
+  const mapped=all.filter(r=>r.vm&&r.vm.length>0).length;
+  const rw=all.filter(r=>r.acc==='RW').length;
+  const ro=all.filter(r=>r.acc==='R').length;
+  document.getElementById('stats-bar').innerHTML=`
+    <div class="stat-card"><div class="stat-n">${all.length}</div><div class="stat-l">Registers</div><div class="stat-sub">${groups.length} groups</div></div>
+    <div class="stat-card"><div class="stat-n">${rw}</div><div class="stat-l">Read / Write</div><div class="stat-sub">bidirectional</div></div>
+    <div class="stat-card"><div class="stat-n">${ro}</div><div class="stat-l">Read only</div><div class="stat-sub">device → PLC</div></div>
+    <div class="stat-card"><div class="stat-n">${mapped}</div><div class="stat-l">Value mapped</div><div class="stat-sub">documented</div></div>
+    <div class="stat-card"><div class="stat-n">${all.length-mapped}</div><div class="stat-l">Unmapped</div><div class="stat-sub" style="color:${(all.length-mapped)>0?'var(--red)':'var(--green)'}">need attention</div></div>
+  `;
+}
+
+function renderTabs(){
+  const devs=['all','plc','robot','cnc'];
+  const labels={all:'All',plc:'PLC',robot:'Robot',cnc:'CNC'};
+  const cnt={all:groups.flatMap(g=>g.registers).length};
+  groups.forEach(g=>{cnt[g.device]=(cnt[g.device]||0)+g.registers.length});
+  document.getElementById('tab-bar').innerHTML=devs.map(d=>`
+    <button class="tab ${activeTab===d?'on':''}" onclick="setTab('${d}')">${labels[d]}<span class="tab-cnt">${cnt[d]||0}</span></button>
+  `).join('');
+}
+
+function setTab(t){activeTab=t;filterAndRender();}
+
+function filterAndRender(){
+  const q=(document.getElementById('search-box')||{value:''}).value.toLowerCase();
+  const typeF=(document.getElementById('type-filter')||{value:''}).value;
+  const accF=(document.getElementById('acc-filter')||{value:''}).value;
+  const proto=currProto();
+  const p=PROTOS[proto];
+
+  const grps=activeTab==='all'?groups:groups.filter(g=>g.device===activeTab);
+  const dt={plc:'dt-plc',robot:'dt-robot',cnc:'dt-cnc'};
+
+  if(!grps.length){
+    document.getElementById('reg-content').innerHTML=`<div class="empty-state">No groups yet — click <strong>Load Standard Template</strong> or create a group manually.</div>`;
+    return;
+  }
+
+  document.getElementById('reg-content').innerHTML=grps.map(g=>{
+    const regs=g.registers.filter(r=>{
+      if(typeF&&r.type!==typeF)return false;
+      if(accF&&r.acc!==accF)return false;
+      if(q){
+        const addr=(r.addrs||{})[proto]||'';
+        const hay=(addr+' '+r.name+' '+r.desc+' '+(r.vm||[]).map(v=>v.l).join(' ')).toLowerCase();
+        if(!hay.includes(q))return false;
+      }
+      return true;
+    });
+    return `
+    <div class="group-block">
+      <div class="group-head">
+        <span class="device-tag ${dt[g.device]||'dt-plc'}">${g.device}</span>
+        <span class="group-label">${esc(g.name)}</span>
+        <span class="group-note">${esc(g.note)}</span>
+        <button class="btn btn-sm" onclick="openAddReg(${g.id})" title="Add register"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <button class="btn btn-sm btn-danger" onclick="delGroup(${g.id})" title="Delete group"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+      </div>
+      ${regs.length?`<table>
+        <thead><tr>
+          <th style="width:120px">${p.addrLabel}</th>
+          <th style="width:160px">Name</th>
+          <th style="width:52px">Type</th>
+          <th style="width:36px">R/W</th>
+          <th style="width:190px">Description</th>
+          <th>Value map</th>
+          <th style="width:64px"></th>
+        </tr></thead>
+        <tbody>
+        ${regs.map(r=>{
+          const addr=(r.addrs||{})[proto]||'—';
+          return `<tr>
+            <td><span class="addr-cell ${p.addrClass}">${esc(addr)}</span></td>
+            <td><code class="name-cell">${esc(r.name)}</code></td>
+            <td><span class="type-pill">${r.type}</span></td>
+            <td><span class="acc-${r.acc}">${r.acc}</span></td>
+            <td class="desc-cell">${esc(r.desc)}</td>
+            <td><div class="chips">
+              ${(r.vm||[]).map((m,i)=>`<span class="chip ${cc[i%cc.length]}">${m.v} = ${esc(m.l)}<span class="chip-del" onclick="delVM(${g.id},${r.id},${i})">×</span></span>`).join('')}
+              <span class="chip-add" onclick="quickAddVM(${g.id},${r.id})">+ value</span>
+            </div></td>
+            <td><div style="display:flex;gap:4px">
+              <button class="btn btn-sm" onclick="openEditReg(${g.id},${r.id})" title="Edit"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="btn btn-sm btn-danger" onclick="delReg(${g.id},${r.id})" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </div></td>
+          </tr>`;
+        }).join('')}
+        </tbody>
+      </table>`:`<div class="empty-state">No registers — <span style="cursor:pointer;text-decoration:underline" onclick="openAddReg(${g.id})">add one</span></div>`}
+    </div>`;
+  }).join('');
+}
+
+// ─── CRUD ─────────────────────────────────────────────
+function delGroup(gid){if(!confirm('Delete group and all its registers?'))return;groups=groups.filter(g=>g.id!==gid);renderAll();}
+function delReg(gid,rid){const g=groups.find(g=>g.id===gid);if(g)g.registers=g.registers.filter(r=>r.id!==rid);renderAll();}
+function delVM(gid,rid,idx){const g=groups.find(g=>g.id===gid);if(g){const r=g.registers.find(r=>r.id===rid);if(r)r.vm.splice(idx,1);}renderAll();}
+
+function quickAddVM(gid,rid){
+  const v=prompt('Value (number):');if(v===null)return;
+  const l=prompt('Label (e.g. Home):');if(!l)return;
+  const g=groups.find(g=>g.id===gid);
+  if(g){const r=g.registers.find(r=>r.id===rid);if(r){r.vm=r.vm||[];r.vm.push({v:Number(v)||0,l:l.trim()});}}
+  renderAll();
+}
+
+// ─── MODAL HELPERS ────────────────────────────────────
+let _vmBuf=[];
+function showModal(html){
+  document.getElementById('modal-box').innerHTML=html;
+  document.getElementById('modal-overlay').classList.add('show');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('show');_vmBuf=[];}
+
+function addVMLine(v,l){
+  _vmBuf.push({v:v||'',l:l||''});
+  const list=document.getElementById('vm-list');
+  if(!list)return;
+  const i=_vmBuf.length-1;
+  const div=document.createElement('div');
+  div.className='vm-row';div.id='vmr'+i;
+  div.innerHTML=`<input type="text" id="vmv${i}" value="${esc(String(v||''))}" placeholder="0" style="width:60px;flex:none">
+    <input type="text" id="vml${i}" value="${esc(l||'')}" placeholder="Label">
+    <button class="btn btn-sm btn-danger" onclick="rmVMLine(${i})" style="flex:none;padding:4px 8px"><svg viewBox="0 0 24 24" width="12" height="12"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  list.appendChild(div);
+}
+function rmVMLine(i){const el=document.getElementById('vmr'+i);if(el)el.remove();}
+
+function collectVM(){
+  const rows=[];
+  document.querySelectorAll('[id^="vmv"]').forEach(el=>{
+    const i=el.id.replace('vmv','');
+    const lEl=document.getElementById('vml'+i);
+    if(lEl&&el.value.trim()!=='')rows.push({v:Number(el.value)||0,l:lEl.value.trim()});
+  });
+  return rows;
+}
+
+function addrFieldsHTML(addrs){
+  return `<div class="addr-fields">
+    <div class="addr-fields-title">Protocol addresses — fill for each protocol you use</div>
+    <div class="form-grid">
+      <div class="fg"><label>Modbus TCP/RTU address</label><input id="af-modbus" value="${esc((addrs||{}).modbus||'')}" placeholder="40001"></div>
+      <div class="fg"><label>EtherNet/IP tag name</label><input id="af-eip" value="${esc((addrs||{}).eip||'')}" placeholder="Robot_Position"></div>
+      <div class="fg"><label>PROFINET slot.subslot.offset</label><input id="af-profinet" value="${esc((addrs||{}).profinet||'')}" placeholder="1.1.0"></div>
+      <div class="fg"><label>OPC-UA Node ID</label><input id="af-opcua" value="${esc((addrs||{}).opcua||'')}" placeholder="ns=2;i=1001"></div>
+      <div class="fg"><label>CC-Link IE (RWw/RWr)</label><input id="af-cclink" value="${esc((addrs||{}).cclink||'')}" placeholder="RWw0000"></div>
+      <div class="fg"><label>SLMP / Mitsubishi device</label><input id="af-slmp" value="${esc((addrs||{}).slmp||'')}" placeholder="D100"></div>
+    </div>
+  </div>`;
+}
+
+function collectAddrs(){
+  return {
+    modbus:document.getElementById('af-modbus').value.trim(),
+    eip:document.getElementById('af-eip').value.trim(),
+    profinet:document.getElementById('af-profinet').value.trim(),
+    opcua:document.getElementById('af-opcua').value.trim(),
+    cclink:document.getElementById('af-cclink').value.trim(),
+    slmp:document.getElementById('af-slmp').value.trim(),
+  };
+}
+
+// ─── ADD GROUP ────────────────────────────────────────
+function openAddGroup(){
+  showModal(`
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3>New group</h3>
+    <div class="form-grid full" style="gap:12px">
+      <div class="fg"><label>Group name</label><input id="mg-name" placeholder="e.g. Robot position status"></div>
+    </div>
+    <div class="form-grid" style="margin-top:10px">
+      <div class="fg"><label>Device</label><select id="mg-dev"><option value="plc">PLC</option><option value="robot">Robot</option><option value="cnc">CNC</option></select></div>
+    </div>
+    <div class="fg" style="margin-top:10px"><label>Note / description</label><textarea id="mg-note" placeholder="Brief description of this group's purpose"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveGroup()">Add group</button>
+    </div>`);
+}
+function saveGroup(){
+  const name=document.getElementById('mg-name').value.trim();
+  if(!name){alert('Enter a name');return;}
+  groups.push({id:uid(),name,device:document.getElementById('mg-dev').value,note:document.getElementById('mg-note').value.trim(),registers:[]});
+  closeModal();renderAll();
+}
+
+// ─── ADD REGISTER ─────────────────────────────────────
+function openAddReg(gid){
+  _vmBuf=[];
+  const gOpts=groups.map(g=>`<option value="${g.id}" ${g.id===gid?'selected':''}>${esc(g.name)}</option>`).join('');
+  const types=['INT','UINT','BOOL','DWORD','FLOAT','STRING'];
+  const accs=['R','RW','W'];
+  showModal(`
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3>Add register</h3>
+    <div class="form-grid">
+      <div class="fg"><label>Group</label><select id="mf-grp">${gOpts}</select></div>
+      <div class="fg"><label>Name (auto-uppercased)</label><input id="mf-name" placeholder="ROBOT_POS"></div>
+    </div>
+    <div class="form-grid" style="margin-top:10px">
+      <div class="fg"><label>Data type</label><select id="mf-type">${types.map(t=>`<option>${t}</option>`).join('')}</select></div>
+      <div class="fg"><label>Access direction</label><select id="mf-acc">${accs.map(a=>`<option value="${a}">${a}</option>`).join('')}</select></div>
+    </div>
+    <div class="fg" style="margin-top:10px"><label>Description</label><textarea id="mf-desc" placeholder="What this register holds and who writes it"></textarea></div>
+    ${addrFieldsHTML(null)}
+    <div class="vm-editor">
+      <div class="vm-editor-title">Value map <span style="font-weight:400;color:var(--text3)">(optional — add all possible values)</span></div>
+      <div id="vm-list"></div>
+      <button class="btn btn-sm" onclick="addVMLine()" style="margin-bottom:8px">+ Add value</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveReg(null,null)">Add register</button>
+    </div>`);
+}
+
+// ─── EDIT REGISTER ────────────────────────────────────
+function openEditReg(gid,rid){
+  _vmBuf=[];
+  const g=groups.find(g=>g.id===gid);
+  const r=g&&g.registers.find(r=>r.id===rid);
+  if(!r)return;
+  const gOpts=groups.map(g=>`<option value="${g.id}" ${g.id===gid?'selected':''}>${esc(g.name)}</option>`).join('');
+  const types=['INT','UINT','BOOL','DWORD','FLOAT','STRING'];
+  const accs=['R','RW','W'];
+  showModal(`
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3>Edit register — <code style="font-size:12px">${esc(r.name)}</code></h3>
+    <div class="form-grid">
+      <div class="fg"><label>Group</label><select id="mf-grp">${gOpts}</select></div>
+      <div class="fg"><label>Name</label><input id="mf-name" value="${esc(r.name)}"></div>
+    </div>
+    <div class="form-grid" style="margin-top:10px">
+      <div class="fg"><label>Data type</label><select id="mf-type">${types.map(t=>`<option ${r.type===t?'selected':''}>${t}</option>`).join('')}</select></div>
+      <div class="fg"><label>Access</label><select id="mf-acc">${accs.map(a=>`<option value="${a}" ${r.acc===a?'selected':''}>${a}</option>`).join('')}</select></div>
+    </div>
+    <div class="fg" style="margin-top:10px"><label>Description</label><textarea id="mf-desc">${esc(r.desc)}</textarea></div>
+    ${addrFieldsHTML(r.addrs)}
+    <div class="vm-editor">
+      <div class="vm-editor-title">Value map</div>
+      <div id="vm-list"></div>
+      <button class="btn btn-sm" onclick="addVMLine()">+ Add value</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveReg(${gid},${rid})">Save changes</button>
+    </div>`);
+  (r.vm||[]).forEach(m=>addVMLine(m.v,m.l));
+}
+
+function saveReg(gid,rid){
+  const name=document.getElementById('mf-name').value.trim().toUpperCase().replace(/\s+/g,'_');
+  if(!name){alert('Name required');return;}
+  const selGid=parseInt(document.getElementById('mf-grp').value);
+  const g=groups.find(g=>g.id===selGid);
+  if(!g){alert('Select a group');return;}
+  const rec={
+    id:rid||uid(),
+    name,
+    type:document.getElementById('mf-type').value,
+    acc:document.getElementById('mf-acc').value,
+    desc:document.getElementById('mf-desc').value.trim(),
+    addrs:collectAddrs(),
+    vm:collectVM()
+  };
+  if(rid){g.registers=g.registers.map(r=>r.id===rid?rec:r);}
+  else{g.registers.push(rec);}
+  closeModal();renderAll();
+}
+
+// ─── EXPORT ───────────────────────────────────────────
+function meta(){
+  return {
+    client:document.getElementById('sb-client').value,
+    site:document.getElementById('sb-site').value,
+    engineer:document.getElementById('sb-eng').value,
+    revision:document.getElementById('sb-rev').value,
+    protocol:currProto(),
+    protocolName:PROTOS[currProto()].name,
+    plcIP:document.getElementById('sb-ip').value,
+    unitID:document.getElementById('sb-uid').value,
+    exported:new Date().toISOString(),
+  };
+}
+
+function exportJSON(){
+  const data={...meta(),groups};
+  const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download=`RegisterMap_${(meta().client||'Project').replace(/\s+/g,'_')}_R${meta().revision||'A'}.json`;
+  a.click();
+}
+
+function exportCSV(){
+  const m=meta();
+  const header=[
+    `# Register Map — ${m.client||'Untitled'} / ${m.site}`,
+    `# Protocol: ${m.protocolName}  |  PLC IP: ${m.plcIP}  |  Unit/Station: ${m.unitID}`,
+    `# Engineer: ${m.engineer}  |  Rev: ${m.revision}  |  Exported: ${m.exported}`,
+    '',
+    ['Group','Device','Name','Type','R/W','Description',
+     'Modbus Addr','EtherNet/IP Tag','PROFINET Addr','OPC-UA NodeID','CC-Link Addr','SLMP Addr',
+     'Value Map'].join(',')
+  ];
+  const rows=groups.flatMap(g=>g.registers.map(r=>{
+    const a=r.addrs||{};
+    const vm=(r.vm||[]).map(v=>`${v.v}=${v.l}`).join(' | ');
+    return [g.name,g.device,r.name,r.type,r.acc,r.desc,
+      a.modbus||'',a.eip||'',a.profinet||'',a.opcua||'',a.cclink||'',a.slmp||'',vm
+    ].map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',');
+  }));
+  const csv=[...header,...rows].join('\n');
+  const b=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download=`RegisterMap_${(m.client||'Project').replace(/\s+/g,'_')}_R${m.revision||'A'}.csv`;
+  a.click();
+}
+
+function printPage(){window.print();}
+
+// ─── DEEP DIVE ACCORDION ─────────────────────────────
+function toggleDD(head){
+  const body=head.nextElementSibling;
+  const arrow=head.querySelector('.dd-arrow');
+  const open=body.classList.toggle('open');
+  arrow.style.transform=open?'rotate(180deg)':'';
+}
+
+// ─── INIT ────────────────────────────────────────────
+renderLegend();
+loadTemplate();
+</script>
+</body>
+</html>

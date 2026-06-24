@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IO Mapping Sheet — 25-Core Wire</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --sans:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+  --serif:'Playfair Display',serif;
+
+  /* Pastel palette */
+  --bg:#F4F7FC;
+  --surface:#FFFFFF;
+  --surface2:#F9FAFЕ;
+
+  --blue-50:#EEF4FF;
+  --blue-100:#DDEAFF;
+  --blue-200:#B8D0FA;
+  --blue-300:#7AAAE8;
+  --blue-400:#4A7ED4;
+  --blue-500:#2F5BB8;
+
+  --peach-50:#FFF3EE;
+  --peach-100:#FFE4D4;
+  --peach-200:#FAC9A8;
+  --peach-300:#E8956A;
+  --peach-400:#D46A3A;
+  --peach-500:#B84E22;
+
+  --green-field:#E8F8F0;
+  --green-bd:#A8DFC4;
+  --green-tx:#1A6640;
+
+  --amber-field:#FEF6E8;
+  --amber-bd:#E8C97A;
+  --amber-tx:#664400;
+
+  --sky-field:#EBF3FC;
+  --sky-bd:#A8C8E8;
+  --sky-tx:#1A4466;
+
+  --lav-field:#F0EFFC;
+  --lav-bd:#B8B5E8;
+  --lav-tx:#2A2A6B;
+
+  --cream-field:#FFF8EE;
+  --cream-bd:#E8D4A0;
+  --cream-tx:#5A3A00;
+
+  --ghost-field:#F8F8FC;
+  --ghost-bd:#D8D8EC;
+  --ghost-tx:#3A3A5A;
+
+  --border:#E0E8F4;
+  --txt:#2A3550;
+  --txt-sub:#6B7A99;
+  --radius:10px;
+  --row-h:34px;
+}
+
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--txt);
+  min-height:100vh;
+  padding:0;
+}
+
+/* ── Top toolbar ─────────────────────────────────────────────────────── */
+.toolbar{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:10px 24px;
+}
+.toolbar h1{
+  font-family:var(--serif);
+  font-size:18px;font-weight:600;
+  color:var(--txt);flex:1;
+  letter-spacing:-0.3px;
+}
+.toolbar h1 span{color:var(--blue-400);}
+
+.tab-group{display:flex;gap:4px;background:var(--blue-50);
+  border-radius:8px;padding:3px;}
+.tab-btn{
+  border:none;background:none;cursor:pointer;
+  padding:6px 16px;border-radius:6px;
+  font-family:var(--sans);font-size:13px;font-weight:500;
+  color:var(--txt-sub);transition:all .2s;
+}
+.tab-btn.active{
+  background:#fff;color:var(--blue-500);
+  box-shadow:0 1px 4px rgba(74,126,212,.18);
+}
+.tab-btn.out.active{background:#fff;color:var(--peach-500);}
+
+.btn{
+  display:flex;align-items:center;gap:7px;
+  border:none;cursor:pointer;
+  padding:8px 18px;border-radius:8px;
+  font-family:var(--sans);font-size:13px;font-weight:500;
+  transition:all .18s;white-space:nowrap;
+}
+.btn-outline{
+  background:#fff;color:var(--txt-sub);
+  border:1px solid var(--border);
+}
+.btn-outline:hover{border-color:var(--blue-300);color:var(--blue-500);}
+.btn-primary{
+  background:var(--blue-400);color:#fff;
+  box-shadow:0 2px 8px rgba(74,126,212,.35);
+}
+.btn-primary:hover{background:var(--blue-500);transform:translateY(-1px);}
+.btn svg{width:15px;height:15px;fill:currentColor;}
+
+/* ── Page wrapper ───────────────────────────────────────────────────── */
+.page-wrap{display:none;padding:24px 24px 48px;}
+.page-wrap.active{display:block;}
+
+/* ── Sheet card ──────────────────────────────────────────────────────── */
+.sheet{
+  background:var(--surface);
+  border-radius:16px;
+  border:1px solid var(--border);
+  overflow:hidden;
+  box-shadow:0 4px 24px rgba(100,130,200,.08);
+  max-width:1260px;margin:0 auto;
+}
+
+/* ── Banner ──────────────────────────────────────────────────────────── */
+.banner{
+  display:flex;align-items:center;gap:0;
+  padding:0;position:relative;overflow:hidden;
+}
+.banner-accent{width:5px;align-self:stretch;flex-shrink:0;}
+.banner-body{flex:1;padding:18px 20px 14px;}
+.banner-title{
+  font-family:var(--serif);font-size:22px;font-weight:600;
+  color:var(--txt);letter-spacing:-0.4px;line-height:1.2;
+}
+.banner-sub{
+  font-size:12px;color:var(--txt-sub);margin-top:3px;
+  font-weight:400;letter-spacing:0.3px;
+}
+.banner-tag{
+  margin:16px 20px;
+  padding:5px 14px;border-radius:20px;
+  font-size:11px;font-weight:600;
+  letter-spacing:0.8px;text-transform:uppercase;
+  white-space:nowrap;
+}
+
+/* Input page */
+.input-page .banner{background:var(--blue-100);}
+.input-page .banner-accent{background:var(--blue-400);}
+.input-page .banner-tag{background:var(--blue-400);color:#fff;}
+/* Output page */
+.output-page .banner{background:var(--peach-100);}
+.output-page .banner-accent{background:var(--peach-400);}
+.output-page .banner-tag{background:var(--peach-400);color:#fff;}
+
+/* ── Info grid ───────────────────────────────────────────────────────── */
+.info-section{
+  display:grid;gap:1px;
+  background:var(--border);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.info-row{display:grid;gap:1px;background:var(--border);}
+.info-row-1{grid-template-columns:3fr 2.3fr 2.3fr 2fr .9fr 1.4fr;}
+.info-row-2{grid-template-columns:2.2fr 1.4fr 2.2fr 1.4fr 2.2fr 1.4fr 2.8fr;}
+
+.info-cell{
+  background:#fff;
+  padding:8px 12px 7px;
+  display:flex;flex-direction:column;gap:3px;
+}
+.info-label{
+  font-size:9.5px;font-weight:600;
+  letter-spacing:.7px;text-transform:uppercase;
+  color:var(--txt-sub);
+}
+.info-input{
+  border:none;outline:none;background:none;
+  font-family:var(--sans);font-size:13px;
+  font-weight:500;color:var(--txt);
+  width:100%;padding:0;
+}
+.info-input::placeholder{color:#C5D0E8;font-weight:400;}
+.output-page .info-label{color:#BB9688;}
+.output-page .info-input::placeholder{color:#E8C5BB;}
+
+/* ── Table ───────────────────────────────────────────────────────────── */
+.table-wrap{overflow-x:auto;}
+table{
+  width:100%;border-collapse:collapse;
+  font-size:12px;
+}
+thead tr{border-bottom:2px solid var(--border);}
+.input-page thead tr{background:var(--blue-50);}
+.output-page thead tr{background:var(--peach-50);}
+
+th{
+  padding:9px 8px;font-size:10.5px;font-weight:600;
+  letter-spacing:.4px;text-transform:uppercase;
+  white-space:nowrap;text-align:center;
+}
+.input-page th{color:var(--blue-500);}
+.output-page th{color:var(--peach-500);}
+
+td{
+  padding:3px 4px;
+  border-bottom:1px solid var(--border);
+  border-right:1px solid var(--border);
+  vertical-align:middle;
+  height:var(--row-h);
+}
+tbody tr:nth-child(even){background:#FAFBFF;}
+.output-page tbody tr:nth-child(even){background:#FFFAF8;}
+tbody tr:hover{background:var(--blue-50)!important;transition:background .12s;}
+.output-page tbody tr:hover{background:var(--peach-50)!important;}
+
+/* col widths */
+.c-sno   {width:38px;text-align:center;}
+.c-colour{width:110px;}
+.c-sw    {width:44px;text-align:center;}
+.c-pin   {width:60px;text-align:center;}
+.c-signal{width:180px;}
+.c-sigt  {width:110px;}
+.c-iotype{width:120px;}
+.c-plc   {width:100px;}
+.c-desc  {width:220px;}
+.c-term  {width:80px;}
+.c-remark{width:120px;}
+
+/* serial */
+td.c-sno{color:var(--txt-sub);font-size:11px;font-family:var(--mono);}
+
+/* wire colour name */
+td.c-colour{font-size:11px;font-weight:500;padding-left:8px;}
+
+/* swatch */
+.swatch-wrap{
+  display:inline-block;
+  width:34px;height:20px;
+  border-radius:4px;overflow:hidden;
+  box-shadow:0 1px 4px rgba(0,0,0,.15);
+  border:1px solid rgba(0,0,0,.10);
+  vertical-align:middle;
+}
+
+/* pin pill */
+.pin-pill{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:22px;border-radius:5px;
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:#fff;margin:0 auto;
+}
+.input-page .pin-pill{background:var(--blue-400);}
+.output-page .pin-pill{background:var(--peach-400);}
+
+/* editable cell inputs */
+.cell-input,.cell-select{
+  width:100%;height:26px;
+  border:1.5px solid transparent;
+  border-radius:5px;
+  padding:0 7px;
+  font-family:var(--sans);font-size:11.5px;font-weight:400;
+  outline:none;transition:border-color .15s,box-shadow .15s;
+  appearance:none;-webkit-appearance:none;
+}
+.cell-input:focus,.cell-select:focus{
+  box-shadow:0 0 0 3px rgba(74,126,212,.12);
+}
+
+/* colour variants */
+.f-signal {background:var(--green-field);border-color:var(--green-bd);color:var(--green-tx);}
+.f-signal:focus{border-color:#5CCB96;}
+.f-sigt   {background:var(--sky-field);border-color:var(--sky-bd);color:var(--sky-tx);}
+.f-sigt:focus{border-color:#5BAAD4;}
+.f-iotype {background:var(--amber-field);border-color:var(--amber-bd);color:var(--amber-tx);}
+.f-iotype:focus{border-color:#D4A830;}
+.f-plc    {background:var(--lav-field);border-color:var(--lav-bd);color:var(--lav-tx);}
+.f-plc:focus{border-color:#8880D8;}
+.f-desc   {background:#FAFBFF;border-color:#D8E3F0;color:var(--txt);}
+.f-desc:focus{border-color:#A0B8E0;}
+.f-term   {background:var(--cream-field);border-color:var(--cream-bd);color:var(--cream-tx);}
+.f-term:focus{border-color:#D4B060;}
+.f-remark {background:var(--ghost-field);border-color:var(--ghost-bd);color:var(--ghost-tx);}
+.f-remark:focus{border-color:#A8A8CC;}
+
+/* preset signal highlight */
+.f-signal[data-preset="1"]{font-weight:600;}
+
+/* select arrow */
+.cell-select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B7A99'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 7px center;
+  padding-right:22px;cursor:pointer;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+.sheet-footer{
+  padding:10px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--border);
+  font-size:11px;color:var(--txt-sub);
+}
+.input-page .sheet-footer{background:var(--blue-50);}
+.output-page .sheet-footer{background:var(--peach-50);}
+
+/* ── PDF Loading overlay ──────────────────────────────────────────────── */
+.pdf-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(244,247,252,.88);backdrop-filter:blur(6px);
+  flex-direction:column;align-items:center;justify-content:center;gap:16px;
+}
+.pdf-overlay.show{display:flex;}
+.pdf-spinner{
+  width:40px;height:40px;border-radius:50%;
+  border:3px solid var(--blue-100);
+  border-top-color:var(--blue-400);
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pdf-msg{font-size:14px;font-weight:500;color:var(--txt);}
+
+/* ── Print / PDF styles ───────────────────────────────────────────────── */
+@media print{
+  body{background:#fff;}
+  .toolbar,.tab-group,.btn{display:none!important;}
+  .page-wrap{display:block!important;padding:0;}
+  .sheet{border:none;border-radius:0;box-shadow:none;}
+  tbody tr:hover{background:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Toolbar ──────────────────────────────────────────────────────── -->
+<div class="toolbar">
+  <h1>IO Mapping <span>Sheet</span></h1>
+  <div class="tab-group">
+    <button class="tab-btn active" onclick="showTab('in')">Inputs X1–X25</button>
+    <button class="tab-btn out" onclick="showTab('out')">Outputs Y1–Y25</button>
+  </div>
+  <button class="btn btn-outline" onclick="clearAll()">
+    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+    Clear All
+  </button>
+  <button class="btn btn-primary" onclick="exportPDF()">
+    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+    Save as PDF (A4)
+  </button>
+</div>
+
+<!-- ── PDF overlay ──────────────────────────────────────────────────── -->
+<div class="pdf-overlay" id="pdfOverlay">
+  <div class="pdf-spinner"></div>
+  <div class="pdf-msg">Generating A4 PDF…</div>
+</div>
+
+<!-- ════════════════ INPUT PAGE ════════════════ -->
+<div class="page-wrap input-page active" id="page-in">
+<div class="sheet" id="sheet-in">
+
+  <div class="banner">
+    <div class="banner-accent"></div>
+    <div class="banner-body">
+      <div class="banner-title">IO Mapping Sheet</div>
+      <div class="banner-sub">INPUT SIGNALS · X1 – X25 · 25-Core Wire · PLC Input Module</div>
+    </div>
+    <div class="banner-tag">Page 1 / 2</div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-row info-row-1">
+      <div class="info-cell"><div class="info-label">Company / Organisation</div><input class="info-input" placeholder="Enter company name…" id="in_company"/></div>
+      <div class="info-cell"><div class="info-label">Project Name</div><input class="info-input" placeholder="Project…" id="in_project"/></div>
+      <div class="info-cell"><div class="info-label">Machine / Equipment</div><input class="info-input" placeholder="Machine…" id="in_machine"/></div>
+      <div class="info-cell"><div class="info-label">Document No.</div><input class="info-input" placeholder="DOC-001" id="in_docno"/></div>
+      <div class="info-cell"><div class="info-label">Rev</div><input class="info-input" placeholder="A" id="in_rev"/></div>
+      <div class="info-cell"><div class="info-label">Date</div><input class="info-input" type="date" id="in_date"/></div>
+    </div>
+    <div class="info-row info-row-2">
+      <div class="info-cell"><div class="info-label">Prepared By</div><input class="info-input" placeholder="Name…" id="in_prepby"/></div>
+      <div class="info-cell"><div class="info-label">Prepared Date</div><input class="info-input" type="date" id="in_prepdate"/></div>
+      <div class="info-cell"><div class="info-label">Checked By</div><input class="info-input" placeholder="Name…" id="in_chkby"/></div>
+      <div class="info-cell"><div class="info-label">Checked Date</div><input class="info-input" type="date" id="in_chkdate"/></div>
+      <div class="info-cell"><div class="info-label">Approved By</div><input class="info-input" placeholder="Name…" id="in_apprby"/></div>
+      <div class="info-cell"><div class="info-label">Approved Date</div><input class="info-input" type="date" id="in_apprdate"/></div>
+      <div class="info-cell"><div class="info-label">General Remarks</div><input class="info-input" placeholder="Notes…" id="in_rem"/></div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+  <table id="table-in">
+    <thead><tr>
+      <th class="c-sno">#</th>
+      <th class="c-colour">Wire Colour</th>
+      <th class="c-sw"></th>
+      <th class="c-pin">X Pin</th>
+      <th class="c-signal">Signal Name</th>
+      <th class="c-sigt">Signal Type</th>
+      <th class="c-iotype">I/O Type</th>
+      <th class="c-plc">PLC Address</th>
+      <th class="c-desc">Description</th>
+      <th class="c-term">Terminal No</th>
+      <th class="c-remark">Remarks</th>
+    </tr></thead>
+    <tbody id="tbody-in"></tbody>
+  </table>
+  </div>
+
+  <div class="sheet-footer">
+    <span>IO Mapping Sheet · 25-Core Wire · X1–X25 · Input Module</span>
+    <span>Page 1 of 2</span>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════ OUTPUT PAGE ════════════════ -->
+<div class="page-wrap output-page" id="page-out">
+<div class="sheet" id="sheet-out">
+
+  <div class="banner">
+    <div class="banner-accent"></div>
+    <div class="banner-body">
+      <div class="banner-title">IO Mapping Sheet</div>
+      <div class="banner-sub">OUTPUT SIGNALS · Y1 – Y25 · 25-Core Wire · PLC Output Module</div>
+    </div>
+    <div class="banner-tag">Page 2 / 2</div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-row info-row-1">
+      <div class="info-cell"><div class="info-label">Company / Organisation</div><input class="info-input" placeholder="Enter company name…" id="out_company"/></div>
+      <div class="info-cell"><div class="info-label">Project Name</div><input class="info-input" placeholder="Project…" id="out_project"/></div>
+      <div class="info-cell"><div class="info-label">Machine / Equipment</div><input class="info-input" placeholder="Machine…" id="out_machine"/></div>
+      <div class="info-cell"><div class="info-label">Document No.</div><input class="info-input" placeholder="DOC-001" id="out_docno"/></div>
+      <div class="info-cell"><div class="info-label">Rev</div><input class="info-input" placeholder="A" id="out_rev"/></div>
+      <div class="info-cell"><div class="info-label">Date</div><input class="info-input" type="date" id="out_date"/></div>
+    </div>
+    <div class="info-row info-row-2">
+      <div class="info-cell"><div class="info-label">Prepared By</div><input class="info-input" placeholder="Name…" id="out_prepby"/></div>
+      <div class="info-cell"><div class="info-label">Prepared Date</div><input class="info-input" type="date" id="out_prepdate"/></div>
+      <div class="info-cell"><div class="info-label">Checked By</div><input class="info-input" placeholder="Name…" id="out_chkby"/></div>
+      <div class="info-cell"><div class="info-label">Checked Date</div><input class="info-input" type="date" id="out_chkdate"/></div>
+      <div class="info-cell"><div class="info-label">Approved By</div><input class="info-input" placeholder="Name…" id="out_apprby"/></div>
+      <div class="info-cell"><div class="info-label">Approved Date</div><input class="info-input" type="date" id="out_apprdate"/></div>
+      <div class="info-cell"><div class="info-label">General Remarks</div><input class="info-input" placeholder="Notes…" id="out_rem"/></div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+  <table id="table-out">
+    <thead><tr>
+      <th class="c-sno">#</th>
+      <th class="c-colour">Wire Colour</th>
+      <th class="c-sw"></th>
+      <th class="c-pin">Y Pin</th>
+      <th class="c-signal">Signal Name</th>
+      <th class="c-sigt">Signal Type</th>
+      <th class="c-iotype">I/O Type</th>
+      <th class="c-plc">PLC Address</th>
+      <th class="c-desc">Description</th>
+      <th class="c-term">Terminal No</th>
+      <th class="c-remark">Remarks</th>
+    </tr></thead>
+    <tbody id="tbody-out"></tbody>
+  </table>
+  </div>
+
+  <div class="sheet-footer">
+    <span>IO Mapping Sheet · 25-Core Wire · Y1–Y25 · Output Module</span>
+    <span>Page 2 of 2</span>
+  </div>
+</div>
+</div>
+
+<script>
+const WIRES=[
+  ["Red",           "#E57373",null],
+  ["Yellow",        "#FFD54F",null],
+  ["Green",         "#66BB6A",null],
+  ["Blue",          "#64B5F6",null],
+  ["White",         "#EEEEEE",null],
+  ["Black",         "#78909C",null],
+  ["Brown",         "#A1887F",null],
+  ["Orange",        "#FFA726",null],
+  ["Violet",        "#9575CD",null],
+  ["Grey",          "#90A4AE",null],
+  ["Pink",          "#F48FB1",null],
+  ["Red / White",   "#E57373","#EEEEEE"],
+  ["Yellow / Black","#FFD54F","#78909C"],
+  ["Green / White", "#66BB6A","#EEEEEE"],
+  ["Blue / White",  "#64B5F6","#EEEEEE"],
+  ["Brown / White", "#A1887F","#EEEEEE"],
+  ["Orange / White","#FFA726","#EEEEEE"],
+  ["Violet / White","#9575CD","#EEEEEE"],
+  ["Grey / White",  "#90A4AE","#EEEEEE"],
+  ["Pink / White",  "#F48FB1","#EEEEEE"],
+  ["Red / Blue",    "#E57373","#64B5F6"],
+  ["Yellow / Green","#FFD54F","#66BB6A"],
+  ["Green / Blue",  "#66BB6A","#64B5F6"],
+  ["Black / White", "#78909C","#EEEEEE"],
+  ["Bare / Shield", "#C8B89A","#E8DCC8"],
+];
+
+const IO_OPTS=["Not Used","Digital Input (DI)","Digital Output (DO)","Analog Input (AI)","Analog Output (AO)"];
+const SIG_OPTS=["Digital","Analog","Pulse","Frequency","Not Used"];
+
+const IN_PRESET_SIG  ={1:"DOOR OPEN LIMIT",2:"DOOR CLOSE LIMIT",3:"CHUCK CLAMP",4:"CHUCK DECLAMP"};
+const IN_PRESET_TYPE ={1:"Digital Input (DI)",2:"Digital Input (DI)",3:"Digital Output (DO)",4:"Digital Output (DO)"};
+
+function swatch(c1,c2){
+  if(!c2){
+    return `<div class="swatch-wrap" style="background:${c1}"></div>`;
+  }
+  // Diagonal stripes using CSS repeating-linear-gradient — zero DOM overhead
+  const stripe=`repeating-linear-gradient(
+    45deg,
+    ${c1} 0px,
+    ${c1} 4px,
+    ${c2} 4px,
+    ${c2} 8px
+  )`;
+  return `<div class="swatch-wrap" style="background:${stripe}"></div>`;
+}
+
+function selOpts(opts,val){
+  return opts.map(o=>`<option${o===val?' selected':''}>${o}</option>`).join('');
+}
+
+function buildTable(tbodyId, prefix, presetSig, presetType){
+  const tbody=document.getElementById(tbodyId);
+  let html='';
+  WIRES.forEach(([name,c1,c2],i)=>{
+    const n=i+1;
+    const sig=presetSig[n]||'';
+    const iot=presetType[n]||'Not Used';
+    html+=`<tr>
+      <td class="c-sno">${n}</td>
+      <td class="c-colour">${name}</td>
+      <td class="c-sw">${swatch(c1,c2)}</td>
+      <td class="c-pin"><span class="pin-pill">${prefix}${n}</span></td>
+      <td class="c-signal"><input class="cell-input f-signal" ${sig?'data-preset="1"':''} value="${sig}" placeholder="Signal name…" id="${prefix}sig${n}"/></td>
+      <td class="c-sigt"><select class="cell-input cell-select f-sigt" id="${prefix}sigt${n}">${selOpts(SIG_OPTS,'Digital')}</select></td>
+      <td class="c-iotype"><select class="cell-input cell-select f-iotype" id="${prefix}io${n}">${selOpts(IO_OPTS,iot)}</select></td>
+      <td class="c-plc"><input class="cell-input f-plc" placeholder="e.g. I0.0" id="${prefix}plc${n}"/></td>
+      <td class="c-desc"><input class="cell-input f-desc" placeholder="Description…" id="${prefix}desc${n}"/></td>
+      <td class="c-term"><input class="cell-input f-term" placeholder="T-${n}" id="${prefix}term${n}"/></td>
+      <td class="c-remark"><input class="cell-input f-remark" placeholder="Remarks…" id="${prefix}rem${n}"/></td>
+    </tr>`;
+  });
+  tbody.innerHTML=html;
+}
+
+buildTable('tbody-in','X',IN_PRESET_SIG,IN_PRESET_TYPE);
+buildTable('tbody-out','Y',{},{});
+
+// ── Tab switching ─────────────────────────────────────────────────────
+function showTab(t){
+  document.querySelectorAll('.page-wrap').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+t).classList.add('active');
+  document.querySelectorAll('.tab-btn')[t==='in'?0:1].classList.add('active');
+}
+
+// ── Clear all ────────────────────────────────────────────────────────
+function clearAll(){
+  if(!confirm('Clear all entered data?')) return;
+  document.querySelectorAll('.cell-input,.cell-select,.info-input').forEach(el=>{
+    if(el.tagName==='SELECT') el.selectedIndex=0;
+    else el.value='';
+  });
+}
+
+// ── Pure jsPDF export — no html2canvas, instant ───────────────────────
+function exportPDF(){
+  const overlay=document.getElementById('pdfOverlay');
+  overlay.classList.add('show');
+  setTimeout(()=>{ _buildPDF(); overlay.classList.remove('show'); },30);
+}
+
+function hexToRgb(h){
+  h=h.replace('#','');
+  return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];
+}
+
+function _buildPDF(){
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+
+  // A4 landscape: 297 x 210 mm
+  const PW=297, PH=210;
+  const MG=8;
+  const TW=PW-MG*2; // total table width
+
+  // Column widths in mm  (must sum to TW=281)
+  const COLS=[
+    {k:'sno',  label:'#',           w:7 },
+    {k:'col',  label:'Wire Colour', w:22},
+    {k:'sw',   label:'',            w:9 },
+    {k:'pin',  label:'Pin',         w:12},
+    {k:'sig',  label:'Signal Name', w:49},
+    {k:'sigt', label:'Signal Type', w:22},
+    {k:'io',   label:'I/O Type',    w:22},
+    {k:'plc',  label:'PLC Address', w:22},
+    {k:'desc', label:'Description', w:63},
+    {k:'term', label:'Terminal No', w:17},
+    {k:'rem',  label:'Remarks',     w:29},
+  ];
+  // auto-scale to fill TW
+  const rawSum=COLS.reduce((a,c)=>a+c.w,0);
+  const scale=TW/rawSum;
+  COLS.forEach(c=>c.w=c.w*scale);
+
+  function readPage(prefix,isInput){
+    const info={};
+    ['company','project','machine','docno','rev','date',
+     'prepby','prepdate','chkby','chkdate','apprby','apprdate','rem']
+    .forEach(k=>{
+      const el=document.getElementById(`${prefix}_${k}`);
+      info[k]=el?el.value:'';
+    });
+    const rows=[];
+    WIRES.forEach(([name,c1,c2],i)=>{
+      const n=i+1,p=prefix==='in'?'X':'Y';
+      rows.push({
+        n, name, c1, c2,
+        pin:`${p}${n}`,
+        sig: (document.getElementById(`${p}sig${n}`)||{}).value||'',
+        sigt:(document.getElementById(`${p}sigt${n}`)||{}).value||'Digital',
+        io:  (document.getElementById(`${p}io${n}`)||{}).value||'Not Used',
+        plc: (document.getElementById(`${p}plc${n}`)||{}).value||'',
+        desc:(document.getElementById(`${p}desc${n}`)||{}).value||'',
+        term:(document.getElementById(`${p}term${n}`)||{}).value||'',
+        rem: (document.getElementById(`${p}rem${n}`)||{}).value||'',
+      });
+    });
+    return{info,rows};
+  }
+
+  function drawPage(data, isInput, pageNum){
+    const ac  =isInput?[74,126,212]:[212,96,74];
+    const bn  =isInput?[214,228,255]:[255,228,214];
+    const hbg =isInput?[189,212,245]:[245,206,191];
+    const htxt=isInput?[28,48,96]:[96,28,10];
+    const rodd=isInput?[240,244,250]:[253,243,239];
+    const ibg =isInput?[238,243,251]:[251,240,238];
+    const ibd =isInput?[197,213,238]:[238,197,181];
+    const lbl =isInput?[136,150,187]:[187,150,136];
+    const foot=isInput?[197,208,232]:[232,197,187];
+
+    // ── Background
+    pdf.setFillColor(247,249,252);
+    pdf.rect(0,0,PW,PH,'F');
+
+    // ── Banner
+    const BH=14, by=MG;
+    pdf.setFillColor(...bn);
+    pdf.rect(MG,by,TW,BH,'F');
+    pdf.setFillColor(...ac);
+    pdf.rect(MG,by,3,BH,'F');
+
+    pdf.setTextColor(42,53,80);
+    pdf.setFont('helvetica','bold');
+    pdf.setFontSize(14);
+    pdf.text('IO Mapping Sheet',MG+5,by+9);
+    pdf.setFont('helvetica','normal');
+    pdf.setFontSize(7.5);
+    pdf.setTextColor(107,122,153);
+    const sub=isInput
+      ?'INPUT SIGNALS  ·  X1–X25  ·  25-Core Wire  ·  PLC Input Module'
+      :'OUTPUT SIGNALS  ·  Y1–Y25  ·  25-Core Wire  ·  PLC Output Module';
+    pdf.text(sub,MG+5,by+12.5);
+
+    // page pill
+    pdf.setFillColor(...ac);
+    pdf.roundedRect(MG+TW-19,by+3,18,7,1.5,1.5,'F');
+    pdf.setTextColor(255,255,255);
+    pdf.setFont('helvetica','bold');
+    pdf.setFontSize(7);
+    pdf.text(`Page ${pageNum} / 2`,MG+TW-10,by+7.5,{align:'center'});
+
+    // ── Info row 1
+    const IH1=11, i1y=by+BH+1.5;
+    const cells1=[
+      ['Company / Organisation', data.info.company,  60],
+      ['Project Name',           data.info.project,  46],
+      ['Machine / Equipment',    data.info.machine,  46],
+      ['Document No.',           data.info.docno,    38],
+      ['Rev',                    data.info.rev,      18],
+      ['Date',                   data.info.date,     73],
+    ];
+    const tot1=cells1.reduce((a,c)=>a+c[2],0);
+    let cx=MG;
+    cells1.forEach(([lb,val,wmm])=>{
+      const cw=wmm/tot1*TW;
+      pdf.setFillColor(...ibg);
+      pdf.setDrawColor(...ibd);
+      pdf.setLineWidth(0.4);
+      pdf.rect(cx,i1y,cw-0.5,IH1,'FD');
+      pdf.setTextColor(...lbl);
+      pdf.setFont('helvetica','bold');
+      pdf.setFontSize(5.5);
+      pdf.text(lb.toUpperCase(),cx+2,i1y+3.8);
+      pdf.setFont('helvetica','normal');
+      pdf.setFontSize(8);
+      pdf.setTextColor(42,53,80);
+      if(val) pdf.text(String(val),cx+2,i1y+8.5,{maxWidth:cw-4});
+      cx+=cw;
+    });
+
+    // ── Info row 2
+    const IH2=10, i2y=i1y+IH1+0.8;
+    const cells2=[
+      ['Prepared By',    data.info.prepby,    44],
+      ['Prepared Date',  data.info.prepdate,  28],
+      ['Checked By',     data.info.chkby,     44],
+      ['Checked Date',   data.info.chkdate,   28],
+      ['Approved By',    data.info.apprby,    44],
+      ['Approved Date',  data.info.apprdate,  28],
+      ['General Remarks',data.info.rem,       65],
+    ];
+    const tot2=cells2.reduce((a,c)=>a+c[2],0);
+    cx=MG;
+    cells2.forEach(([lb,val,wmm])=>{
+      const cw=wmm/tot2*TW;
+      pdf.setFillColor(...ibg);
+      pdf.setDrawColor(...ibd);
+      pdf.setLineWidth(0.4);
+      pdf.rect(cx,i2y,cw-0.5,IH2,'FD');
+      pdf.setTextColor(...lbl);
+      pdf.setFont('helvetica','bold');
+      pdf.setFontSize(5.5);
+      pdf.text(lb.toUpperCase(),cx+2,i2y+3.5);
+      pdf.setFont('helvetica','normal');
+      pdf.setFontSize(7.5);
+      pdf.setTextColor(42,53,80);
+      if(val) pdf.text(String(val),cx+2,i2y+8,{maxWidth:cw-4});
+      cx+=cw;
+    });
+
+    // ── Column header
+    const HDR_H=8, hdr_y=i2y+IH2+1;
+    pdf.setFillColor(...hbg);
+    pdf.rect(MG,hdr_y,TW,HDR_H,'F');
+    pdf.setFont('helvetica','bold');
+    pdf.setFontSize(7);
+    pdf.setTextColor(...htxt);
+    cx=MG;
+    COLS.forEach(col=>{
+      const lbl2=col.k==='pin'?(isInput?'X1–X25':'Y1–Y25'):col.label;
+      if(lbl2) pdf.text(lbl2,cx+col.w/2,hdr_y+5,{align:'center'});
+      cx+=col.w;
+    });
+
+    // ── Data rows
+    const TABLE_BOT=PH-MG-5;
+    const ROW_H=(TABLE_BOT-hdr_y-HDR_H)/25;
+
+    // field colour map
+    const FC={
+      sig: {bg:[235,248,242],tx:[26,102,64]},
+      sigt:{bg:[235,243,252],tx:[26,68,102]},
+      io:  {bg:[254,246,232],tx:[102,68,0]},
+      plc: {bg:[240,239,252],tx:[42,42,107]},
+      desc:{bg:[250,251,255],tx:[42,53,80]},
+      term:{bg:[255,248,238],tx:[90,58,0]},
+      rem: {bg:[248,248,252],tx:[58,58,90]},
+    };
+
+    data.rows.forEach((row,i)=>{
+      const ry=hdr_y+HDR_H+i*ROW_H;
+      // row bg
+      if(i%2===1){pdf.setFillColor(...rodd); pdf.rect(MG,ry,TW,ROW_H,'F');}
+
+      // cell grid
+      pdf.setDrawColor(216,227,240);
+      pdf.setLineWidth(0.2);
+      cx=MG;
+      COLS.forEach(col=>{pdf.rect(cx,ry,col.w,ROW_H,'S');cx+=col.w;});
+
+      cx=MG;
+      const ty=ry+ROW_H*0.62; // text baseline
+
+      // # serial
+      pdf.setFont('helvetica','normal');
+      pdf.setFontSize(6.5);
+      pdf.setTextColor(154,170,187);
+      pdf.text(String(row.n),cx+COLS[0].w/2,ty,{align:'center'});
+      cx+=COLS[0].w;
+
+      // wire colour name
+      pdf.setFontSize(6);
+      pdf.setTextColor(42,53,80);
+      pdf.text(row.name,cx+COLS[1].w/2,ty,{align:'center'});
+      cx+=COLS[1].w;
+
+      // swatch — diagonal stripes via thin rects
+      const sw=COLS[2].w, sh=ROW_H;
+      const sx=cx, sy=ry;
+      const pad=1;
+      const [r1,g1,b1]=hexToRgb(row.c1);
+      if(!row.c2){
+        pdf.setFillColor(r1,g1,b1);
+        pdf.rect(sx+pad,sy+pad,sw-pad*2,sh-pad*2,'F');
+      } else {
+        const [r2,g2,b2]=hexToRgb(row.c2);
+        // base fill c1
+        pdf.setFillColor(r1,g1,b1);
+        pdf.rect(sx+pad,sy+pad,sw-pad*2,sh-pad*2,'F');
+        // stripe c2 — 4 diagonal bands
+        const stripeW=1.6;
+        const total=sw+sh;
+        pdf.setFillColor(r2,g2,b2);
+        for(let k=-2;k<Math.ceil(total/(stripeW*2))+2;k++){
+          const ox=sx+pad-sh+k*stripeW*2;
+          // parallelogram: 4 points
+          const pts=[
+            [ox,sy+pad],[ox+stripeW,sy+pad],
+            [ox+stripeW+sh-pad*2,sy+sh-pad],[ox+sh-pad*2,sy+sh-pad]
+          ];
+          // clip to swatch box manually via thin vertical slice rects
+          const x1=Math.max(ox,sx+pad);
+          const x2=Math.min(ox+stripeW,sx+sw-pad);
+          if(x2>x1){
+            // approximate stripe as vertical rect (close enough at small scale)
+            pdf.rect(x1,sy+pad,x2-x1,sh-pad*2,'F');
+          }
+        }
+      }
+      // swatch border
+      pdf.setDrawColor(180,180,180);
+      pdf.setLineWidth(0.3);
+      pdf.rect(sx+pad,sy+pad,sw-pad*2,sh-pad*2,'S');
+      cx+=COLS[2].w;
+
+      // pin pill bg
+      const pinBg=isInput?[74,126,212]:[212,96,74];
+      pdf.setFillColor(...pinBg);
+      pdf.roundedRect(cx+1,ry+ROW_H*0.18,COLS[3].w-2,ROW_H*0.64,1,1,'F');
+      pdf.setFont('helvetica','bold');
+      pdf.setFontSize(7.5);
+      pdf.setTextColor(255,255,255);
+      pdf.text(row.pin,cx+COLS[3].w/2,ty,{align:'center'});
+      cx+=COLS[3].w;
+
+      // editable data cells
+      const dataFields=[
+        {key:'sig', val:row.sig},
+        {key:'sigt',val:row.sigt},
+        {key:'io',  val:row.io},
+        {key:'plc', val:row.plc},
+        {key:'desc',val:row.desc},
+        {key:'term',val:row.term},
+        {key:'rem', val:row.rem},
+      ];
+      const colSlice=COLS.slice(4);
+      dataFields.forEach((f,fi)=>{
+        const cw=colSlice[fi].w;
+        const fc=FC[f.key];
+        const p2=0.8;
+        pdf.setFillColor(...fc.bg);
+        pdf.setDrawColor(200,210,230);
+        pdf.setLineWidth(0.4);
+        pdf.roundedRect(cx+p2,ry+p2,cw-p2*2,ROW_H-p2*2,1,1,'FD');
+        if(f.val){
+          pdf.setFont('helvetica','normal');
+          pdf.setFontSize(6.5);
+          pdf.setTextColor(...fc.tx);
+          pdf.text(String(f.val),cx+p2+1.5,ty,{maxWidth:cw-p2*2-2});
+        }
+        cx+=cw;
+      });
+    });
+
+    // outer border
+    pdf.setDrawColor(...ac);
+    pdf.setLineWidth(1);
+    pdf.rect(MG,hdr_y,TW,HDR_H+25*ROW_H,'S');
+
+    // footer
+    pdf.setFillColor(...foot);
+    pdf.rect(MG,PH-MG-4,TW,4,'F');
+    pdf.setFont('helvetica','normal');
+    pdf.setFontSize(6);
+    pdf.setTextColor(107,122,153);
+    const pfx=isInput?'X':'Y';
+    pdf.text(`IO Mapping Sheet  ·  25-Core Wire  ·  ${pfx}1–${pfx}25`,MG+3,PH-MG-1.2);
+    pdf.text(`Page ${pageNum} of 2`,MG+TW-3,PH-MG-1.2,{align:'right'});
+  }
+
+  // Draw both pages
+  const inData =readPage('in', true);
+  const outData=readPage('out',false);
+
+  drawPage(inData, true, 1);
+  pdf.addPage();
+  drawPage(outData,false,2);
+
+  pdf.save('IO_Mapping_Sheet.pdf');
+}
+</script>
+</body>
+</html>

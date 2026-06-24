@@ -1,0 +1,2995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EOAT Enterprise Simulator — V24 Ultimate</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne+Mono&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2234;
+  --surface3: #1e2d45;
+  --border: #1e2d45;
+  --border2: #2d3f5a;
+  --accent: #3b82f6;
+  --accent2: #60a5fa;
+  --accent-glow: rgba(59,130,246,0.25);
+  --teal: #14b8a6;
+  --teal-glow: rgba(20,184,166,0.2);
+  --amber: #f59e0b;
+  --amber-glow: rgba(245,158,11,0.2);
+  --green: #22c55e;
+  --green-glow: rgba(34,197,94,0.2);
+  --red: #ef4444;
+  --red-glow: rgba(239,68,68,0.2);
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --mono: 'Syne Mono', monospace;
+  --sans: 'Space Grotesk', sans-serif;
+  --display: 'Syne', sans-serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.6);
+  --glow: 0 0 40px rgba(59,130,246,0.15);
+}
+[data-theme="light"] {
+  --bg: #f0f4f8;
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+  --surface3: #eff6ff;
+  --border: #e2e8f0;
+  --border2: #cbd5e1;
+  --accent: #2563eb;
+  --accent2: #3b82f6;
+  --accent-glow: rgba(37,99,235,0.12);
+  --text: #0f172a;
+  --text2: #334155;
+  --text3: #64748b;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+  --glow: 0 0 40px rgba(37,99,235,0.08);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+}
+body::before {
+  content:'';
+  position:fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: radial-gradient(ellipse 80% 40% at 20% -10%, rgba(59,130,246,0.06) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 30% at 80% 100%, rgba(20,184,166,0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ── ERROR BANNER ── */
+#errorBanner {
+  display:none;
+  background: var(--red);
+  color:#fff;
+  padding:12px 24px;
+  text-align:center;
+  font-weight:700;
+  font-family: var(--mono);
+  font-size:12px;
+  position:sticky;
+  top:0;
+  z-index:9999;
+  letter-spacing:1px;
+  box-shadow: 0 4px 20px var(--red-glow);
+}
+
+/* ── HEADER ── */
+.hdr {
+  background: linear-gradient(180deg, #070c18 0%, var(--surface) 100%);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.hdr-i {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-badge {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--accent) 0%, #1d4ed8 100%);
+  border-radius: 10px;
+  display: flex; align-items:center; justify-content:center;
+  font-size: 22px;
+  box-shadow: 0 0 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.2);
+  flex-shrink:0;
+  position:relative;
+  overflow:hidden;
+}
+.logo-badge::after {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:50%;
+  background: linear-gradient(rgba(255,255,255,0.15), transparent);
+  border-radius:10px 10px 0 0;
+}
+.logo-text h1 {
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+.logo-text h1 em {
+  color: var(--accent2);
+  font-style:normal;
+}
+.logo-sub {
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+.hdr-actions { display:flex; gap:10px; align-items:center; }
+.hdr-btn {
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text2);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display:flex; align-items:center; gap:6px;
+  letter-spacing: 0.5px;
+}
+.hdr-btn:hover {
+  background: var(--surface3);
+  color: var(--text);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+  transform: translateY(-1px);
+}
+.hdr-btn.primary {
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 16px rgba(5,150,105,0.3);
+}
+.hdr-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(5,150,105,0.4);
+}
+.hdr-pill {
+  display:flex;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  gap: 4px;
+}
+.hp {
+  padding: 7px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.3px;
+  white-space:nowrap;
+}
+.hp:hover { color: var(--text); background: var(--surface3); }
+.hp.on {
+  background: linear-gradient(135deg, var(--accent), #1d4ed8);
+  color: #fff;
+  box-shadow: 0 2px 12px var(--accent-glow);
+}
+.hp.on-vac {
+  background: linear-gradient(135deg, var(--teal), #0f766e);
+  color: #fff;
+  box-shadow: 0 2px 12px var(--teal-glow);
+}
+
+/* ── LAYOUT ── */
+.wrap { max-width:1800px; margin:0 auto; padding:24px 28px; position:relative; z-index:1; }
+.layout {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width:1200px) { .layout { grid-template-columns: 1fr; } }
+.sidebar { display:flex; flex-direction:column; gap:16px; }
+.main-col { display:flex; flex-direction:column; gap:20px; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position:relative;
+}
+.card:hover {
+  border-color: var(--border2);
+}
+.card-header {
+  padding: 14px 20px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-num {
+  width: 26px; height: 26px;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex; align-items:center; justify-content:center;
+  font-family: var(--mono);
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+.card-title {
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.card-body { padding: 20px; }
+
+/* ── FORMS ── */
+.field { margin-bottom: 18px; }
+.field:last-child { margin-bottom: 0; }
+.field-row { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:7px; }
+.field-label { font-size:12px; font-weight:700; color:var(--text); letter-spacing:0.3px; }
+.field-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent2);
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-weight: 700;
+}
+.field-hint { font-size:11px; color:var(--text3); line-height:1.5; margin-bottom:8px; }
+
+/* SLIDER ROW */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.slider-row input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 4px;
+  background: var(--border2);
+  border-radius: 99px;
+  outline: none;
+  cursor: pointer;
+}
+.slider-row input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 2px 8px var(--accent-glow);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.slider-row input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+.slider-row input[type=number] {
+  width: 76px;
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: 7px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 8px;
+  outline: none;
+  text-align: center;
+  transition: all 0.2s;
+}
+.slider-row input[type=number]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.field-unit {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  font-family: var(--mono);
+  min-width: 32px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* SELECT */
+select {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 10px 14px;
+  width: 100%;
+  outline: none;
+  transition: all 0.2s;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+input[type=file] {
+  background: var(--surface2);
+  border: 1px dashed var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-family: var(--sans);
+  font-size: 12px;
+  padding: 10px;
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+}
+input[type=number] {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 12px;
+  outline: none;
+  transition: all 0.2s;
+  width: 100%;
+}
+input[type=number]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* TOGGLE GROUP */
+.tog-group {
+  display: flex;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  gap: 4px;
+}
+.tog-opt {
+  flex: 1;
+  padding: 9px 8px;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text3);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 6px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  user-select: none;
+}
+.tog-opt:hover { color: var(--text); background: var(--surface3); }
+.tog-opt.active {
+  background: var(--surface3);
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border: 1px solid var(--border2);
+}
+.tog-opt.active-blue {
+  background: linear-gradient(135deg, var(--accent), #1d4ed8);
+  color: #fff;
+  box-shadow: 0 2px 12px var(--accent-glow);
+  border: 1px solid transparent;
+}
+.tog-opt.active-teal {
+  background: linear-gradient(135deg, var(--teal), #0f766e);
+  color: #fff;
+  box-shadow: 0 2px 12px var(--teal-glow);
+  border: 1px solid transparent;
+}
+
+/* CHECKBOX */
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 16px;
+}
+.check-row:hover { border-color: var(--accent); background: rgba(59,130,246,0.05); }
+.check-row input[type=checkbox] {
+  width: 18px; height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.check-label { font-size: 13px; font-weight: 700; color: var(--text); }
+
+/* ACTION BUTTON */
+.btn-action {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--surface3);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: all 0.2s;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.btn-action:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 16px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 18px 0; opacity: 0.6; }
+
+/* CONDITIONAL */
+.cond { display: none; }
+.cond.show { display: block; }
+
+/* CAD BOX */
+.cad-section {
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 18px;
+}
+.cad-section .field-hint { color: var(--amber); }
+
+/* ── ROBOT KINEMATICS CARD HEADER ── */
+.card-header.dark {
+  background: linear-gradient(135deg, #070c18 0%, var(--surface2) 100%);
+  border-bottom-color: var(--border2);
+}
+
+/* ── DIAGRAMS ROW ── */
+.diagrams-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width:1400px) { .diagrams-grid { grid-template-columns: 1fr; } }
+
+.dg-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.dg-header {
+  padding: 14px 20px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.dg-title {
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.dg-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.dg-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 5px;
+  background: var(--surface3);
+  color: var(--text3);
+  border: 1px solid var(--border);
+}
+
+/* SVG CANVAS — LARGE */
+.dg-2d {
+  flex: 1;
+  min-height: 560px;
+  background: var(--surface2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  position: relative;
+}
+.dg-2d svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 3D CANVAS — LARGE */
+.dg-3d-wrap {
+  flex: 1;
+  height: 560px;
+  position: relative;
+  background: #020815;
+}
+#c3d {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+#c3d:active { cursor: grabbing; }
+.d3-controls {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.d3-btn {
+  padding: 9px 14px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  background: rgba(7,12,24,0.85);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #e2e8f0;
+  cursor: pointer;
+  font-family: var(--sans);
+  backdrop-filter: blur(12px);
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+.d3-btn:hover { background: rgba(59,130,246,0.3); border-color: var(--accent); }
+.d3-btn.playing { background: rgba(239,68,68,0.7); border-color: #ef4444; }
+.measure-label {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(7,12,24,0.9);
+  border: 1px solid rgba(59,130,246,0.4);
+  color: var(--accent2);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+/* LEGEND */
+.dg-legend {
+  padding: 12px 20px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.leg-dot {
+  width: 14px; height: 14px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.leg-dot.circle { border-radius: 50%; }
+
+/* ── ANSWER BOARD ── */
+.answer-board {
+  background: linear-gradient(135deg, #07111f 0%, #0d1b2e 50%, #07111f 100%);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg), var(--glow);
+}
+.answer-board::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--teal), var(--amber));
+}
+.answer-board::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle at top right, rgba(59,130,246,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ans-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 28px;
+  align-items: center;
+}
+.ans-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+.ans-big {
+  font-family: var(--mono);
+  font-size: 60px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -2px;
+  text-shadow: 0 0 30px rgba(59,130,246,0.3);
+}
+.ans-big span { font-size: 22px; color: var(--text3); font-weight: 400; margin-left: 6px; }
+.ans-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+  background: rgba(0,0,0,0.25);
+  padding: 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.ans-stat .asl { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; }
+.ans-stat .asv {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-top: 4px;
+}
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.status-badge.pass { background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.3); }
+.status-badge.warn { background: rgba(245,158,11,0.15); color: #fde047; border: 1px solid rgba(245,158,11,0.3); }
+.status-badge.fail { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+.status-sub { font-size: 11px; color: var(--text3); margin-top: 8px; text-align: right; }
+
+/* ── TABS & CHARTS ── */
+.tab-bar {
+  display: flex;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.tab-item {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px 12px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 11.5px;
+  cursor: pointer;
+  border-radius: 6px;
+  color: var(--text3);
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tab-item:hover { color: var(--text); }
+.tab-item.active {
+  background: var(--surface3);
+  color: var(--accent2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border: 1px solid var(--border2);
+}
+.tab-item.special {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(34,197,94,0.3);
+  border: 1px solid transparent;
+}
+.chart-container { height: 380px; width: 100%; position: relative; }
+.chart-desc {
+  font-size: 13px;
+  color: var(--text2);
+  background: var(--surface2);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  margin-top: 16px;
+  line-height: 1.7;
+  border-left: 3px solid var(--accent);
+}
+.chart-desc strong { color: var(--accent2); }
+
+/* ── ENGINEERING CHECKS ── */
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.check-item:hover { background: rgba(255,255,255,0.015); }
+.check-item:last-child { border-bottom: none; }
+.check-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.check-dot.pass { background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
+.check-dot.warn { background: var(--amber); box-shadow: 0 0 8px var(--amber-glow); }
+.check-dot.fail { background: var(--red); box-shadow: 0 0 8px var(--red-glow); }
+.check-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.check-eq {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent2);
+  background: rgba(59,130,246,0.08);
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 5px;
+  border: 1px solid rgba(59,130,246,0.15);
+  margin-bottom: 8px;
+}
+.check-note { font-size: 12.5px; color: var(--text3); line-height: 1.6; }
+.check-val { font-family: var(--mono); font-size: 15px; font-weight: 700; margin-left: auto; padding-left: 16px; white-space: nowrap; flex-shrink:0; }
+.check-val.pass { color: var(--green); }
+.check-val.warn { color: var(--amber); }
+.check-val.fail { color: var(--red); }
+
+/* ── FORMULA STEPS ── */
+.formula-steps {}
+.formula-legend {
+  padding: 14px 22px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.8;
+}
+.formula-legend strong { color: var(--text); font-weight: 700; }
+.formula-step {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.formula-step:hover { background: rgba(255,255,255,0.015); }
+.formula-step:last-child { border-bottom: none; }
+.fs-num {
+  background: var(--surface2);
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text3);
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  border-right: 1px solid var(--border);
+}
+.fs-body { padding: 18px 22px; }
+.fs-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 7px; }
+.fs-formula {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--amber);
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 6px;
+  padding: 5px 12px;
+  display: inline-block;
+  margin-bottom: 6px;
+  cursor: help;
+  transition: all 0.2s;
+  position: relative;
+}
+.fs-formula:hover { background: rgba(245,158,11,0.15); }
+.fs-formula:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 130%;
+  left: 0;
+  background: #0d1b2e;
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  width: 320px;
+  z-index: 999;
+  line-height: 1.6;
+  font-family: var(--sans);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  border: 1px solid var(--border2);
+  text-align: left;
+  font-weight: 500;
+  letter-spacing: 0;
+  pointer-events: none;
+}
+.fs-result {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--green);
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 6px;
+  padding: 5px 12px;
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.fs-explain { font-size: 12.5px; color: var(--text3); line-height: 1.6; }
+
+/* ── MULTI-PART SIZER ── */
+.part-list { display:flex; flex-direction:column; gap:8px; margin-top:14px; }
+.part-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+.part-item:hover { border-color: var(--border2); }
+.part-name { font-weight: 700; font-size: 13px; color: var(--text); }
+.part-stats { font-family: var(--mono); font-size: 11px; color: var(--text3); font-weight: 600; margin-top:2px; }
+.part-del {
+  background: rgba(239,68,68,0.1);
+  color: var(--red);
+  border: 1px solid rgba(239,68,68,0.2);
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: flex; align-items:center; justify-content:center;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 13px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.part-del:hover { background: var(--red); color: #fff; border-color: var(--red); }
+.universal-result {
+  margin-top: 16px;
+  padding: 18px;
+  background: rgba(59,130,246,0.06);
+  border: 2px dashed rgba(59,130,246,0.3);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+.ur-title { font-size: 11px; font-weight: 800; color: var(--accent2); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+.ur-val { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--text); }
+.ur-sub { font-size: 12px; color: var(--text3); margin-top: 8px; font-weight: 700; }
+
+/* ── AIR FLOW RESULT ── */
+.air-result {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  margin-top: 18px;
+}
+.air-label { font-size: 11px; font-weight: 800; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.air-val { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--accent2); }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 36px 20px;
+  margin-top: 32px;
+  border-top: 1px solid var(--border);
+  color: var(--text3);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── SECTION HEADER (shared between card sections) ── */
+.section-hdr {
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  padding: 14px 20px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.section-title { font-family: var(--display); font-size:12px; font-weight:800; color:var(--text); letter-spacing:1.5px; text-transform:uppercase; }
+.section-tag { font-size:11px; font-weight:700; color:var(--text3); }
+
+/* ── NO-MARGIN ── */
+.mb0 { margin-bottom: 0 !important; }
+</style>
+</head>
+<body>
+
+<div id="errorBanner">⚠ PHYSICS ENGINE ERROR — Check Console</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-i">
+    <div class="logo">
+      <div class="logo-badge">⚙️</div>
+      <div class="logo-text">
+        <h1>EOAT Master <em>Simulator</em></h1>
+        <div class="logo-sub">Inertia · Kinematics · Payload Validation · V2</div>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <div class="hdr-pill">
+        <div class="hp on" id="togJaw" onclick="setMech('jaw')">🦾 Mechanical Jaws</div>
+        <div class="hp" id="togVac" onclick="setMech('vac')">🌪 Vacuum Suction</div>
+      </div>
+      <button class="hdr-btn" onclick="toggleTheme()">🌓 Theme</button>
+      <button class="hdr-btn primary" onclick="generatePDF()">📄 Export PDF Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="reportArea">
+<div class="wrap">
+<div class="layout">
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<div class="sidebar">
+
+  <!-- CARD 1: DEFINE PART -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">1</div>
+      <div class="card-title">Define Your Part</div>
+    </div>
+    <div class="card-body">
+
+      <div class="field">
+        <div class="field-row"><span class="field-label">Part Shape Profile</span></div>
+        <select id="shape" onchange="onShapeChange()">
+          <option value="cyl">Solid Cylinder — rod / shaft</option>
+          <option value="hcyl" selected>Hollow Cylinder — pipe / tube</option>
+          <option value="rect">Rectangular Block</option>
+          <option value="sq">Square Block</option>
+          <option value="disc">Disc / Flange</option>
+          <option value="cad">⚙️ SolidWorks / CAD Data Import</option>
+        </select>
+      </div>
+
+      <!-- CAD SECTION -->
+      <div id="fCAD" class="cond">
+        <div class="cad-section">
+          <div class="field-hint" style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:10px;">① Visual 3D File (Optional)</div>
+          <div class="field-hint">Upload .STL for collision checking in the 3D viewer.</div>
+          <input type="file" id="stlUpload" accept=".stl" onchange="handleSTLUpload(event)" style="margin-bottom:12px;">
+
+          <div class="field" style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(245,158,11,0.15)">
+            <div class="field-row"><span class="field-label">CAD Orientation (X / Y / Z °)</span></div>
+            <div style="display:flex;gap:8px;">
+              <input type="number" id="cadRotX" value="0" step="90" oninput="safeCalc()" placeholder="X°">
+              <input type="number" id="cadRotY" value="0" step="90" oninput="safeCalc()" placeholder="Y°">
+              <input type="number" id="cadRotZ" value="0" step="90" oninput="safeCalc()" placeholder="Z°">
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-row"><span class="field-label">Vertical Height Offset (Z)</span></div>
+            <div class="slider-row">
+              <input type="range" id="cadOffsetYR" min="-500" max="500" step="1" value="0" oninput="sv('cadOffsetY',this.value);safeCalc()">
+              <input type="number" id="cadOffsetY" value="0" step="1" oninput="sv('cadOffsetY',this.value);safeCalc()">
+              <span class="field-unit">mm</span>
+            </div>
+          </div>
+
+          <div class="field-hint" style="font-size:13px;font-weight:700;color:var(--amber);border-top:1px solid rgba(245,158,11,0.15);padding-top:12px;margin-bottom:8px;">② SolidWorks Mass Properties (Ixx / Iyy / Izz)</div>
+          <div class="field-hint">Copy Lxx, Lyy, Lzz from "Moments of inertia taken at center of mass".</div>
+          <div class="field">
+            <div class="field-row"><span class="field-label">Ixx (Lxx)</span></div>
+            <div class="slider-row"><input type="number" id="ixx" value="937380" step="1" oninput="safeCalc()" style="width:100%;text-align:left;flex:1"><span class="field-unit">—</span></div>
+          </div>
+          <div class="field">
+            <div class="field-row"><span class="field-label">Iyy (Lyy)</span></div>
+            <div class="slider-row"><input type="number" id="iyy" value="251103" step="1" oninput="safeCalc()" style="width:100%;text-align:left;flex:1"><span class="field-unit">—</span></div>
+          </div>
+          <div class="field">
+            <div class="field-row"><span class="field-label">Izz (Lzz)</span></div>
+            <div class="slider-row"><input type="number" id="izz" value="859991" step="1" oninput="safeCalc()" style="width:100%;text-align:left;flex:1"><span class="field-unit">—</span></div>
+          </div>
+          <div class="field mb0">
+            <div class="field-row"><span class="field-label">Units from CAD Software</span></div>
+            <select id="cadUnits" onchange="safeCalc()">
+              <option value="gmm">g · mm² (SolidWorks Default)</option>
+              <option value="kgcm">kg · cm²</option>
+              <option value="kgm">kg · m² (SI Standard)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-row"><span class="field-label">Total Part Mass</span><span class="field-badge">m</span></div>
+        <div class="slider-row">
+          <input type="range" id="massR" min="0.01" max="50" step="0.1" value="1.5" oninput="sv('mass',this.value);safeCalc()">
+          <input type="number" id="mass" value="1.5" step="0.01" min="0.001" oninput="sv('mass',this.value);safeCalc()">
+          <span class="field-unit">kg</span>
+        </div>
+      </div>
+
+      <div class="field cond show" id="fPL">
+        <div class="field-row"><span class="field-label" id="lblLen">Length / Height (Z)</span><span class="field-badge">L</span></div>
+        <div class="slider-row">
+          <input type="range" id="partLenR" min="10" max="1500" step="1" value="100" oninput="sv('partLen',this.value);autoCGSilent();safeCalc()">
+          <input type="number" id="partLen" value="100" step="1" min="1" oninput="sv('partLen',this.value);autoCGSilent();safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="field cond show" id="fPD">
+        <div class="field-row"><span class="field-label">Outer Diameter (X/Y)</span><span class="field-badge">⌀</span></div>
+        <div class="slider-row">
+          <input type="range" id="partDiaR" min="10" max="1000" step="1" value="60" oninput="sv('partDia',this.value);safeCalc()">
+          <input type="number" id="partDia" value="60" step="1" min="1" oninput="sv('partDia',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="field cond show" id="fID">
+        <div class="field-row"><span class="field-label">Inner Bore Diameter</span><span class="field-badge">⌀i</span></div>
+        <div class="slider-row">
+          <input type="range" id="innerDiaR" min="5" max="980" step="1" value="40" oninput="sv('innerDia',this.value);safeCalc()">
+          <input type="number" id="innerDia" value="40" step="1" min="1" oninput="sv('innerDia',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="field cond" id="fPW">
+        <div class="field-row"><span class="field-label">Width (X)</span><span class="field-badge">W</span></div>
+        <div class="slider-row">
+          <input type="range" id="partWR" min="10" max="1000" step="1" value="80" oninput="sv('partW',this.value);safeCalc()">
+          <input type="number" id="partW" value="80" step="1" min="1" oninput="sv('partW',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="field cond" id="fPS">
+        <div class="field-row"><span class="field-label">Side Length (X/Y)</span><span class="field-badge">s</span></div>
+        <div class="slider-row">
+          <input type="range" id="partSideR" min="10" max="1000" step="1" value="60" oninput="sv('partSide',this.value);safeCalc()">
+          <input type="number" id="partSide" value="60" step="1" min="1" oninput="sv('partSide',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="field cond" id="fDT">
+        <div class="field-row"><span class="field-label">Disc Thickness (Z)</span><span class="field-badge">t</span></div>
+        <div class="slider-row">
+          <input type="range" id="discThickR" min="2" max="200" step="1" value="20" oninput="sv('discThick',this.value);autoCGSilent();safeCalc()">
+          <input type="number" id="discThick" value="20" step="1" min="1" oninput="sv('discThick',this.value);autoCGSilent();safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="field cond" id="fDD">
+        <div class="field-row"><span class="field-label">Disc Diameter (X/Y)</span><span class="field-badge">⌀</span></div>
+        <div class="slider-row">
+          <input type="range" id="discDiaR" min="20" max="1000" step="1" value="120" oninput="sv('discDia',this.value);safeCalc()">
+          <input type="number" id="discDia" value="120" step="1" min="1" oninput="sv('discDia',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <div class="field-row"><span class="field-label">Part Orientation</span></div>
+        <div class="tog-group" style="margin-top:8px">
+          <div class="tog-opt active" id="btnV" onclick="setOrient('V')">↕ Vertical<br><small style="opacity:0.7;font-size:10px">Wall-like</small></div>
+          <div class="tog-opt" id="btnH" onclick="setOrient('H')">↔ Horizontal<br><small style="opacity:0.7;font-size:10px">Table-like</small></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <div class="field-row"><span class="field-label">Part Center of Gravity</span><span class="field-badge">CG</span></div>
+        <div class="field-hint">Distance from part base to its true mass center.</div>
+        <div class="slider-row">
+          <input type="range" id="cgPosR" min="0" max="100" step="0.5" value="50" oninput="sv('cgPos',this.value);safeCalc()">
+          <input type="number" id="cgPos" value="50" step="0.5" oninput="sv('cgPos',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+        <button class="btn-action" onclick="autoCG()" style="margin-top:10px;">🎯 Auto-Center CG</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CARD 2: ROBOT KINEMATICS -->
+  <div class="card">
+    <div class="card-header dark" style="background:linear-gradient(135deg,#070c18,var(--surface2))">
+      <div class="card-num" style="background:linear-gradient(135deg,#38bdf8,#0284c7);color:#fff">R</div>
+      <div class="card-title" style="color:var(--text)">Robot Kinematics & Mount</div>
+    </div>
+    <div class="card-body">
+
+      <label class="check-row">
+        <input type="checkbox" id="useATC" onchange="toggleATC();safeCalc();">
+        <span class="check-label">Use Automatic Tool Changer (ATC)</span>
+      </label>
+
+      <div class="field">
+        <div class="field-row"><span class="field-label">Adapter Plate (Z-Offset)</span></div>
+        <div class="field-hint">Thickness of plate between robot Tool0 flange & actuator.</div>
+        <div class="slider-row">
+          <input type="range" id="adpZR" min="0" max="300" step="1" value="15" oninput="sv('adpZ',this.value);safeCalc()">
+          <input type="number" id="adpZ" value="15" step="1" min="0" oninput="sv('adpZ',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-row"><span class="field-label">Eccentricity (X-Offset)</span></div>
+        <div class="field-hint">Is the gripper mounted off-center from the wrist axis?</div>
+        <div class="slider-row">
+          <input type="range" id="adpXR" min="-400" max="400" step="1" value="0" oninput="sv('adpX',this.value);safeCalc()">
+          <input type="number" id="adpX" value="0" step="1" oninput="sv('adpX',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-row"><span class="field-label">Tool Mass (Actuator Base)</span></div>
+        <div class="field-hint">Weight of bare gripper body or vacuum manifold.</div>
+        <div class="slider-row">
+          <input type="range" id="gmR" min="0" max="30" step="0.1" value="1.2" oninput="sv('gm',this.value);safeCalc()">
+          <input type="number" id="gm" value="1.2" step="0.1" min="0" oninput="sv('gm',this.value);safeCalc()">
+          <span class="field-unit">kg</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <div class="field-row"><span class="field-label">Robot Payload Limit</span></div>
+        <div class="slider-row">
+          <input type="number" id="robotLimit" value="20" step="1" min="1" oninput="safeCalc()" style="flex:1;text-align:left;">
+          <span class="field-unit">kg</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-row"><span class="field-label">Robot J5 Distance (Pitch Axis)</span></div>
+        <div class="field-hint">Distance from Tool0 Flange back to center of J5.</div>
+        <div class="slider-row">
+          <input type="range" id="j5LR" min="50" max="300" step="1" value="100" oninput="sv('j5L',this.value);safeCalc()">
+          <input type="number" id="j5L" value="100" step="1" min="0" oninput="sv('j5L',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="field mb0">
+        <div class="field-row"><span class="field-label">Robot J4 Distance (Roll Axis)</span></div>
+        <div class="field-hint">Distance from Tool0 Flange back to center of J4.</div>
+        <div class="slider-row">
+          <input type="range" id="j4LR" min="100" max="800" step="1" value="300" oninput="sv('j4L',this.value);safeCalc()">
+          <input type="number" id="j4L" value="300" step="1" min="0" oninput="sv('j4L',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CARD 3: END EFFECTOR -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num" style="background:linear-gradient(135deg,var(--teal),#0f766e)">2</div>
+      <div class="card-title">Define End Effector</div>
+    </div>
+    <div class="card-body">
+
+      <!-- JAW INPUTS -->
+      <div id="inpJaw" class="cond show">
+        <div class="field">
+          <div class="field-row"><span class="field-label">Actuation Method</span></div>
+          <div class="tog-group">
+            <div class="tog-opt active" id="btnPneu" onclick="setActuation('pneu')">💨 Pneumatic</div>
+            <div class="tog-opt" id="btnElec" onclick="setActuation('elec')">⚡ Electric Servo</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Grip Direction</span></div>
+          <div class="tog-group">
+            <div class="tog-opt active-blue" id="btnExt" onclick="setGripType('ext')">⬇⬆ External OD</div>
+            <div class="tog-opt active-teal" id="btnInt" onclick="setGripType('int')">⬆⬇ Internal ID</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Number of Fingers</span><span class="field-badge">N</span></div>
+          <select id="nFing" onchange="safeCalc()">
+            <option value="2">2 — Standard Parallel Jaw</option>
+            <option value="3">3 — Three-Jaw Radial</option>
+            <option value="4">4 — Four-Point Angular</option>
+          </select>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Finger Length (L)</span><span class="field-badge">L</span></div>
+          <div class="slider-row">
+            <input type="range" id="fingerLenR" min="5" max="500" step="1" value="40" oninput="sv('fingerLen',this.value);safeCalc()">
+            <input type="number" id="fingerLen" value="40" step="1" min="5" oninput="sv('fingerLen',this.value);safeCalc()">
+            <span class="field-unit">mm</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Finger Width (Contact Area)</span></div>
+          <div class="slider-row">
+            <input type="range" id="fingerWidthR" min="5" max="300" step="1" value="20" oninput="sv('fingerWidth',this.value);safeCalc()">
+            <input type="number" id="fingerWidth" value="20" step="1" min="5" oninput="sv('fingerWidth',this.value);safeCalc()">
+            <span class="field-unit">mm</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Grip Position (From Part Base)</span><span class="field-badge">G</span></div>
+          <div class="slider-row">
+            <input type="range" id="gripPosR" min="0" max="100" step="0.5" value="50" oninput="sv('gripPos',this.value);updateGripToggles('');safeCalc()">
+            <input type="number" id="gripPos" value="50" step="0.5" oninput="sv('gripPos',this.value);updateGripToggles('');safeCalc()">
+            <span class="field-unit">mm</span>
+          </div>
+          <div class="tog-group" style="margin-top:8px">
+            <div class="tog-opt active" id="btnGripMid" onclick="autoGrip()">Auto Center</div>
+            <div class="tog-opt" id="btnGripTop" onclick="gripNearTop()">Near Top</div>
+            <div class="tog-opt" id="btnGripBot" onclick="gripNearBot()">Near Bottom</div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Part Material (Yield Check)</span></div>
+          <select id="partMat" onchange="safeCalc()">
+            <option value="250">Steel / Hard Metals (>250 MPa)</option>
+            <option value="40">Aluminum / Brass (~40 MPa)</option>
+            <option value="60">Hard Plastics / Delrin (~60 MPa)</option>
+            <option value="10">Soft Plastics / Rubber (~10 MPa)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- VAC INPUTS -->
+      <div id="inpVac" class="cond">
+        <div class="field">
+          <div class="field-row"><span class="field-label">Vacuum Array Layout</span></div>
+          <select id="vacLayout" onchange="safeCalc()">
+            <option value="linear">Linear (1×N Array)</option>
+            <option value="grid" selected>H-Frame (2D Grid)</option>
+            <option value="radial">Circular / Radial Star</option>
+          </select>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Number of Suction Cups</span><span class="field-badge">n</span></div>
+          <div class="slider-row">
+            <input type="range" id="nCupsR" min="1" max="32" step="1" value="4" oninput="sv('nCups',this.value);safeCalc()">
+            <input type="number" id="nCups" value="4" step="1" min="1" oninput="sv('nCups',this.value);safeCalc()">
+            <span class="field-unit">cups</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Diameter per Cup</span><span class="field-badge">⌀</span></div>
+          <div class="slider-row">
+            <input type="range" id="cupDiaR" min="5" max="200" step="1" value="30" oninput="sv('cupDia',this.value);safeCalc()">
+            <input type="number" id="cupDia" value="30" step="1" min="5" oninput="sv('cupDia',this.value);safeCalc()">
+            <span class="field-unit">mm</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Operating Vacuum Level</span><span class="field-badge">ΔP</span></div>
+          <div class="field-hint">Typical factory vacuum supply is −60 kPa (−0.6 bar).</div>
+          <div class="slider-row">
+            <input type="range" id="vacLevelR" min="10" max="95" step="1" value="60" oninput="sv('vacLevel',this.value);safeCalc()">
+            <input type="number" id="vacLevel" value="60" step="5" min="10" max="95" oninput="sv('vacLevel',this.value);safeCalc()">
+            <span class="field-unit">−kPa</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="field-label">Cup Spacing (X/Y-Span)</span></div>
+          <div class="slider-row">
+            <input type="range" id="cupSpaceXR" min="0" max="1000" step="1" value="50" oninput="sv('cupSpaceX',this.value);safeCalc()">
+            <input type="number" id="cupSpaceX" value="50" step="1" min="0" oninput="sv('cupSpaceX',this.value);safeCalc()">
+            <span class="field-unit">mm</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <div class="field-row"><span class="field-label" id="lblFric">Friction Coefficient</span><span class="field-badge">μ</span></div>
+        <div class="field-hint" id="hntFric">Steel on steel ≈ 0.10. Rubber on glass ≈ 0.8.</div>
+        <div class="slider-row">
+          <input type="range" id="muR" min="0.01" max="1.5" step="0.01" value="0.1" oninput="sv('mu',this.value);safeCalc()">
+          <input type="number" id="mu" value="0.1" step="0.01" min="0.01" max="1.5" oninput="sv('mu',this.value);safeCalc()">
+          <span class="field-unit">—</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-row"><span class="field-label">Safety Factor</span><span class="field-badge">A</span></div>
+        <div class="field-hint">Industry standard 4× multiplier to handle robot jerk.</div>
+        <div class="slider-row">
+          <input type="range" id="safetyR" min="1" max="10" step="0.5" value="4" oninput="sv('safety',this.value);safeCalc()">
+          <input type="number" id="safety" value="4" step="0.5" min="1" max="10" oninput="sv('safety',this.value);safeCalc()">
+          <span class="field-unit">×</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-row"><span class="field-label">Peak Linear Acceleration</span><span class="field-badge">a</span></div>
+        <div class="slider-row">
+          <input type="range" id="accelR" min="0" max="30" step="0.5" value="2" oninput="sv('accel',this.value);safeCalc()">
+          <input type="number" id="accel" value="2" step="0.5" min="0" oninput="sv('accel',this.value);safeCalc()">
+          <span class="field-unit">m/s²</span>
+        </div>
+      </div>
+      <div class="field mb0">
+        <div class="field-row"><span class="field-label">Peak Angular Acceleration</span><span class="field-badge">α</span></div>
+        <div class="field-hint">Wrist stopping angular rate — triggers inertia fault.</div>
+        <div class="slider-row">
+          <input type="range" id="angAccelR" min="1" max="50" step="1" value="15" oninput="sv('angAccel',this.value);safeCalc()">
+          <input type="number" id="angAccel" value="15" step="1" min="1" oninput="sv('angAccel',this.value);safeCalc()">
+          <span class="field-unit">rad/s²</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AIR FLOW CARD -->
+  <div class="card" id="airFlowCard">
+    <div class="card-header">
+      <div class="card-num" style="background:linear-gradient(135deg,#38bdf8,#0284c7)">☁</div>
+      <div class="card-title">Pneumatic Air Consumption</div>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <div class="field-row"><span class="field-label">Target Grip / Evacuation Time</span></div>
+        <div class="field-hint">How fast must the tool actuate to meet cycle time?</div>
+        <div class="slider-row">
+          <input type="range" id="gripTimeR" min="0.1" max="5.0" step="0.1" value="0.5" oninput="sv('gripTime',this.value);safeCalc()">
+          <input type="number" id="gripTime" value="0.5" step="0.1" min="0.1" oninput="sv('gripTime',this.value);safeCalc()">
+          <span class="field-unit">s</span>
+        </div>
+      </div>
+      <div class="field mb0">
+        <div class="field-row"><span class="field-label">Tubing Length to Valve</span></div>
+        <div class="slider-row">
+          <input type="range" id="tubeLenR" min="100" max="5000" step="100" value="1000" oninput="sv('tubeLen',this.value);safeCalc()">
+          <input type="number" id="tubeLen" value="1000" step="10" min="100" oninput="sv('tubeLen',this.value);safeCalc()">
+          <span class="field-unit">mm</span>
+        </div>
+      </div>
+      <div class="air-result">
+        <div class="air-label">Required Air Flow (Compressor Sizing)</div>
+        <div class="air-val" id="airFlowRes">— <span style="font-size:15px;color:var(--text3)">NL/min</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end sidebar -->
+
+<!-- ══════════ MAIN COLUMN ══════════ -->
+<div class="main-col">
+
+  <!-- UNIVERSAL TOOLING SIZER — TOP -->
+  <div class="card" style="border:1px solid rgba(59,130,246,0.3);box-shadow:0 8px 32px rgba(59,130,246,0.08)">
+    <div class="section-hdr" style="background:rgba(59,130,246,0.06)">
+      <div class="section-title" style="color:var(--accent2)">Universal Tooling Sizer</div>
+      <span class="section-tag" style="color:var(--accent2)">Size 1 tool for infinite parts</span>
+    </div>
+    <div style="padding:20px">
+      <button class="btn-action" onclick="addCurrentPart()" style="background:var(--accent);color:#fff;border-color:transparent;box-shadow:0 4px 16px var(--accent-glow)">
+        ➕ Save Current Configuration to List
+      </button>
+      <div class="part-list" id="partListArea"></div>
+      <div class="universal-result" id="universalSpecArea" style="display:none">
+        <div class="ur-title">Master Universal Specification — Order ≥ This</div>
+        <div class="ur-val" id="usForceStroke">—</div>
+        <div class="ur-sub" id="usTorque">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIAGRAMS ROW -->
+  <div class="diagrams-grid">
+
+    <!-- 2D Physics Diagram -->
+    <div class="dg-card">
+      <div class="dg-header">
+        <div class="dg-title">2D Vector Physics</div>
+        <div class="dg-tags">
+          <span class="dg-tag" id="dg-s">Hollow Pipe</span>
+          <span class="dg-tag" id="dg-o">Vertical</span>
+          <span class="dg-tag" id="dg-t">External Jaw</span>
+        </div>
+      </div>
+      <div class="dg-2d" id="svgContainerWrapper">
+        <div id="svgC"></div>
+      </div>
+      <div class="dg-legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#94a3b8"></div>Flange</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div>Actuator</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#14b8a6" id="legToolColor"></div>Tooling</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#f59e0b"></div>Part</div>
+        <div class="leg-item"><div class="leg-dot circle" style="background:#22c55e"></div>CG</div>
+        <div class="leg-item"><div class="leg-dot circle" style="background:#3b82f6" id="legFColor"></div>F_Grip</div>
+        <div class="leg-item"><div class="leg-dot circle" style="background:#ef4444"></div>Weight</div>
+      </div>
+    </div>
+
+    <!-- 3D Master Assembly -->
+    <div class="dg-card" style="position:relative">
+      <div id="measureLabel" class="measure-label">Laser Measure: Click 2 Points</div>
+      <div class="dg-header">
+        <div class="dg-title">3D Master Assembly</div>
+        <span class="dg-tag">Drag · Scroll · Click Measure</span>
+      </div>
+      <div class="dg-3d-wrap" id="c3dWrapper">
+        <canvas id="c3d"></canvas>
+        <div class="d3-controls">
+          <div class="d3-btn" id="btnAnim" onclick="toggleAnim()">▶ Animate Cycle</div>
+          <div class="d3-btn" onclick="resetCam()">⌂ Reset View</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ANSWER BOARD -->
+  <div class="answer-board">
+    <div class="ans-grid">
+      <div>
+        <div class="ans-label" id="ansLbl">Required Grip Force per Finger</div>
+        <div class="ans-big" id="bigF">—<span>N</span></div>
+        <div class="ans-stats">
+          <div class="ans-stat"><div class="asl" id="subLbl1">Total Min Tool Force</div><div class="asv" id="aTotal">—</div></div>
+          <div class="ans-stat"><div class="asl">Order Spec <span id="specMultLabel" style="color:var(--amber)">+50% Margin</span></div><div class="asv" id="aSpec" style="color:var(--amber);font-weight:900">—</div></div>
+          <div class="ans-stat" id="tipForceDiv"><div class="asl">Dynamic Tipping Force</div><div class="asv" id="aTip">—</div></div>
+          <div class="ans-stat" style="grid-column:1/-1;padding-top:14px;border-top:1px solid rgba(255,255,255,0.07)">
+            <div class="asl" style="color:#6ee7b7">Robot Kinematic Payload Torques — J4 / J5 / J6</div>
+            <div class="asv" id="aTorque" style="color:#6ee7b7;font-size:15px;margin-top:6px">—</div>
+          </div>
+          <div class="ans-stat" style="grid-column:1/-1;padding-top:14px;border-top:1px solid rgba(255,255,255,0.07)">
+            <div class="asl" style="color:#f9a8d4">Dynamic Load Inertia — J4 / J5 / J6</div>
+            <div class="asv" id="aInertia" style="color:#f9a8d4;font-size:15px;margin-top:6px">—</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+        <div class="status-badge pass" id="vbadge">✓ SECURE PAYLOAD</div>
+        <div class="status-sub" id="vsub">All parameters optimal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANALYTICS CARD -->
+  <div class="card">
+    <div class="section-hdr">
+      <div class="section-title">Engineering Analytics & Sensitivity</div>
+      <span class="section-tag" style="color:var(--amber)">● Live Charts</span>
+    </div>
+    <div class="card-body">
+      <div class="tab-bar">
+        <div class="tab-item active" id="tabGrip" onclick="switchTab('chartGrip')">Force vs Accel</div>
+        <div class="tab-item" id="tabFric" onclick="switchTab('chartFric')">Friction Sensitivity</div>
+        <div class="tab-item" id="tabTorque" onclick="switchTab('chartTorque')">Wrist Utilization</div>
+        <div class="tab-item" id="tabOffset" onclick="switchTab('chartOffset')">CG Offset Penalty</div>
+        <div class="tab-item special" id="tabEnv" onclick="switchTab('chartEnv')">Payload Envelope</div>
+      </div>
+      <div class="chart-container"><canvas id="mainChart"></canvas></div>
+      <div id="chartExplanation" class="chart-desc"></div>
+    </div>
+  </div>
+
+  <!-- VALIDATION CHECKS CARD -->
+  <div class="card">
+    <div class="section-hdr">
+      <div class="section-title">Engineering Validations</div>
+      <span class="section-tag" style="color:var(--accent2)">● System Checks</span>
+    </div>
+    <div id="checksArea"></div>
+  </div>
+
+  <!-- FORMULA STEPS CARD -->
+  <div class="card">
+    <div class="section-hdr">
+      <div class="section-title">Step-by-Step Mathematical Verification</div>
+      <span class="section-tag" style="color:var(--green)">● Hover formulas for definitions</span>
+    </div>
+    <div id="formulaArea" class="formula-steps"></div>
+  </div>
+
+
+</div><!-- end main-col -->
+
+</div><!-- layout -->
+</div><!-- wrap -->
+</div><!-- reportArea -->
+
+<div class="footer">
+  © 2026 EOAT Masterclass Tool &nbsp;·&nbsp; Advanced End-of-Arm Tooling & Kinematics Validation System &nbsp;·&nbsp; V2
+</div>
+
+<!-- ═══════════════════════════ JAVASCRIPT ═══════════════════════════ -->
+<script>
+var G = 9.81;
+var calcMode = 'jaw';
+var orient = 'V';
+var gripType = 'ext';
+var actuationType = 'pneu';
+var activeTab = 'chartGrip';
+var savedPartsList = [];
+var partCounter = 1;
+var userSTLGeo = null;
+
+var dictionary = {
+  "W":"Gravity Weight: Total downward pull. W = Mass (kg) × 9.81 (m/s²).",
+  "Fi":"Inertia Force: Sideways pull caused by robot linear acceleration (m × a).",
+  "Fe":"Effective Load: Vector sum of Gravity and Inertia. Fe = √(W² + Fi²).",
+  "A":"Safety Factor: Multiplier to account for robot jerk and vibration (Industry Standard = 4.0).",
+  "mu":"Friction (μ): Surface grippiness. Metal-on-metal is extremely low (~0.1).",
+  "Mc":"CG Moment: Torque created when the grip center does not perfectly align with the mass center.",
+  "N":"Number of contacting elements (fingers or cups) sharing the total force.",
+  "P":"Vacuum Pressure: Negative pressure (ΔP) generated by the pneumatic pump.",
+  "W_tot":"Total Payload Mass: Includes the Part Mass AND the Gripper Actuator Mass.",
+  "X_ecc":"Eccentricity (X): Offset distance from the exact center axis of the robot flange.",
+  "Z_J6":"Z-Distance to J6: Total lever length from the Tool0 Flange face to the combined Center of Gravity.",
+  "Z_J5":"Z-Distance to J5: Lever length including the physical mechanical distance back to Axis 5 (Pitch).",
+  "Z_J4":"Z-Distance to J4: Lever length including the physical mechanical distance back to Axis 4 (Roll).",
+  "I_base":"Base Inertia: The rotational inertia of the part shape spinning perfectly around its own geometric center.",
+  "I_total":"Total Inertia: Using the Parallel Axis Theorem, this transfers the base inertia back through the eccentric offsets to the robot joints."
+};
+
+function gv(id){ var e=document.getElementById(id); return e?(parseFloat(e.value)||0):0; }
+function sv(id,v){ var e1=document.getElementById(id); if(e1)e1.value=v; var e2=document.getElementById(id+'R'); if(e2)e2.value=v; }
+function fmt(v,d){ d=d||2; return(isFinite(v)&&!isNaN(v))?v.toFixed(d):'—'; }
+function el(id){ return document.getElementById(id); }
+
+function toggleTheme(){
+  var b=document.body;
+  var isDark=b.getAttribute('data-theme')==='light';
+  b.setAttribute('data-theme', isDark?'dark':'light');
+  if(t3.scene) t3.scene.background=new THREE.Color(isDark?0x010409:0x020815);
+  updateChartColors();
+}
+
+function toggleATC(){
+  var useATC=el('useATC')&&el('useATC').checked;
+  if(useATC){ sv('adpZ',gv('adpZ')+40); sv('gm',gv('gm')+1.5); }
+  else{ sv('adpZ',Math.max(0,gv('adpZ')-40)); sv('gm',Math.max(0,gv('gm')-1.5)); }
+}
+
+function generatePDF(){
+  var shape=(el('shape')||{}).value||'hcyl';
+  var shapeNames={cyl:'Solid Cylinder',hcyl:'Hollow Cylinder (Pipe)',rect:'Rectangular Block',sq:'Square Block',disc:'Disc / Flange',cad:'SolidWorks / CAD Import'};
+  var m=gv('mass'),partL=getPartLen(),partOD=getPartOD();
+  var cgP=gv('cgPos'),adpZ=gv('adpZ'),adpX=gv('adpX'),gm=gv('gm');
+  var j5L=gv('j5L'),j4L=gv('j4L'),rLimit=gv('robotLimit');
+  var A=gv('safety'),a=gv('accel'),mu=gv('mu'),angAccel=gv('angAccel');
+  var gripPos=gv('gripPos'),fingerLen=gv('fingerLen'),fingerWidth=gv('fingerWidth');
+  var nFing=(el('nFing')||{}).value||'2';
+  var nCups=gv('nCups'),cupDia=gv('cupDia'),vacLevel=gv('vacLevel'),cupSpaceX=gv('cupSpaceX');
+  var gripTime=gv('gripTime'),tubeLen=gv('tubeLen');
+  var matNames={'250':'Steel / Hard Metals (>250 MPa)','40':'Aluminum / Brass (~40 MPa)','60':'Hard Plastics / Delrin (~60 MPa)','10':'Soft Plastics / Rubber (~10 MPa)'};
+  var matVal=(el('partMat')||{}).value||'250';
+  var vacLayoutNames={linear:'Linear (1xN Array)',grid:'H-Frame (2D Grid)',radial:'Circular / Radial Star'};
+  var vacLayout=(el('vacLayout')||{}).value||'grid';
+  var aTotal=el('aTotal')?el('aTotal').textContent:'--';
+  var aSpec=el('aSpec')?el('aSpec').textContent:'--';
+  var aTip=el('aTip')?el('aTip').textContent:'--';
+  var aTorque=el('aTorque')?el('aTorque').innerHTML.replace(/&nbsp;/g,' ').replace(/<[^>]+>/g,''):'--';
+  var aInertia=el('aInertia')?el('aInertia').innerHTML.replace(/&nbsp;/g,' ').replace(/<[^>]+>/g,''):'--';
+  var airFlow=el('airFlowRes')?el('airFlowRes').textContent.trim():'--';
+  var bigFText=el('bigF')?el('bigF').textContent.replace(/[<>]/g,''):'--';
+  var vbEl=el('vbadge');
+  var isPASS=vbEl&&vbEl.className.includes('pass');
+  var isWARN=vbEl&&vbEl.className.includes('warn');
+  var statusText=vbEl?vbEl.textContent.trim():'--';
+  var stColor=isPASS?'#14532d':isWARN?'#78350f':'#7f1d1d';
+  var stBg=isPASS?'#dcfce7':isWARN?'#fef3c7':'#fee2e2';
+  var stBorder=isPASS?'#86efac':isWARN?'#fde047':'#fca5a5';
+  var now=new Date();
+  var dateStr=now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' at '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  function iRow(label,value,shade){
+    var bg=shade?'#f8fafc':'#ffffff';
+    return '<tr style="background:'+bg+';border-bottom:1px solid #f1f5f9">'+
+      '<td style="padding:9px 16px;font-size:12px;font-weight:600;color:#64748b;border-right:1px solid #e2e8f0;width:52%">'+label+'</td>'+
+      '<td style="padding:9px 16px;font-family:Courier New,monospace;font-size:12.5px;font-weight:700;color:#0f172a">'+value+'</td></tr>';
+  }
+
+  var formulaRows='';
+  var stepEls=el('formulaArea')?el('formulaArea').querySelectorAll('.formula-step'):[];
+  stepEls.forEach(function(step,i){
+    var num=step.querySelector('.fs-num')?step.querySelector('.fs-num').textContent.trim():(i+1);
+    var title=step.querySelector('.fs-title')?step.querySelector('.fs-title').textContent.trim():'';
+    var formula=step.querySelector('.fs-formula')?step.querySelector('.fs-formula').textContent.trim():'';
+    var result=step.querySelector('.fs-result')?step.querySelector('.fs-result').textContent.replace('->','').replace('→','').trim():'';
+    var explain=step.querySelector('.fs-explain')?step.querySelector('.fs-explain').textContent.trim():'';
+    var rowBg=i%2===0?'#f8fafc':'#ffffff';
+    formulaRows+=
+      '<tr style="background:'+rowBg+';page-break-inside:avoid">'+
+      '<td style="padding:12px 14px;text-align:center;font-size:16px;font-weight:900;color:#94a3b8;border-right:2px solid #e2e8f0;width:38px;vertical-align:top">'+num+'</td>'+
+      '<td style="padding:12px 16px;border-right:1px solid #e2e8f0;vertical-align:top;width:30%">'+
+        '<div style="font-size:13px;font-weight:800;color:#0f172a;margin-bottom:7px">'+title+'</div>'+
+        '<span style="font-family:Courier New,monospace;font-size:11.5px;background:#fef3c7;color:#92400e;padding:4px 10px;border-radius:4px;display:inline-block;border:1px solid #fde68a">'+formula+'</span>'+
+      '</td>'+
+      '<td style="padding:12px 16px;border-right:1px solid #e2e8f0;vertical-align:top;width:22%">'+
+        '<span style="font-family:Courier New,monospace;font-size:13px;font-weight:800;color:#166534;background:#f0fdf4;padding:6px 10px;border-radius:4px;display:inline-block;border:1px solid #bbf7d0">'+result+'</span>'+
+      '</td>'+
+      '<td style="padding:12px 16px;font-size:12px;color:#475569;line-height:1.6;vertical-align:top">'+explain+'</td></tr>';
+  });
+
+  var checkRows='';
+  var checkEls=el('checksArea')?el('checksArea').querySelectorAll('.check-item'):[];
+  checkEls.forEach(function(check,i){
+    var name=check.querySelector('.check-name')?check.querySelector('.check-name').textContent.trim():'';
+    var eq=check.querySelector('.check-eq')?check.querySelector('.check-eq').textContent.trim():'';
+    var note=check.querySelector('.check-note')?check.querySelector('.check-note').textContent.trim():'';
+    var valEl=check.querySelector('.check-val');
+    var val=valEl?valEl.textContent.trim():'';
+    var dot=check.querySelector('.check-dot');
+    var st=dot&&dot.className.includes('pass')?'pass':dot&&dot.className.includes('warn')?'warn':'fail';
+    var sc=st==='pass'?'#14532d':st==='warn'?'#78350f':'#7f1d1d';
+    var sb=st==='pass'?'#dcfce7':st==='warn'?'#fef3c7':'#fee2e2';
+    var sbo=st==='pass'?'#86efac':st==='warn'?'#fde047':'#fca5a5';
+    var rowBg=i%2===0?'#f8fafc':'#ffffff';
+    checkRows+=
+      '<tr style="background:'+rowBg+';page-break-inside:avoid">'+
+      '<td style="padding:12px 16px;font-size:13px;font-weight:800;color:#0f172a;vertical-align:top;border-right:1px solid #e2e8f0">'+name+'</td>'+
+      '<td style="padding:12px 16px;font-family:Courier New,monospace;font-size:11.5px;color:#1d4ed8;vertical-align:top;border-right:1px solid #e2e8f0">'+eq+'</td>'+
+      '<td style="padding:12px 16px;font-size:12px;color:#475569;vertical-align:top;border-right:1px solid #e2e8f0;line-height:1.5">'+note+'</td>'+
+      '<td style="padding:12px 16px;text-align:center;vertical-align:top">'+
+        '<span style="display:inline-block;background:'+sb+';color:'+sc+';border:1px solid '+sbo+';padding:4px 12px;border-radius:5px;font-weight:800;font-size:11px;white-space:nowrap">'+val+'</span>'+
+      '</td></tr>';
+  });
+
+  var shd=false;
+  var partRows='';
+  partRows+=iRow('Shape Profile',shapeNames[shape]||shape,shd=!shd);
+  partRows+=iRow('Part Mass (m)',m+' kg',shd=!shd);
+  partRows+=iRow('Length / Height (L)',partL+' mm',shd=!shd);
+  partRows+=iRow('Outer Diameter (OD)',partOD+' mm',shd=!shd);
+  if(shape==='hcyl')partRows+=iRow('Inner Bore Diameter',gv('innerDia')+' mm',shd=!shd);
+  partRows+=iRow('Center of Gravity',cgP+' mm from base',shd=!shd);
+  partRows+=iRow('Orientation',orient==='V'?'Vertical (wall-like)':'Horizontal (table-like)',shd=!shd);
+
+  shd=false;
+  var robotRows='';
+  robotRows+=iRow('Robot Payload Limit',rLimit+' kg',shd=!shd);
+  robotRows+=iRow('Adapter Plate Z-Offset',adpZ+' mm',shd=!shd);
+  robotRows+=iRow('Eccentricity X-Offset',adpX+' mm',shd=!shd);
+  robotRows+=iRow('Tool / Actuator Mass',gm+' kg',shd=!shd);
+  robotRows+=iRow('J5 Distance (Pitch)',j5L+' mm',shd=!shd);
+  robotRows+=iRow('J4 Distance (Roll)',j4L+' mm',shd=!shd);
+  robotRows+=iRow('ATC Installed',(el('useATC')&&el('useATC').checked)?'Yes':'No',shd=!shd);
+
+  shd=false;
+  var toolRows='';
+  if(calcMode==='jaw'){
+    toolRows+=iRow('Actuation Method',actuationType==='pneu'?'Pneumatic Air':'Electric Servo',shd=!shd);
+    toolRows+=iRow('Grip Direction',gripType==='ext'?'External OD':'Internal ID',shd=!shd);
+    toolRows+=iRow('Number of Fingers',nFing,shd=!shd);
+    toolRows+=iRow('Finger Length',fingerLen+' mm',shd=!shd);
+    toolRows+=iRow('Finger Width',fingerWidth+' mm',shd=!shd);
+    toolRows+=iRow('Grip Position',gripPos+' mm from base',shd=!shd);
+    toolRows+=iRow('Part Material',matNames[matVal]||matVal,shd=!shd);
+  }else{
+    toolRows+=iRow('Array Layout',vacLayoutNames[vacLayout]||vacLayout,shd=!shd);
+    toolRows+=iRow('Number of Cups',nCups,shd=!shd);
+    toolRows+=iRow('Cup Diameter',cupDia+' mm',shd=!shd);
+    toolRows+=iRow('Vacuum Level','-'+vacLevel+' kPa',shd=!shd);
+    toolRows+=iRow('Cup Spacing',cupSpaceX+' mm',shd=!shd);
+  }
+
+  shd=false;
+  var dynRows='';
+  dynRows+=iRow('Safety Factor (A)',A+' x',shd=!shd);
+  dynRows+=iRow('Peak Linear Accel (a)',a+' m/s2',shd=!shd);
+  dynRows+=iRow('Angular Accel (alpha)',angAccel+' rad/s2',shd=!shd);
+  dynRows+=iRow('Friction Coefficient (u)',mu,shd=!shd);
+  dynRows+=iRow('Grip / Evacuation Time',gripTime+' s',shd=!shd);
+  dynRows+=iRow('Tubing Length',tubeLen+' mm',shd=!shd);
+  dynRows+=iRow('Required Air Flow',airFlow,shd=!shd);
+
+  function thCell(txt,w){return '<th style="padding:11px 16px;text-align:left;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#ffffff;border-right:1px solid #1e293b'+(w?';width:'+w:'')+'">'+txt+'</th>';}
+  function subHdr(txt){return '<tr><td colspan="2" style="background:#1e3a5f;padding:10px 16px;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#93c5fd">'+txt+'</td></tr>';}
+  function secTitle(txt){return '<div style="font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#2563eb;padding-bottom:8px;border-bottom:2px solid #2563eb;margin-bottom:14px">&#9654; '+txt+'</div>';}
+
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>'+
+    '@page{margin:16mm}*{margin:0;padding:0;box-sizing:border-box}'+
+    'body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#0f172a;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+    'table{border-collapse:collapse;width:100%}td,th{vertical-align:top}'+
+    '</style></head><body>';
+
+  html+='<table cellpadding="0" cellspacing="0"><tr><td>';
+
+  // HEADER
+  html+='<table cellpadding="0" cellspacing="0" style="width:100%;background:#0f172a;border-bottom:4px solid #2563eb;margin-bottom:22px"><tr><td style="padding:24px 28px 20px">'+
+    '<table cellpadding="0" cellspacing="0"><tr>'+
+      '<td style="width:50px;height:50px;background:#1d4ed8;border-radius:10px;text-align:center;vertical-align:middle;font-size:24px;padding:10px 12px">&#9881;</td>'+
+      '<td style="padding-left:14px">'+
+        '<div style="font-size:21px;font-weight:900;color:#fff;letter-spacing:-0.5px">EOAT Master <span style="color:#60a5fa">Simulator</span></div>'+
+        '<div style="font-size:10px;color:#94a3b8;letter-spacing:2px;text-transform:uppercase;margin-top:4px">Inertia &middot; Kinematics &middot; Payload Validation &middot; V2</div>'+
+      '</td>'+
+      '<td style="text-align:right;padding-left:30px">'+
+        '<div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px">Engineering Report</div>'+
+        '<div style="font-size:13px;font-weight:700;color:#e2e8f0;margin-top:4px">'+dateStr+'</div>'+
+      '</td>'+
+    '</tr></table>'+
+    '<table cellpadding="0" cellspacing="0" style="margin-top:14px"><tr>'+
+      '<td style="padding-right:10px"><span style="background:'+stBg+';color:'+stColor+';border:1.5px solid '+stBorder+';padding:7px 18px;border-radius:6px;font-size:13px;font-weight:800;letter-spacing:0.5px">'+statusText+'</span></td>'+
+      '<td style="padding-right:8px"><span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#e2e8f0;padding:6px 14px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase">'+(calcMode==='jaw'?'Jaw Gripper':'Vacuum')+'</span></td>'+
+      '<td style="padding-right:8px"><span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#e2e8f0;padding:6px 14px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase">'+(orient==='V'?'Vertical':'Horizontal')+'</span></td>'+
+      (calcMode==='jaw'?'<td><span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#e2e8f0;padding:6px 14px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase">'+(gripType==='ext'?'External OD':'Internal ID')+'</span></td>':'')+
+    '</tr></table>'+
+  '</td></tr></table>';
+
+  // RESULTS SUMMARY
+  html+=secTitle('CALCULATION RESULTS SUMMARY');
+  html+='<table cellpadding="0" cellspacing="0" style="border:2px solid #3b82f6;border-radius:10px;overflow:hidden;margin-bottom:22px">'+
+    '<tr>'+
+      '<td style="padding:18px 20px;background:#eff6ff;border-right:1px solid #dbeafe;width:25%">'+
+        '<div style="font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#2563eb;margin-bottom:7px">'+(calcMode==='jaw'?'Required Force / Finger':'Required Area / Cup')+'</div>'+
+        '<div style="font-family:Courier New,monospace;font-size:30px;font-weight:900;color:#1d4ed8;line-height:1">'+bigFText+'</div>'+
+      '</td>'+
+      '<td style="padding:18px 20px;background:#f8fafc;border-right:1px solid #dbeafe;width:25%">'+
+        '<div style="font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#64748b;margin-bottom:7px">Total Min Tool Force</div>'+
+        '<div style="font-family:Courier New,monospace;font-size:20px;font-weight:800;color:#0f172a">'+aTotal+'</div>'+
+      '</td>'+
+      '<td style="padding:18px 20px;background:#fffbeb;border-right:1px solid #dbeafe;width:25%">'+
+        '<div style="font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#d97706;margin-bottom:7px">Order Spec (with margin)</div>'+
+        '<div style="font-family:Courier New,monospace;font-size:20px;font-weight:800;color:#b45309">'+aSpec+'</div>'+
+      '</td>'+
+      '<td style="padding:18px 20px;background:#f8fafc;width:25%">'+
+        '<div style="font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#64748b;margin-bottom:7px">Dynamic Tipping Force</div>'+
+        '<div style="font-family:Courier New,monospace;font-size:20px;font-weight:800;color:#0f172a">'+aTip+'</div>'+
+      '</td>'+
+    '</tr>'+
+    '<tr><td colspan="4" style="background:#f0fdf4;padding:14px 20px;border-top:1px solid #bbf7d0">'+
+      '<table cellpadding="0" cellspacing="0"><tr>'+
+        '<td style="padding-right:30px">'+
+          '<div style="font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#166534;margin-bottom:5px">Kinematic Torques (J4 / J5 / J6)</div>'+
+          '<div style="font-family:Courier New,monospace;font-size:13px;font-weight:800;color:#14532d">'+aTorque+'</div>'+
+        '</td>'+
+        '<td>'+
+          '<div style="font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#166534;margin-bottom:5px">Dynamic Load Inertia (J4 / J5 / J6)</div>'+
+          '<div style="font-family:Courier New,monospace;font-size:13px;font-weight:800;color:#14532d">'+aInertia+'</div>'+
+        '</td>'+
+      '</tr></table>'+
+    '</td></tr>'+
+  '</table>';
+
+  // INPUT PARAMETERS (2-col)
+  html+=secTitle('INPUT PARAMETERS');
+  html+='<table cellpadding="0" cellspacing="0" style="margin-bottom:22px"><tr valign="top">'+
+    '<td style="width:50%;padding-right:11px">'+
+      '<table cellpadding="0" cellspacing="0" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:12px">'+
+        subHdr('Part Geometry')+partRows+'</table>'+
+      '<table cellpadding="0" cellspacing="0" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden">'+
+        subHdr('Dynamic Parameters')+dynRows+'</table>'+
+    '</td>'+
+    '<td style="width:50%;padding-left:11px">'+
+      '<table cellpadding="0" cellspacing="0" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:12px">'+
+        subHdr('Robot Kinematics and Mount')+robotRows+'</table>'+
+      '<table cellpadding="0" cellspacing="0" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden">'+
+        subHdr((calcMode==='jaw'?'Jaw Gripper':'Vacuum Gripper')+' Parameters')+toolRows+'</table>'+
+    '</td>'+
+  '</tr></table>';
+
+  // ENGINEERING CHECKS
+  html+=secTitle('ENGINEERING VALIDATION CHECKS');
+  html+='<table cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:22px">'+
+    '<tr style="background:#0f172a">'+
+      thCell('Check Name','22%')+thCell('Equation / Limit','24%')+thCell('Notes','')+thCell('Result','14%')+
+    '</tr>'+checkRows+'</table>';
+
+  // FORMULA STEPS
+  html+=secTitle('STEP-BY-STEP MATHEMATICAL VERIFICATION');
+  html+='<table cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:22px">'+
+    '<tr style="background:#0f172a">'+
+      thCell('#','38px')+thCell('Step / Formula','30%')+thCell('Result','22%')+thCell('Explanation','')+
+    '</tr>'+formulaRows+'</table>';
+
+  // FOOTER
+  html+='<table cellpadding="0" cellspacing="0" style="width:100%;border-top:2px solid #e2e8f0;padding-top:14px;margin-top:6px">'+
+    '<tr>'+
+      '<td style="font-size:11px;color:#64748b">© 2026 <strong style="color:#0f172a">EOAT Masterclass Tool</strong> — V2 — End-of-Arm Tooling and Kinematics Validation</td>'+
+      '<td style="text-align:right;font-size:11px;color:#64748b">Generated: <strong style="color:#0f172a">'+dateStr+'</strong></td>'+
+    '</tr></table>';
+
+  html+='</td></tr></table></body></html>';
+
+  var iframe=document.createElement('iframe');
+  iframe.style.cssText='position:fixed;top:-9999px;left:-9999px;width:794px;height:1123px;border:none;visibility:hidden';
+  document.body.appendChild(iframe);
+  iframe.contentDocument.open();
+  iframe.contentDocument.write(html);
+  iframe.contentDocument.close();
+
+  setTimeout(function(){
+    html2pdf().set({
+      margin:[0,0,0,0],
+      filename:'EOAT_Engineering_Report_V24.pdf',
+      image:{type:'jpeg',quality:0.99},
+      html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff',windowWidth:794},
+      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+    }).from(iframe.contentDocument.body).save().then(function(){
+      document.body.removeChild(iframe);
+    });
+  },800);
+}
+
+function safeCalc(){
+  try{
+    var eb=el('errorBanner'); if(eb)eb.style.display='none';
+    clear3DMeasures();
+    calc();
+  }catch(err){
+    console.error("V24 Physics Engine Error:",err);
+    var eb2=el('errorBanner');
+    if(eb2){ eb2.style.display='block'; eb2.textContent="⚠ Engine Error: "+err.message; }
+  }
+}
+
+function handleSTLUpload(event){
+  var file=event.target.files[0]; if(!file)return;
+  if(file.name.toLowerCase().endsWith('.step')||file.name.toLowerCase().endsWith('.stp')){
+    alert("⚠ FORMAT: Web browsers cannot render .STEP files.\n\nExport as .STL from SolidWorks/Fusion360 first!");
+    return;
+  }
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var contents=e.target.result;
+      var loader=new THREE.STLLoader();
+      var geometry=loader.parse(contents);
+      geometry.computeVertexNormals();
+      geometry.computeBoundingBox();
+      var bb=geometry.boundingBox;
+      var size=new THREE.Vector3(); bb.getSize(size);
+      geometry.center();
+      userSTLGeo=geometry;
+      sv('partLen',Math.max(1,size.y));
+      sv('partW',Math.max(1,size.x));
+      sv('partDia',Math.max(1,Math.max(size.x,size.z)));
+      autoCGSilent(); safeCalc();
+    }catch(err){ alert("Error parsing STL file. Ensure it is a valid binary or ASCII STL."); }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function addCurrentPart(){
+  if(calcMode==='vac')return;
+  var eSpec=el('aSpec');
+  var spec=eSpec?(parseFloat(eSpec.textContent)||0):0;
+  var stroke=getGripContactDia()/2;
+  var mass=gv('mass');
+  var tStr=el('aTorque').textContent;
+  var t6=0;
+  var parts=tStr.split('|');
+  if(parts.length===3) t6=parseFloat(parts[2].replace(/[^\d.-]/g,''));
+  var newPart={id:partCounter++,name:"Part "+partCounter,spec:spec,stroke:stroke,mass:mass,t6:t6};
+  savedPartsList.push(newPart);
+  renderSavedParts();
+}
+
+function removePart(id){
+  savedPartsList=savedPartsList.filter(function(p){return p.id!==id;});
+  renderSavedParts();
+}
+
+function renderSavedParts(){
+  var listArea=el('partListArea');
+  var specArea=el('universalSpecArea');
+  if(!listArea||!specArea)return;
+  if(savedPartsList.length===0){listArea.innerHTML='';specArea.style.display='none';return;}
+  var maxF=0,maxS=0,maxT=0,html='';
+  for(var i=0;i<savedPartsList.length;i++){
+    var p=savedPartsList[i];
+    if(p.spec>maxF)maxF=p.spec;
+    if(p.stroke>maxS)maxS=p.stroke;
+    if(p.t6>maxT)maxT=p.t6;
+    html+='<div class="part-item"><div><div class="part-name">'+p.name+' ('+p.mass+'kg)</div><div class="part-stats">Force: '+fmt(p.spec)+'N | Stroke: '+fmt(p.stroke,1)+'mm</div></div><button class="part-del" onclick="removePart('+p.id+')">✕</button></div>';
+  }
+  listArea.innerHTML=html;
+  specArea.style.display='block';
+  el('usForceStroke').innerHTML='FORCE: <span style="color:var(--accent2)">'+fmt(maxF)+' N</span> &nbsp;|&nbsp; STROKE: <span style="color:var(--accent2)">'+fmt(maxS,1)+' mm</span>';
+  el('usTorque').innerHTML='Max J6 Torque: '+fmt(maxT,1)+' Nm';
+}
+
+function setMech(m){
+  calcMode=m;
+  if(el('togJaw'))el('togJaw').className=m==='jaw'?'hp on':'hp';
+  if(el('togVac'))el('togVac').className=m==='vac'?'hp on-vac':'hp';
+  if(el('inpJaw'))el('inpJaw').className=m==='jaw'?'cond show':'cond';
+  if(el('inpVac'))el('inpVac').className=m==='vac'?'cond show':'cond';
+  if(el('tipForceDiv'))el('tipForceDiv').style.display=m==='jaw'?'':'none';
+  if(el('airFlowCard'))el('airFlowCard').style.display='block';
+  if(m==='vac'){
+    if(el('lblFric'))el('lblFric').textContent='Shear Friction (μ)';
+    sv('mu',0.5);
+    if(el('ansLbl'))el('ansLbl').textContent='Required Area per Cup';
+    if(el('subLbl1'))el('subLbl1').textContent='Total Lifting Capacity';
+    if(el('dg-t')){el('dg-t').textContent='Vacuum Suction';}
+    if(el('legToolColor'))el('legToolColor').style.background='#0ea5e9';
+  }else{
+    if(el('lblFric'))el('lblFric').textContent='Friction Coefficient';
+    sv('mu',0.1);
+    if(el('ansLbl'))el('ansLbl').textContent='Required Grip Force per Finger';
+    if(el('subLbl1'))el('subLbl1').textContent='Total Min Tool Force';
+    setGripType(gripType);
+    if(el('legToolColor'))el('legToolColor').style.background='#14b8a6';
+    if(actuationType==='elec'){if(el('airFlowCard'))el('airFlowCard').style.display='none';}
+  }
+  onShapeChange(); safeCalc();
+}
+
+function setActuation(type){
+  actuationType=type;
+  if(el('btnPneu'))el('btnPneu').className=type==='pneu'?'tog-opt active':'tog-opt';
+  if(el('btnElec'))el('btnElec').className=type==='elec'?'tog-opt active':'tog-opt';
+  if(calcMode==='jaw'){if(el('airFlowCard'))el('airFlowCard').style.display=type==='pneu'?'block':'none';}
+  safeCalc();
+}
+
+function setOrient(o){
+  orient=o;
+  if(el('btnV'))el('btnV').className=o==='V'?'tog-opt active':'tog-opt';
+  if(el('btnH'))el('btnH').className=o==='H'?'tog-opt active':'tog-opt';
+  if(el('dg-o'))el('dg-o').textContent=o==='V'?'Vertical':'Horizontal';
+  safeCalc();
+}
+
+function setGripType(t){
+  gripType=t;
+  if(el('btnExt'))el('btnExt').className=t==='ext'?'tog-opt active-blue':'tog-opt';
+  if(el('btnInt'))el('btnInt').className=t==='int'?'tog-opt active-teal':'tog-opt';
+  if(calcMode==='jaw'&&el('dg-t')){
+    el('dg-t').textContent=t==='ext'?'External OD':'Internal ID';
+  }
+  if(el('legFColor'))el('legFColor').style.background=t==='ext'?'#3b82f6':'#8b5cf6';
+  safeCalc();
+}
+
+function onShapeChange(){
+  var e=el('shape'); var s=e?e.value:'cyl';
+  var show=function(id,v){var elem=el(id);if(elem)elem.className=v?'field cond show':'field cond';};
+  show('fPL',s!=='disc'&&s!=='cad');
+  show('fPD',s==='cyl'||s==='hcyl');
+  show('fID',s==='hcyl');
+  show('fPW',s==='rect');
+  show('fPS',s==='sq');
+  show('fDT',s==='disc');
+  show('fDD',s==='disc');
+  var fCAD=el('fCAD');
+  if(fCAD)fCAD.className=s==='cad'?'cond show':'cond';
+  var names={cyl:'Solid Cylinder',hcyl:'Hollow Pipe',rect:'Rectangular',sq:'Square',disc:'Disc/Flange',cad:'CAD Import'};
+  if(el('dg-s'))el('dg-s').textContent=names[s]||s;
+  autoCGSilent(); safeCalc();
+}
+
+function getPartLen(){
+  var e=el('shape'); var s=e?e.value:'cyl';
+  if(s==='cad')return gv('partLen')||100;
+  return s==='disc'?(gv('discThick')||20):(gv('partLen')||100);
+}
+function getPartOD(){
+  var e=el('shape'); var s=e?e.value:'cyl';
+  if(s==='cad')return gv('partDia')||60;
+  if(s==='disc')return gv('discDia')||120;
+  if(s==='sq')return gv('partSide')||60;
+  if(s==='rect')return gv('partW')||80;
+  return gv('partDia')||60;
+}
+function getGripContactDia(){
+  if(gripType==='int'&&calcMode==='jaw')return Math.max(10,gv('innerDia')||40);
+  return getPartOD();
+}
+
+function updateGripToggles(activeId){
+  ['btnGripTop','btnGripMid','btnGripBot'].forEach(function(id){
+    var e=el(id); if(e)e.className='tog-opt';
+  });
+  if(activeId){var a=el(activeId);if(a)a.className='tog-opt active';}
+}
+function autoCGSilent(){sv('cgPos',(getPartLen()/2).toFixed(1));}
+function autoCG(){autoCGSilent();safeCalc();}
+function autoGrip(){sv('gripPos',(getPartLen()/2).toFixed(1));updateGripToggles('btnGripMid');safeCalc();}
+function gripNearTop(){sv('gripPos',Math.max(0,(getPartLen()-gv('fingerLen')/2-5)).toFixed(1));updateGripToggles('btnGripTop');safeCalc();}
+function gripNearBot(){sv('gripPos',Math.max(0,(gv('fingerLen')/2+5)).toFixed(1));updateGripToggles('btnGripBot');safeCalc();}
+
+// ═══════ MAIN CALCULATION ENGINE ═══════
+function calc(){
+  var m=Math.max(0.001,gv('mass'));
+  var partL=Math.max(1,getPartLen());
+  var cgP=gv('cgPos');
+  var A=Math.max(1,gv('safety'));
+  var a=gv('accel');
+  var angAccel=Math.max(0.1,gv('angAccel'));
+  var mu=Math.max(0.01,gv('mu'));
+  var gripD=Math.max(1,getGripContactDia());
+  var rLimit=Math.max(1,gv('robotLimit')||20);
+
+  if(el('cgPosR'))el('cgPosR').max=partL;
+  if(el('gripPosR'))el('gripPosR').max=partL;
+
+  var adpZ=Math.max(0,gv('adpZ'));
+  var adpX=gv('adpX');
+  var gm=Math.max(0,gv('gm'));
+  var j5L=Math.max(0,gv('j5L')||100);
+  var j4L=Math.max(0,gv('j4L')||300);
+
+  var W=m*G, Fi=m*a, Fe=Math.sqrt(W*W+Fi*Fi);
+
+  var bigRes='',totRes='',specRes='',tipRes='',torqueStr='',inertiaStr='';
+  var checks=[],steps=[];
+
+  var cobotTorqueLimit=rLimit*2.5;
+  var cobotInertiaLimit=rLimit*0.1;
+
+  var I_part_roll=0,I_part_pitch=0;
+  var shape=el('shape')?el('shape').value:'cyl';
+  var L_m=partL/1000, OD_m=getPartOD()/1000;
+
+  if(shape==='cad'){
+    var ixx=gv('ixx'),iyy=gv('iyy'),izz=gv('izz');
+    var unit=el('cadUnits')?el('cadUnits').value:'gmm';
+    var mult=(unit==='gmm')?1e-9:(unit==='kgcm'?1e-4:1);
+    I_part_pitch=Math.max(ixx,iyy)*mult; I_part_roll=izz*mult;
+  }else if(shape==='rect'||shape==='sq'){
+    var W_m=(shape==='sq')?OD_m:(gv('partW')/1000);
+    var I_base=(1/12)*m*(L_m*L_m+W_m*W_m);
+    I_part_pitch=I_base; I_part_roll=I_base;
+  }else{
+    var I_base=(1/12)*m*(3*(OD_m/2)*(OD_m/2)+L_m*L_m);
+    I_part_pitch=I_base; I_part_roll=I_base;
+  }
+  var I_tool_base=(1/12)*gm*(0.1*0.1+0.1*0.1);
+
+  if(calcMode==='jaw'){
+    var L=Math.max(1,gv('fingerLen'));
+    var fW=Math.max(1,gv('fingerWidth'));
+    var eN=el('nFing'); var N=eN?(parseInt(eN.value)||2):2;
+    var gripP=gv('gripPos');
+
+    var F_slip=(Fe*A)/(N*mu);
+    var cgOff=Math.abs(gripP-cgP);
+    var M_cg=W*cgOff;
+    var F_cgtip=(M_cg*A)/L;
+    var finBottomFromBase=Math.max(0,gripP-L/2);
+    var cgOver=Math.max(0,cgP-finBottomFromBase);
+    var F_itip=(Fi*cgOver*A)/L;
+    var F_final=Math.max(F_slip,F_cgtip,F_itip);
+    var F_total=F_final*N;
+    var specMargin=actuationType==='pneu'?1.5:1.2;
+    if(el('specMultLabel'))el('specMultLabel').textContent=actuationType==='pneu'?'+50% Air Margin':'+20% Torque Margin';
+    var F_spec=F_total*specMargin;
+
+    var actBaseZ=50;
+    var partDistZ=orient==='V'?(adpZ+actBaseZ+(partL-gripP)):(adpZ+actBaseZ+getPartOD()/2);
+    var toolDistZ=adpZ+actBaseZ/2;
+    var W_tot=m+gm;
+    var cg_Z_m=((m*partDistZ+gm*toolDistZ)/W_tot)/1000;
+    var cg_X_m=adpX/1000;
+
+    var tJ6=Math.sqrt(Math.pow(W_tot*G*cg_X_m,2)+Math.pow(W_tot*a*cg_Z_m,2));
+    var tJ5=Math.sqrt(Math.pow(W_tot*G*(cg_Z_m+j5L/1000),2)+Math.pow(W_tot*a*(cg_Z_m+j5L/1000),2));
+    var tJ4=Math.sqrt(Math.pow(W_tot*G*cg_X_m,2)+Math.pow(W_tot*a*(cg_Z_m+j4L/1000),2));
+    var iJ6=I_part_roll+m*(cg_Z_m*cg_Z_m+cg_X_m*cg_X_m)+I_tool_base+gm*Math.pow((toolDistZ/1000),2);
+    var dJ5=(cg_Z_m+j5L/1000);
+    var iJ5=I_part_pitch+m*(dJ5*dJ5+cg_X_m*cg_X_m)+I_tool_base+gm*Math.pow((toolDistZ/1000+j5L/1000),2);
+    var dJ4=(cg_Z_m+j4L/1000);
+    var iJ4=I_part_roll+m*(dJ4*dJ4+cg_X_m*cg_X_m)+I_tool_base+gm*Math.pow((toolDistZ/1000+j4L/1000),2);
+
+    torqueStr='J4: '+fmt(tJ4,1)+' Nm &nbsp;|&nbsp; J5: '+fmt(tJ5,1)+' Nm &nbsp;|&nbsp; J6: '+fmt(tJ6,1)+' Nm';
+    inertiaStr='J4: '+fmt(iJ4,3)+' kg·m² &nbsp;|&nbsp; J5: '+fmt(iJ5,3)+' kg·m² &nbsp;|&nbsp; J6: '+fmt(iJ6,3)+' kg·m²';
+
+    bigRes=fmt(F_final)+'<span> N</span>';
+    totRes=fmt(F_total)+' N';
+    specRes=fmt(F_spec)+' N';
+    tipRes=fmt(Math.max(F_cgtip,F_itip))+' N';
+
+    var cgOK=cgOff<5,covPct=(L/partL)*100,covOK=covPct>=25;
+    var tOK=tJ5<cobotTorqueLimit*0.7,tWarn=tJ5>=cobotTorqueLimit*0.7&&tJ5<cobotTorqueLimit;
+    var iOK=iJ5<cobotInertiaLimit*0.7,iWarn=iJ5>=cobotInertiaLimit*0.7&&iJ5<cobotInertiaLimit;
+    var tStopJ5=iJ5*angAccel,stopOK=tStopJ5<cobotTorqueLimit;
+
+    checks=[
+      {n:'Slip Resistance',eq:'N×μ×F = '+fmt(N*mu*F_slip)+' N ≥ Fe×A',note:'Combined friction overcomes load.',val:'✓ OK',st:'pass'},
+      {n:'CG Balance Offset',eq:'|Grip − CG| = '+fmt(cgOff,1)+' mm',note:cgOK?'Grip perfectly centered.':'Offset creates rotation moment.',val:(cgOK?'✓ ':'⚠ ')+fmt(cgOff,1)+' mm',st:cgOK?'pass':'warn'},
+      {n:'Dynamic Inertia Tipping',eq:'F_itip = '+fmt(F_itip)+' N',note:cgOver<1?'No overhang mass.':'Robot acceleration swinging overhang mass.',val:F_itip<1?'✓ Safe':fmt(F_itip)+' N',st:F_itip<F_slip*0.5?'pass':'warn'},
+      {n:'Robot Payload Torque',eq:'Max J5 Limit ~ '+fmt(cobotTorqueLimit)+' Nm',note:'Checks gravity & linear inertia at weakest wrist joint.',val:(tOK?'✓ ':tWarn?'⚠ ':'✗ ')+'J5 = '+fmt(tJ5)+' Nm',st:tOK?'pass':tWarn?'warn':'fail'},
+      {n:'Dynamic Load Inertia',eq:'Max J5 Limit ~ '+fmt(cobotInertiaLimit,2)+' kg·m²',note:'Ensures the robot can safely swing the part.',val:(iOK?'✓ ':iWarn?'⚠ ':'✗ ')+'J5 = '+fmt(iJ5,2)+' kg·m²',st:iOK?'pass':iWarn?'warn':'fail'},
+      {n:'Inertia Stopping Torque',eq:'T = I_J5 × α',note:'Torque at '+fmt(angAccel)+' rad/s² angular decel.',val:(stopOK?'✓ ':'✗ ')+fmt(tStopJ5)+' Nm',st:stopOK?'pass':'fail'}
+    ];
+
+    var typeN=gripType==='int'?'<b>Internal grip:</b> Forces point outward.':'<b>External grip:</b> Forces point inward.';
+    steps=[
+      {n:'1',t:'Gravity (Weight)',f:'W = m × g',l:'W = '+m+' × 9.81 = '+fmt(W)+' N',e:'Base downward force on part due to gravity.',d:'W'},
+      {n:'2',t:'Inertia Force',f:'F_i = m × a',l:'F_i = '+m+' × '+a+' = '+fmt(Fi)+' N',e:'Force generated by robot arm linear acceleration.',d:'Fi'},
+      {n:'3',t:'Effective Load',f:'Fe = √(W² + F_i²)',l:'Fe = √('+fmt(W)+'² + '+fmt(Fi)+'²) = '+fmt(Fe)+' N',e:'Pythagorean combination of gravity and lateral inertia.',d:'Fe'},
+      {n:'4',t:'Slip Force',f:'F_slip = (Fe × A) / (N × μ)',l:'F_slip = ('+fmt(Fe)+' × '+A+') / ('+N+' × '+mu+') = '+fmt(F_slip)+' N',e:'Force required per finger to prevent slipping. '+typeN,d:'mu'},
+      {n:'5',t:'Static Tipping Force',f:'F_cgtip = (M_cg × A) / L',l:'F_cgtip = ('+fmt(M_cg)+' × '+A+') / '+L+' = '+fmt(F_cgtip)+' N',e:'Finger length L provides leverage to resist static tipping.',d:'A'},
+      {n:'6',t:'Inertia Tipping Force',f:'F_itip = (F_i × overhang × A) / L',l:'F_itip = ('+fmt(Fi)+' × '+fmt(cgOver)+' × '+A+') / '+L+' = '+fmt(F_itip)+' N',e:'Acceleration swings mass hanging below the fingers.',d:'Fi'},
+      {n:'7',t:'Final Finger Force',f:'F_final = max(F_slip, F_cgtip, F_itip)',l:'F_final = max('+fmt(F_slip)+', '+fmt(F_cgtip)+', '+fmt(F_itip)+') = '+fmt(F_final)+' N',e:'Largest physical requirement dictates the design constraint.',d:'N'},
+      {n:'8',t:'J6 Wrist Torque',f:'J6 = √(M_stat² + M_dyn²)',l:'J6 = '+fmt(tJ6)+' Nm',e:'Total twisting and bending torque at Tool0 faceplate.',d:'Z_J6'},
+      {n:'9',t:'J5 Pitch Torque',f:'J5 = √(M_stat_J5² + M_dyn_J5²)',l:'J5 = '+fmt(tJ5)+' Nm',e:'Leverage extended by J5 distance. Worst-case horizontal arm.',d:'Z_J5'},
+      {n:'10',t:'Dynamic Inertia',f:'I_tot = I_base + m×d²',l:'I_J5 = '+fmt(iJ5,3)+' kg·m²',e:'Parallel axis theorem: rotational resistance at the wrist.',d:'I_total'}
+    ];
+
+    if(actuationType==='pneu'){
+      var gTime=gv('gripTime')||0.5,tLen=gv('tubeLen')||1000;
+      var vol_cyl=(Math.PI*16*16*20)/1000000,vol_tube=(Math.PI*2*2*tLen)/1000000;
+      var vol_tot=vol_cyl+vol_tube;
+      var flowRate=(vol_tot/gTime)*60*7;
+      if(el('airFlowRes'))el('airFlowRes').innerHTML=fmt(flowRate,1)+' <span style="font-size:15px;color:var(--text3)">NL/min</span>';
+      steps.push({n:'11',t:'Air Consumption',f:'Q = (V_tot / t) × 60 × P_ratio',l:'Q = '+fmt(flowRate,1)+' NL/min',e:'Volumetric flow rate from compressor using Boyle\'s Law.',d:'P'});
+    }
+
+  }else{
+    var n=Math.max(1,gv('nCups'));
+    var d=Math.max(1,gv('cupDia'));
+    var vac=Math.max(1,gv('vacLevel'));
+    var vLayout=el('vacLayout')?el('vacLayout').value:'grid';
+    var cSpace=gv('cupSpaceX');
+
+    var P_pa=vac*1000;
+    var r_m=(d/2)/1000;
+    var a_cup=Math.PI*r_m*r_m;
+    var F_theoretical=P_pa*a_cup*n;
+    var F_req=0;
+    var desc='';
+
+    if(orient==='V'){
+      F_req=(Fe*A)/mu;
+      desc='Side-Grip (Shear) requires high vacuum to create mechanical friction against gravity.';
+    }else{
+      F_req=Fe*A;
+      desc='Top-Down (Direct) opposes gravity directly without relying on shear friction.';
+    }
+
+    var A_req_total=F_req/P_pa;
+    var A_req_per_cup=(A_req_total/n)*1000000;
+    var actual_A_per_cup=(a_cup*1000000);
+    var isSafe=actual_A_per_cup>=A_req_per_cup;
+
+    var adp_Z_m=adpZ/1000,adp_X_m=adpX/1000;
+    var mfd_Z_m=0.03,cg_Z_m=(partL/2)/1000;
+    var total_Z_arm=adp_Z_m+mfd_Z_m+cg_Z_m;
+    var W_tot=m+gm;
+    var cg_Z_m_tot=(m*total_Z_arm+gm*(adp_Z_m+mfd_Z_m/2))/W_tot;
+    var cg_X_m_tot=adpX/1000;
+
+    var tJ6=Math.sqrt(Math.pow(W_tot*G*cg_X_m_tot,2)+Math.pow(W_tot*a*cg_Z_m_tot,2));
+    var tJ5=Math.sqrt(Math.pow(W_tot*G*(cg_Z_m_tot+j5L/1000),2)+Math.pow(W_tot*a*(cg_Z_m_tot+j5L/1000),2));
+    var tJ4=Math.sqrt(Math.pow(W_tot*G*cg_X_m_tot,2)+Math.pow(W_tot*a*(cg_Z_m_tot+j4L/1000),2));
+
+    var I_manifold_expansion=0;
+    if(vLayout==='linear') I_manifold_expansion=(1/12)*gm*Math.pow((n*cSpace/1000),2);
+    else if(vLayout==='grid'){var cols=Math.ceil(Math.sqrt(n));I_manifold_expansion=(1/12)*gm*(Math.pow((cols*cSpace/1000),2)+Math.pow((cols*cSpace/1000),2));}
+    else if(vLayout==='radial') I_manifold_expansion=(1/2)*gm*Math.pow((cSpace/1000),2);
+
+    var iJ6=I_part_roll+m*(cg_Z_m_tot*cg_Z_m_tot+cg_X_m_tot*cg_X_m_tot)+I_tool_base+I_manifold_expansion;
+    var iJ5=I_part_pitch+m*Math.pow((cg_Z_m_tot+j5L/1000),2)+I_tool_base+I_manifold_expansion;
+    var iJ4=I_part_roll+m*Math.pow((cg_Z_m_tot+j4L/1000),2)+I_tool_base+I_manifold_expansion;
+
+    torqueStr='J4: '+fmt(tJ4,1)+' Nm &nbsp;|&nbsp; J5: '+fmt(tJ5,1)+' Nm &nbsp;|&nbsp; J6: '+fmt(tJ6,1)+' Nm';
+    inertiaStr='J4: '+fmt(iJ4,3)+' kg·m² &nbsp;|&nbsp; J5: '+fmt(iJ5,3)+' kg·m² &nbsp;|&nbsp; J6: '+fmt(iJ6,3)+' kg·m²';
+
+    bigRes=fmt(A_req_per_cup)+'<span> mm²</span>';
+    totRes=fmt(F_theoretical)+' N';
+    specRes=fmt(F_req)+' N';
+    if(el('specMultLabel'))el('specMultLabel').textContent='Safety '+A+'×';
+    tipRes='N/A';
+
+    var tOK=tJ5<cobotTorqueLimit*0.7,tWarn=tJ5>=cobotTorqueLimit*0.7&&tJ5<cobotTorqueLimit;
+    var iOK=iJ5<cobotInertiaLimit*0.7,iWarn=iJ5>=cobotInertiaLimit*0.7&&iJ5<cobotInertiaLimit;
+    var tStopJ5=iJ5*angAccel,stopOK=tStopJ5<cobotTorqueLimit;
+
+    checks=[
+      {n:'Cup Area Sufficiency',eq:'Actual = '+fmt(actual_A_per_cup,0)+' mm² ≥ Req = '+fmt(A_req_per_cup,0)+' mm²',note:desc,val:(isSafe?'✓ Safe':'✗ Too Small'),st:isSafe?'pass':'fail'},
+      {n:'Shear Friction Check',eq:'μ = '+mu,note:'If oily, μ drops to 0.1 and shear parts fall.',val:orient==='V'&&mu<0.3?'⚠ Low Friction':'✓ OK',st:orient==='V'&&mu<0.3?'warn':'pass'},
+      {n:'Robot Payload Torque',eq:'Max J5 ~ '+fmt(cobotTorqueLimit)+' Nm',note:'Gravity & linear inertia at weakest wrist joint.',val:(tOK?'✓ ':tWarn?'⚠ ':'✗ ')+'J5 = '+fmt(tJ5)+' Nm',st:tOK?'pass':tWarn?'warn':'fail'},
+      {n:'Dynamic Load Inertia',eq:'Max J5 ~ '+fmt(cobotInertiaLimit,2)+' kg·m²',note:'Ensures robot can safely stop the part spinning.',val:(iOK?'✓ ':iWarn?'⚠ ':'✗ ')+'J5 = '+fmt(iJ5,2)+' kg·m²',st:iOK?'pass':iWarn?'warn':'fail'},
+      {n:'Inertia Stopping Torque',eq:'T = I_J5 × α',note:'Torque when stopping at '+fmt(angAccel)+' rad/s².',val:(stopOK?'✓ ':'✗ ')+fmt(tStopJ5)+' Nm',st:stopOK?'pass':'fail'}
+    ];
+
+    steps=[
+      {n:'1',t:'Gravity (Weight)',f:'W = m × g',l:'W = '+m+' × 9.81 = '+fmt(W)+' N',e:'Base downward force on part due to gravity.',d:'W'},
+      {n:'2',t:'Inertia Force',f:'F_i = m × a',l:'F_i = '+m+' × '+a+' = '+fmt(Fi)+' N',e:'Force from robot arm linear acceleration.',d:'Fi'},
+      {n:'3',t:'Effective Load',f:'Fe = √(W² + F_i²)',l:'Fe = √('+fmt(W)+'² + '+fmt(Fi)+'²) = '+fmt(Fe)+' N',e:'Pythagorean sum of gravity and inertia.',d:'Fe'},
+      {n:'4',t:'Required Force',f:'F_req = (Fe × A)'+(orient==='V'?' / μ':''),l:'F_req = '+fmt(F_req)+' N',e:orient==='V'?'Shear: vacuum creates normal force, friction lifts.':'Direct lift opposing gravity.',d:'mu'},
+      {n:'5',t:'Theoretical Lift',f:'F_theo = P × Area × n',l:'F_theo = '+fmt(F_theoretical)+' N',e:'Theoretical lift assuming perfect 100% seal.',d:'P'},
+      {n:'6',t:'Required Area/Cup',f:'Area = F_req / (P × n)',l:'Area = '+fmt(A_req_per_cup,0)+' mm²',e:'Each cup must have at least this area under max acceleration.',d:'N'},
+      {n:'7',t:'J6 Wrist Torque',f:'J6 = √(M_stat² + M_dyn²)',l:'J6 = '+fmt(tJ6)+' Nm',e:'Twisting and bending at Tool0 faceplate.',d:'Z_J6'},
+      {n:'8',t:'J5 Pitch Torque',f:'J5 = √(M_stat_J5² + M_dyn_J5²)',l:'J5 = '+fmt(tJ5)+' Nm',e:'Leverage extended by J5 distance.',d:'Z_J5'},
+      {n:'9',t:'Dynamic Inertia',f:'I_tot = I_base + m×d²',l:'I_J5 = '+fmt(iJ5,3)+' kg·m²',e:'Parallel axis theorem at wrist.',d:'I_total'}
+    ];
+
+    var gTime=gv('gripTime')||0.5,tLen=gv('tubeLen')||1000;
+    var vol_cup=(2/3)*Math.PI*Math.pow(d/2,3)*n/1000000,vol_tube=(Math.PI*3*3*tLen)/1000000;
+    var flowRate=((vol_cup+vol_tube)/gTime)*60;
+    if(el('airFlowRes'))el('airFlowRes').innerHTML=fmt(flowRate,1)+' <span style="font-size:15px;color:var(--text3)">NL/min</span>';
+    steps.push({n:'10',t:'Vacuum Air Consumption',f:'Q = (V_tot / t) × 60',l:'Q = '+fmt(flowRate,1)+' NL/min',e:'Volumetric flow rate for ejector/pump.',d:'P'});
+  }
+
+  // APPLY RESULTS
+  if(el('bigF'))el('bigF').innerHTML=bigRes;
+  if(el('aTotal'))el('aTotal').textContent=totRes;
+  if(el('aSpec'))el('aSpec').textContent=specRes;
+  if(el('aTip'))el('aTip').textContent=tipRes;
+  if(el('aTorque'))el('aTorque').innerHTML=torqueStr;
+  if(el('aInertia'))el('aInertia').innerHTML=inertiaStr;
+
+  var anyFail=false,anyWarn=false;
+  for(var i=0;i<checks.length;i++){if(checks[i].st==='fail')anyFail=true;if(checks[i].st==='warn')anyWarn=true;}
+  var vb=el('vbadge'),vs=el('vsub');
+  if(vb&&vs){
+    if(anyFail){vb.className='status-badge fail';vb.textContent='✗ ENGINEERING ALERT';vs.textContent='Failure risk detected in limits';}
+    else if(anyWarn){vb.className='status-badge warn';vb.textContent='⚠ SAFE WITH WARNINGS';vs.textContent='Review highlighted parameter alerts';}
+    else{vb.className='status-badge pass';vb.textContent='✓ SECURE PAYLOAD';vs.textContent='All physics checks passed safely';}
+  }
+
+  // RENDER CHECKS
+  if(el('checksArea')){
+    var html="";
+    for(var j=0;j<checks.length;j++){
+      var c=checks[j];
+      html+='<div class="check-item"><div class="check-dot '+c.st+'"></div><div style="flex:1;min-width:0"><div class="check-name">'+c.n+'</div><div class="check-eq">'+c.eq+'</div><div class="check-note">'+c.note+'</div></div><div class="check-val '+c.st+'">'+c.val+'</div></div>';
+    }
+    el('checksArea').innerHTML=html;
+  }
+
+  // RENDER FORMULAS
+  if(el('formulaArea')){
+    var fHtml='<div class="formula-legend"><strong style="color:var(--accent2)">Variable Legend:</strong> &nbsp; <strong>W_tot</strong>=Total Payload (kg) &nbsp;|&nbsp; <strong>X_ecc</strong>=Eccentricity (m) &nbsp;|&nbsp; <strong>Z_J6</strong>=Lever to J6 &nbsp;|&nbsp; <strong>μ</strong>=Friction &nbsp;|&nbsp; <strong>P</strong>=Vacuum (kPa)</div>';
+    for(var k=0;k<steps.length;k++){
+      var s=steps[k];
+      var tipText=dictionary[s.d]||'Engineering Definition';
+      fHtml+='<div class="formula-step"><div class="fs-num">'+s.n+'</div><div class="fs-body"><div class="fs-title">'+s.t+'</div><div><span class="fs-formula" data-tip="'+tipText+'">'+s.f+'</span></div><div><span class="fs-result">→ '+s.l+'</span></div><div class="fs-explain">'+s.e+'</div></div></div>';
+    }
+    el('formulaArea').innerHTML=fHtml;
+  }
+
+  // BUILD 2D/3D
+  var eShape=el('shape'),eFing=el('nFing'),eCups=el('nCups');
+  var vacLayout=el('vacLayout')?el('vacLayout').value:'grid';
+  var gSpan=getGripContactDia();
+  var d_actW=100,d_actH=40,d_actD=80;
+
+  if(calcMode==='jaw'){
+    d_actW=Math.max(100,gSpan+60);
+    d_actD=Math.max(60,d_actW*0.5);
+    d_actH=Math.max(35,20+gSpan*0.05);
+  }else{
+    var nC=eCups?parseInt(eCups.value):4;
+    var cD=parseFloat((el('cupDia')&&el('cupDia').value)||30);
+    var cS=parseFloat((el('cupSpaceX')&&el('cupSpaceX').value)||50);
+    if(vacLayout==='linear'){var spanX=(nC-1)*cS;d_actW=spanX+cD+40;d_actD=cD+40;}
+    else if(vacLayout==='grid'){var cols=Math.ceil(Math.sqrt(nC)),rows=Math.ceil(nC/cols),spanX=(cols-1)*cS,spanZ=(rows-1)*cS;d_actW=spanX+cD+40;d_actD=spanZ+cD+40;}
+    else if(vacLayout==='radial'){d_actW=(cS*2)+cD+40;d_actD=d_actW;}
+    d_actH=40;
+  }
+
+  var pd={m:m,partL:partL,partOD:getPartOD(),gripD:gSpan,cgP:cgP,
+    gripP:gv('gripPos'),L:gv('fingerLen'),
+    N:eFing?(parseInt(eFing.value)||2):2,
+    shape:eShape?eShape.value:'cyl',
+    innerDia:gv('innerDia'),discThick:gv('discThick'),gripType:gripType,
+    adpZ:adpZ,adpX:adpX,vacD:gv('cupDia'),nCups:gv('nCups'),spaceX:gv('cupSpaceX'),
+    actW:d_actW,actH:d_actH,actD:d_actD,vacLayout:vacLayout};
+
+  if(calcMode==='jaw'){if(orient==='V')drawV_Jaw(pd);else drawH_Jaw(pd);}
+  else{if(orient==='V')drawShear_Vac(pd);else drawDirect_Vac(pd);}
+  if(t3.ready)build3D(pd);
+  updateCharts();
+}
+
+// ═══════ CHARTS ENGINE ═══════
+var chartInstance=null;
+function switchTab(tabId){
+  activeTab=tabId;
+  document.querySelectorAll('.tab-item').forEach(function(t){
+    if(t.id==='tabEnv')t.className='tab-item special';
+    else t.classList.remove('active');
+  });
+  var map={chartGrip:'tabGrip',chartFric:'tabFric',chartTorque:'tabTorque',chartOffset:'tabOffset',chartEnv:'tabEnv'};
+  var tEl=el(map[tabId]);
+  if(tEl){if(tabId==='chartEnv')tEl.className='tab-item special active';else tEl.className='tab-item active';}
+  updateCharts();
+}
+
+function updateChartColors(){
+  if(!chartInstance)return;
+  var isDark=document.body.getAttribute('data-theme')!=='light';
+  var textCol=isDark?'#94a3b8':'#64748b';
+  var gridCol=isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.08)';
+  chartInstance.options.scales.x.ticks.color=textCol;
+  chartInstance.options.scales.y.ticks.color=textCol;
+  chartInstance.options.scales.x.grid.color=gridCol;
+  chartInstance.options.scales.y.grid.color=gridCol;
+  if(chartInstance.options.plugins&&chartInstance.options.plugins.legend)
+    chartInstance.options.plugins.legend.labels.color=textCol;
+  chartInstance.update();
+}
+
+function updateCharts(){
+  var ctxEl=el('mainChart'); if(!ctxEl)return;
+  var ctx=ctxEl.getContext('2d');
+  var m=gv('mass'),mu=gv('mu')||0.15;
+  var isDark=document.body.getAttribute('data-theme')!=='light';
+  var textCol=isDark?'#94a3b8':'#64748b';
+  var gridCol=isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.08)';
+  var commonOpts={
+    responsive:true,maintainAspectRatio:false,animation:{duration:350},
+    scales:{x:{ticks:{color:textCol,font:{family:'Space Grotesk',size:11}},grid:{color:gridCol}},y:{ticks:{color:textCol,font:{family:'Space Grotesk',size:11}},grid:{color:gridCol}}},
+    plugins:{legend:{labels:{color:textCol,font:{family:'Space Grotesk',weight:'bold',size:12}}}}
+  };
+  var explanation='',cConfig={};
+
+  if(activeTab==='chartGrip'){
+    var labels=[],data=[];
+    for(var a=0;a<=10;a++){var Fe=Math.sqrt(Math.pow(m*G,2)+Math.pow(m*a,2));labels.push(a);data.push((Fe*4)/mu);}
+    cConfig={type:'line',data:{labels:labels,datasets:[{label:'Required Force (N) vs Acceleration (m/s²)',data:data,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.12)',fill:true,tension:0.4,borderWidth:2,pointRadius:3,pointBackgroundColor:'#3b82f6'}]},options:commonOpts};
+    explanation="<strong>Force Safety Frontier:</strong> This curve shows how robot acceleration exponentially increases the required gripping force due to dynamic inertia combining with gravity.";
+  }else if(activeTab==='chartFric'){
+    var labels=[],data=[];
+    for(var f=0.05;f<=0.8;f+=0.05){labels.push(f.toFixed(2));var Fe=Math.sqrt(Math.pow(m*G,2)+Math.pow(m*2,2));data.push((Fe*4)/f);}
+    cConfig={type:'line',data:{labels:labels,datasets:[{label:'Force (N) vs Friction Coefficient (μ)',data:data,borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,0.1)',fill:true,tension:0.4,borderWidth:2}]},options:commonOpts};
+    explanation="<strong>Friction Sensitivity:</strong> Shows extreme sensitivity of grip force to surface friction. A drop from μ=0.3 to μ=0.1 triples the required clamping force.";
+  }else if(activeTab==='chartOffset'){
+    var labels=[],data=[],pL=getPartLen();
+    for(var off=0;off<=pL/2;off+=Math.max(1,pL/10)){labels.push(off.toFixed(0));var M_cg=(m*G)*off;data.push((M_cg*4)/Math.max(1,gv('fingerLen')));}
+    cConfig={type:'line',data:{labels:labels,datasets:[{label:'Force (N) vs CG Offset (mm)',data:data,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,0.1)',fill:true,tension:0.4,borderWidth:2}]},options:commonOpts};
+    explanation="<strong>CG Offset Penalty:</strong> Visualizes the penalty of gripping the part off-center. Even small offsets generate large tipping moments that jaws must resist.";
+  }else if(activeTab==='chartTorque'){
+    var labels=[],data=[];
+    var tStr=el('aTorque')?el('aTorque').textContent:'';
+    var parts=tStr.split('|');
+    if(parts.length===3){
+      labels=['Axis 4 (Roll)','Axis 5 (Pitch)','Axis 6 (Flange)'];
+      data.push(parseFloat(parts[0].replace(/[^\d.-]/g,'')),parseFloat(parts[1].replace(/[^\d.-]/g,'')),parseFloat(parts[2].replace(/[^\d.-]/g,'')));
+    }
+    cConfig={type:'bar',data:{labels:labels,datasets:[{label:'Torque Load (Nm)',data:data,borderColor:'#22c55e',backgroundColor:['rgba(239,68,68,0.7)','rgba(245,158,11,0.7)','rgba(34,197,94,0.7)'],borderRadius:6,borderWidth:1}]},options:commonOpts};
+    explanation="<strong>Wrist Utilization:</strong> Compares torque moments at the robot's wrist joints. High acceleration or large Z-offsets can severely strain Axis 5 and Axis 6.";
+  }else if(activeTab==='chartEnv'){
+    var a=gv('accel')||2;
+    var rLimit=Math.max(1,gv('robotLimit')||20);
+    var j5L_m=Math.max(0,gv('j5L')||100)/1000;
+    var cobotTorqueLimit=rLimit*2.5;
+    var curveData=[];
+    for(var z_mm=0;z_mm<=500;z_mm+=20){
+      var z_m=z_mm/1000;
+      var max_M=cobotTorqueLimit/((z_m+j5L_m)*Math.sqrt(G*G+a*a));
+      max_M=Math.min(max_M,rLimit);
+      curveData.push({x:z_mm,y:max_M});
+    }
+    var W_tot2=gv('mass')+gv('gm');
+    var adpZ_m2=gv('adpZ')/1000;
+    var partDistZ2=orient==='V'?(adpZ_m2+0.05+(getPartLen()-gv('gripPos'))/1000):(adpZ_m2+0.05+(getPartOD()/2)/1000);
+    if(calcMode==='vac')partDistZ2=adpZ_m2+0.03+(getPartLen()/2)/1000;
+    var toolDistZ2=(calcMode==='jaw')?(adpZ_m2+0.025):(adpZ_m2+0.015);
+    var cg_Z_m2=(gv('mass')*partDistZ2+gv('gm')*toolDistZ2)/W_tot2;
+    var envOpts=JSON.parse(JSON.stringify(commonOpts));
+    if(!envOpts.scales)envOpts.scales={};
+    envOpts.scales.x.type='linear';
+    envOpts.scales.x.title={display:true,text:'Center of Gravity Z-Offset (mm)',color:textCol};
+    envOpts.scales.y.title={display:true,text:'Allowed Payload Mass (kg)',color:textCol};
+    cConfig={type:'scatter',data:{datasets:[{type:'scatter',label:'Current Tool CG',data:[{x:cg_Z_m2*1000,y:W_tot2}],backgroundColor:'#ef4444',borderColor:'#fff',borderWidth:2,pointRadius:9,pointHoverRadius:12,order:1},{type:'line',label:'Safe Payload Envelope',data:curveData,borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,0.1)',fill:true,tension:0.3,pointRadius:0,order:2,borderWidth:2}]},options:envOpts};
+    explanation="<strong>Payload Capability Envelope:</strong> Green boundary = robot physical payload limit. Red dot = your tool's combined CG. If the dot crosses outside the green area, the robot will fault on inertia limits.";
+  }
+
+  if(chartInstance)chartInstance.destroy();
+  chartInstance=new Chart(ctx,cConfig);
+  if(el('chartExplanation'))el('chartExplanation').innerHTML='💡 '+explanation;
+}
+
+// ═══════ 2D DRAWING ENGINES ═══════
+function drawRobotArm2D(s,CX,actTop,flDia){
+  var rTop=actTop-flDia*0.4;
+  s+='<path d="M'+(CX-flDia*0.5)+',5 L'+(CX+flDia*0.5)+',5 L'+(CX+flDia*0.4)+','+rTop+' L'+(CX-flDia*0.4)+','+rTop+' Z" fill="#1e293b" stroke="#334155" stroke-width="2"/>';
+  s+='<circle cx="'+CX+'" cy="'+rTop+'" r="'+(flDia*0.45)+'" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2"/>';
+  s+='<circle cx="'+CX+'" cy="'+rTop+'" r="'+(flDia*0.2)+'" fill="#2563eb" stroke="#60a5fa" stroke-width="1.5"/>';
+  s+='<rect x="'+(CX-flDia/2)+'" y="'+(actTop-12)+'" width="'+flDia+'" height="12" rx="3" fill="#1e2d45" stroke="#334155" stroke-width="1.5"/>';
+  s+='<rect x="'+(CX-10)+'" y="'+(actTop-12)+'" width="20" height="12" fill="#0f172a"/>';
+  return s;
+}
+
+function drawPartV(s,sh,CX,pL,pR,pW,pTop,pBot,pH,iRatio){
+  var c='#f59e0b',cs='#b45309';
+  var hW=pW*Math.min(0.88,Math.max(0.25,iRatio));
+  switch(sh){
+    case 'cad':
+      s+='<rect x="'+pL+'" y="'+pTop+'" width="'+pW+'" height="'+pH+'" fill="rgba(245,158,11,0.1)" stroke="#d97706" stroke-width="2" stroke-dasharray="8,4" rx="4"/>';
+      s+='<text x="'+CX+'" y="'+(pTop+pH/2)+'" font-family="Syne Mono,monospace" font-size="12" font-weight="bold" fill="#d97706" text-anchor="middle" alignment-baseline="middle">⚙ CAD</text>';
+      break;
+    case 'cyl':
+      s+='<rect x="'+pL+'" y="'+pTop+'" width="'+pW+'" height="'+pH+'" fill="'+c+'" stroke="'+cs+'" stroke-width="2" rx="2"/>';
+      s+='<ellipse cx="'+CX+'" cy="'+(pTop+5)+'" rx="'+(pW/2)+'" ry="5" fill="#fde68a" stroke="'+cs+'" stroke-width="1.5"/>';
+      if(pBot-5>pTop+10)s+='<ellipse cx="'+CX+'" cy="'+(pBot-5)+'" rx="'+(pW/2)+'" ry="5" fill="#fde68a" stroke="'+cs+'" stroke-width="1.5"/>';
+      break;
+    case 'hcyl':
+      s+='<rect x="'+pL+'" y="'+pTop+'" width="'+pW+'" height="'+pH+'" fill="'+c+'" stroke="'+cs+'" stroke-width="2" rx="2"/>';
+      s+='<ellipse cx="'+CX+'" cy="'+(pTop+5)+'" rx="'+(pW/2)+'" ry="5" fill="#fde68a" stroke="'+cs+'" stroke-width="1.5"/>';
+      s+='<rect x="'+(CX-hW/2)+'" y="'+pTop+'" width="'+hW+'" height="'+pH+'" fill="rgba(15,23,42,0.5)" stroke="'+cs+'" stroke-width="1" stroke-dasharray="4,3"/>';
+      break;
+    case 'rect':
+    case 'sq':
+      var d=8;
+      s+='<rect x="'+pL+'" y="'+pTop+'" width="'+pW+'" height="'+pH+'" fill="'+c+'" stroke="'+cs+'" stroke-width="2" rx="2"/>';
+      s+='<line x1="'+pL+'" y1="'+pTop+'" x2="'+(pL-d)+'" y2="'+(pTop-d)+'" stroke="'+cs+'" stroke-width="1.5" opacity=".5"/>';
+      s+='<line x1="'+pR+'" y1="'+pTop+'" x2="'+(pR+d)+'" y2="'+(pTop-d)+'" stroke="'+cs+'" stroke-width="1.5" opacity=".5"/>';
+      s+='<line x1="'+(pL-d)+'" y1="'+(pTop-d)+'" x2="'+(pR+d)+'" y2="'+(pTop-d)+'" stroke="'+cs+'" stroke-width="1.5" opacity=".5"/>';
+      break;
+    case 'disc':
+      s+='<rect x="'+pL+'" y="'+pTop+'" width="'+pW+'" height="'+pH+'" fill="'+c+'" stroke="'+cs+'" stroke-width="2" rx="2"/>';
+      s+='<ellipse cx="'+CX+'" cy="'+(pTop+4)+'" rx="'+(pW/2)+'" ry="4" fill="#fde68a" stroke="'+cs+'" stroke-width="1.5"/>';
+      if(pBot-4>pTop+8)s+='<ellipse cx="'+CX+'" cy="'+(pBot-4)+'" rx="'+(pW/2)+'" ry="4" fill="#fde68a" stroke="'+cs+'" stroke-width="1.5"/>';
+      break;
+  }
+  return s;
+}
+
+function drawV_Jaw(p){
+  var W=380,H=560,CX=W/2;
+  var isInt=p.gripType==='int';
+  var sc=Math.min(220/Math.max(p.partL,1),170/Math.max(p.actW,p.partOD),2.2);
+  var pH=Math.max(22,p.partL*sc);
+  var pW=Math.max(20,p.partOD*sc);
+  var fH=Math.max(16,p.L*sc);
+  var gripDY=320;
+  var pBotY=gripDY+p.gripP*sc;
+  var pTopY=pBotY-pH;
+  var cgY=pBotY-p.cgP*sc;
+  var finTopY=gripDY-fH/2,finBotY=gripDY+fH/2;
+  var v_actW=Math.max(40,p.actW*sc),v_actH=Math.max(20,p.actH*sc);
+  var JW=Math.max(16,(v_actW-pW)/2-5);
+  if(isInt)JW=Math.max(16,pW*0.28);
+  var housingBot=finTopY-15,actBot=Math.max(120,housingBot),actTop=actBot-v_actH;
+  var aCX=CX+p.adpX*sc;
+  var flDia=Math.max(70,v_actW*0.55);
+  var pL=aCX-pW/2,pR=aCX+pW/2;
+  var jlX=pL-JW,jrX=pR;
+  if(isInt&&p.innerDia>0){var bW=Math.max(12,(p.innerDia/Math.max(p.partOD,1))*pW);jlX=aCX-bW/2;jrX=aCX+bW/2-JW;}
+
+  var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">';
+  s+='<defs>';
+  s+='<marker id="mF" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#3b82f6"/></marker>';
+  s+='<marker id="mFi" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#8b5cf6"/></marker>';
+  s+='<marker id="mR" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#ef4444"/></marker>';
+  s+='</defs>';
+
+  var v_adpZ=Math.max(10,p.adpZ*sc);
+  var fTop=actTop-v_adpZ;
+  s=drawRobotArm2D(s,CX,fTop,flDia);
+
+  if(p.adpZ>0||Math.abs(p.adpX)>0){
+    var bSpan=Math.abs(aCX-CX)+flDia,bLeft=Math.min(CX,aCX)-flDia/2;
+    s+='<rect x="'+bLeft+'" y="'+fTop+'" width="'+bSpan+'" height="'+v_adpZ+'" fill="#1e2d45" stroke="#334155" stroke-width="1.5"/>';
+  }
+
+  s+='<rect x="'+(aCX-v_actW/2)+'" y="'+actTop+'" width="'+v_actW+'" height="'+v_actH+'" rx="6" fill="#1d4ed8" stroke="#3b82f6" stroke-width="2"/>';
+  s+='<line x1="'+(aCX-v_actW/2+12)+'" y1="'+(actTop+v_actH/2)+'" x2="'+(aCX+v_actW/2-12)+'" y2="'+(actTop+v_actH/2)+'" stroke="#60a5fa" stroke-width="1.5" opacity="0.6"/>';
+
+  var jCol=isInt?'rgba(139,92,246,0.2)':'rgba(20,184,166,0.2)',jStr=isInt?'#8b5cf6':'#14b8a6';
+  var fFill=isInt?'rgba(139,92,246,0.35)':'rgba(20,184,166,0.35)';
+  if(finBotY-actBot>0){
+    s+='<rect x="'+jlX+'" y="'+actBot+'" width="'+JW+'" height="'+(finBotY-actBot)+'" rx="2" fill="'+jCol+'" stroke="'+jStr+'" stroke-width="2"/>';
+    s+='<rect x="'+jrX+'" y="'+actBot+'" width="'+JW+'" height="'+(finBotY-actBot)+'" rx="2" fill="'+jCol+'" stroke="'+jStr+'" stroke-width="2"/>';
+    s+='<rect x="'+jlX+'" y="'+finTopY+'" width="'+JW+'" height="'+fH+'" fill="'+fFill+'" stroke="'+jStr+'" stroke-width="2.5"/>';
+    s+='<rect x="'+jrX+'" y="'+finTopY+'" width="'+JW+'" height="'+fH+'" fill="'+fFill+'" stroke="'+jStr+'" stroke-width="2.5"/>';
+  }
+
+  var cTop=Math.max(pTopY,actTop),cBot=Math.min(pBotY,H-20);
+  if(cBot>cTop)s=drawPartV(s,p.shape,aCX,pL,pR,pW,cTop,cBot,cBot-cTop,p.innerDia/Math.max(p.partOD,1));
+
+  if(cgY<H-10&&cgY>actTop){
+    s+='<circle cx="'+aCX+'" cy="'+cgY+'" r="10" fill="#22c55e" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>';
+    s+='<line x1="'+aCX+'" y1="'+(cgY+12)+'" x2="'+aCX+'" y2="'+(cgY+38)+'" stroke="#ef4444" stroke-width="3" marker-end="url(#mR)"/>';
+    s+='<text x="'+(aCX+16)+'" y="'+(cgY+5)+'" font-family="Syne Mono,monospace" font-size="11" fill="#22c55e" font-weight="700">CG</text>';
+  }
+
+  var fCol=isInt?'#8b5cf6':'#3b82f6',fMarker=isInt?'url(#mFi)':'url(#mF)';
+  if(!isInt){
+    s+='<line x1="'+(jlX-36)+'" y1="'+gripDY+'" x2="'+(jlX+2)+'" y2="'+gripDY+'" stroke="'+fCol+'" stroke-width="2.5" marker-end="'+fMarker+'"/>';
+    s+='<line x1="'+(jrX+JW+36)+'" y1="'+gripDY+'" x2="'+(jrX+JW-2)+'" y2="'+gripDY+'" stroke="'+fCol+'" stroke-width="2.5" marker-end="'+fMarker+'"/>';
+    s+='<text x="'+(jlX-52)+'" y="'+(gripDY-6)+'" font-family="Syne Mono,monospace" font-size="10" fill="'+fCol+'" text-anchor="middle" font-weight="700">F</text>';
+    s+='<text x="'+(jrX+JW+52)+'" y="'+(gripDY-6)+'" font-family="Syne Mono,monospace" font-size="10" fill="'+fCol+'" text-anchor="middle" font-weight="700">F</text>';
+  }else{
+    s+='<line x1="'+(jlX+2)+'" y1="'+gripDY+'" x2="'+(jlX-36)+'" y2="'+gripDY+'" stroke="'+fCol+'" stroke-width="2.5" marker-end="'+fMarker+'"/>';
+    s+='<line x1="'+(jrX+JW-2)+'" y1="'+gripDY+'" x2="'+(jrX+JW+36)+'" y2="'+gripDY+'" stroke="'+fCol+'" stroke-width="2.5" marker-end="'+fMarker+'"/>';
+  }
+  s+='</svg>';
+  if(el('svgC'))el('svgC').innerHTML=s;
+}
+
+function drawH_Jaw(p){
+  var isInt=p.gripType==='int';
+  var W=380,H=460,CX=W/2,CY=260;
+  var sc=Math.min(180/Math.max(p.partOD,1),170/Math.max(p.actW,p.partOD),2.2);
+  var R=p.partOD/2*sc,JW=Math.max(16,(p.actW*sc-R*2)/2-5);
+  if(isInt)JW=Math.max(16,R*0.6);
+  var JH=Math.max(20,p.L*sc);
+  var extR=(p.shape==='cyl'||p.shape==='hcyl'||p.shape==='disc')?R:p.partOD*sc;
+  var jawY=CY-JH/2;
+  var v_actW=Math.max(40,p.actW*sc),v_actH=Math.max(20,p.actH*sc);
+  var actTop=Math.max(60,jawY-15-p.adpZ*sc-v_actH);
+  var aCX=CX+p.adpX*sc;
+  var flDia=Math.max(70,v_actW*0.55);
+  var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">';
+  s+='<defs><marker id="mF" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#3b82f6"/></marker><marker id="mFi" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#8b5cf6"/></marker><marker id="mR" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#ef4444"/></marker></defs>';
+  var v_adpZ=Math.max(10,p.adpZ*sc),fTop=actTop-v_adpZ;
+  s=drawRobotArm2D(s,CX,fTop,flDia);
+  if(p.adpZ>0||Math.abs(p.adpX)>0){var bS=Math.abs(aCX-CX)+flDia,bL=Math.min(CX,aCX)-flDia/2;s+='<rect x="'+bL+'" y="'+fTop+'" width="'+bS+'" height="'+v_adpZ+'" fill="#1e2d45" stroke="#334155" stroke-width="1.5"/>';}
+  if(actTop>=4){
+    s+='<rect x="'+(aCX-v_actW/2)+'" y="'+actTop+'" width="'+v_actW+'" height="'+v_actH+'" rx="6" fill="#1d4ed8" stroke="#3b82f6" stroke-width="2"/>';
+    var actBot=actTop+v_actH,jBodyH=jawY-actBot+JH;
+    var jCol=isInt?'rgba(139,92,246,0.2)':'rgba(20,184,166,0.2)',jStr=isInt?'#8b5cf6':'#14b8a6';
+    var fFill=isInt?'rgba(139,92,246,0.35)':'rgba(20,184,166,0.35)';
+    var faceL=aCX-extR,faceR=aCX+extR,jlX=faceL-JW,jrX=faceR;
+    if(isInt&&p.innerDia>0){var bR=R*(p.innerDia/p.partOD);jlX=aCX-bR;jrX=aCX+bR-JW;}
+    if(jBodyH>0){
+      s+='<rect x="'+jlX+'" y="'+actBot+'" width="'+JW+'" height="'+jBodyH+'" rx="2" fill="'+jCol+'" stroke="'+jStr+'" stroke-width="2"/>';
+      s+='<rect x="'+jrX+'" y="'+actBot+'" width="'+JW+'" height="'+jBodyH+'" rx="2" fill="'+jCol+'" stroke="'+jStr+'" stroke-width="2"/>';
+    }
+    s+='<rect x="'+jlX+'" y="'+jawY+'" width="'+JW+'" height="'+JH+'" fill="'+fFill+'" stroke="'+jStr+'" stroke-width="2.5"/>';
+    s+='<rect x="'+jrX+'" y="'+jawY+'" width="'+JW+'" height="'+JH+'" fill="'+fFill+'" stroke="'+jStr+'" stroke-width="2.5"/>';
+  }
+  var cP='#f59e0b',cPs='#b45309';
+  if(p.shape==='cad'){
+    s+='<rect x="'+(aCX-extR)+'" y="'+(CY-extR)+'" width="'+(extR*2)+'" height="'+(extR*2)+'" fill="rgba(245,158,11,0.1)" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" rx="4"/>';
+    s+='<text x="'+aCX+'" y="'+CY+'" font-family="Syne Mono,monospace" font-size="12" font-weight="bold" fill="#d97706" text-anchor="middle" alignment-baseline="middle">⚙ CAD</text>';
+  }else if(p.shape==='cyl'||p.shape==='hcyl'||p.shape==='disc'){
+    s+='<circle cx="'+aCX+'" cy="'+CY+'" r="'+R+'" fill="'+cP+'" stroke="'+cPs+'" stroke-width="2"/>';
+    if(p.shape==='hcyl'&&p.innerDia>0)s+='<circle cx="'+aCX+'" cy="'+CY+'" r="'+(R*(p.innerDia/p.partOD))+'" fill="rgba(15,23,42,0.6)" stroke="'+cPs+'" stroke-width="1.5"/>';
+  }else{
+    s+='<rect x="'+(aCX-extR/2)+'" y="'+(CY-extR/2)+'" width="'+extR+'" height="'+extR+'" fill="'+cP+'" stroke="'+cPs+'" stroke-width="2" rx="4"/>';
+  }
+  s+='<circle cx="'+aCX+'" cy="'+CY+'" r="10" fill="#22c55e" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>';
+  var fCol=isInt?'#8b5cf6':'#3b82f6',fM=isInt?'url(#mFi)':'url(#mF)';
+  if(!isInt){
+    s+='<line x1="'+(aCX-extR-JW-36)+'" y1="'+CY+'" x2="'+(aCX-extR-JW+2)+'" y2="'+CY+'" stroke="'+fCol+'" stroke-width="2.5" marker-end="'+fM+'"/>';
+    s+='<line x1="'+(aCX+extR+JW+36)+'" y1="'+CY+'" x2="'+(aCX+extR+JW-2)+'" y2="'+CY+'" stroke="'+fCol+'" stroke-width="2.5" marker-end="'+fM+'"/>';
+  }else{
+    s+='<line x1="'+(aCX-extR+2)+'" y1="'+CY+'" x2="'+(aCX-extR-36)+'" y2="'+CY+'" stroke="'+fCol+'" stroke-width="2.5" marker-end="'+fM+'"/>';
+    s+='<line x1="'+(aCX+extR-2)+'" y1="'+CY+'" x2="'+(aCX+extR+36)+'" y2="'+CY+'" stroke="'+fCol+'" stroke-width="2.5" marker-end="'+fM+'"/>';
+  }
+  s+='<line x1="'+aCX+'" y1="'+(CY+extR+10)+'" x2="'+aCX+'" y2="'+(CY+extR+42)+'" stroke="#ef4444" stroke-width="3" marker-end="url(#mR)"/>';
+  s+='</svg>';
+  if(el('svgC'))el('svgC').innerHTML=s;
+}
+
+function drawDirect_Vac(p){
+  var W=380,H=560,CX=W/2;
+  var sc=Math.min(220/Math.max(p.partL,1),160/Math.max(p.actW,p.partOD),2.2);
+  var pH=Math.max(22,p.partL*sc),pW=Math.max(20,Math.min(p.partOD*sc,170));
+  var cupDY=310,actBot=cupDY-15,v_actW=Math.max(40,p.actW*sc),v_actH=Math.max(20,p.actH*sc);
+  var actTop=Math.max(60,actBot-v_actH-p.adpZ*sc);
+  var aCX=CX+p.adpX*sc,flDia=Math.max(65,v_actW*0.45);
+  var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">';
+  s+='<defs><marker id="mR" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#ef4444"/></marker></defs>';
+  var v_adpZ=Math.max(10,p.adpZ*sc),fTop=actTop-v_adpZ;
+  s=drawRobotArm2D(s,CX,fTop,flDia);
+  if(p.adpZ>0||Math.abs(p.adpX)>0){var bS=Math.abs(aCX-CX)+flDia,bL=Math.min(CX,aCX)-flDia/2;s+='<rect x="'+bL+'" y="'+fTop+'" width="'+bS+'" height="'+v_adpZ+'" fill="#1e2d45" stroke="#334155" stroke-width="1.5"/>';}
+  s+='<rect x="'+(aCX-v_actW/2)+'" y="'+actTop+'" width="'+v_actW+'" height="'+(actBot-actTop)+'" rx="6" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>';
+  s+='<line x1="'+(aCX-v_actW/2+10)+'" y1="'+(actTop+(actBot-actTop)/2)+'" x2="'+(aCX+v_actW/2-10)+'" y2="'+(actTop+(actBot-actTop)/2)+'" stroke="#7dd3fc" stroke-width="1.5" opacity="0.6"/>';
+  var cDist=v_actW*0.5;
+  s+='<path d="M'+(aCX-cDist/2+8)+','+actBot+' L'+(aCX-cDist/2-8)+','+cupDY+' L'+(aCX-cDist/2+24)+','+cupDY+' Z" fill="rgba(14,165,233,0.3)" stroke="#38bdf8" stroke-width="1.5"/>';
+  s+='<path d="M'+(aCX+cDist/2-8)+','+actBot+' L'+(aCX+cDist/2-24)+','+cupDY+' L'+(aCX+cDist/2+8)+','+cupDY+' Z" fill="rgba(14,165,233,0.3)" stroke="#38bdf8" stroke-width="1.5"/>';
+  var pTopY=cupDY;
+  s=drawPartV(s,p.shape,aCX,aCX-pW/2,aCX+pW/2,pW,pTopY,pTopY+pH,pH,p.innerDia/Math.max(p.partOD,1));
+  var cgY=pTopY+pH-p.cgP*sc;
+  if(cgY<H-10&&cgY>pTopY-5){
+    s+='<circle cx="'+aCX+'" cy="'+cgY+'" r="10" fill="#22c55e" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>';
+    s+='<line x1="'+aCX+'" y1="'+(cgY+12)+'" x2="'+aCX+'" y2="'+(cgY+38)+'" stroke="#ef4444" stroke-width="3" marker-end="url(#mR)"/>';
+  }
+  s+='</svg>';
+  if(el('svgC'))el('svgC').innerHTML=s;
+}
+
+function drawShear_Vac(p){
+  var W=380,H=460,CX=W/2,CY=250;
+  var sc=Math.min(180/Math.max(p.partL,1),160/Math.max(p.actW,p.partOD),2.2);
+  var pW=Math.max(20,p.partL*sc),pH=Math.max(20,p.partOD*sc);
+  var v_actW=Math.max(40,p.actW*sc);
+  var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">';
+  s+='<defs><marker id="mR" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#ef4444"/></marker></defs>';
+  var jointX=CX+80,jointY=CY-100,flDia=Math.max(55,v_actW*0.45);
+  s+='<path d="M'+(jointX-40)+',5 L'+(jointX+40)+',5 L'+(jointX+30)+','+jointY+' L'+(jointX-30)+','+jointY+' Z" fill="#1e293b" stroke="#334155" stroke-width="2"/>';
+  s+='<circle cx="'+jointX+'" cy="'+jointY+'" r="35" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2"/>';
+  s+='<circle cx="'+jointX+'" cy="'+jointY+'" r="14" fill="#2563eb" stroke="#60a5fa" stroke-width="1.5"/>';
+  var actRight=jointX-35,actLeft=actRight-55;
+  s+='<rect x="'+actLeft+'" y="'+(jointY-flDia/2)+'" width="'+(actRight-actLeft)+'" height="'+flDia+'" fill="#1e2d45" stroke="#334155" stroke-width="2"/>';
+  s+='<rect x="'+(actLeft-12)+'" y="'+(jointY-flDia/2-10)+'" width="12" height="'+(flDia+20)+'" rx="3" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>';
+  s+='<rect x="'+(actLeft-12)+'" y="'+(jointY-9)+'" width="12" height="18" fill="#0f172a"/>';
+  var mfdRight=actLeft-12;
+  if(p.adpZ>0){var v_adpZ=Math.max(10,p.adpZ*sc),adpDia=Math.max(flDia,v_actW*0.6);s+='<rect x="'+(mfdRight-v_adpZ)+'" y="'+(jointY-adpDia/2)+'" width="'+v_adpZ+'" height="'+adpDia+'" fill="#1e2d45" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,2"/>';mfdRight-=v_adpZ;}
+  var aCY=jointY+p.adpX*sc,mfdLeft=mfdRight-30;
+  s+='<rect x="'+mfdLeft+'" y="'+(aCY-v_actW/2)+'" width="'+(mfdRight-mfdLeft)+'" height="'+v_actW+'" rx="6" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>';
+  var cupFace=mfdLeft-18,cDist=v_actW*0.5;
+  s+='<path d="M'+mfdLeft+','+(aCY-cDist/2+8)+' L'+cupFace+','+(aCY-cDist/2-8)+' L'+cupFace+','+(aCY-cDist/2+24)+' Z" fill="rgba(14,165,233,0.3)" stroke="#38bdf8" stroke-width="1.5"/>';
+  s+='<path d="M'+mfdLeft+','+(aCY+cDist/2-8)+' L'+cupFace+','+(aCY+cDist/2-24)+' L'+cupFace+','+(aCY+cDist/2+8)+' Z" fill="rgba(14,165,233,0.3)" stroke="#38bdf8" stroke-width="1.5"/>';
+  var c='#f59e0b',cs='#b45309',partLeft=cupFace-pW;
+  if(p.shape==='cad'){
+    s+='<rect x="'+partLeft+'" y="'+(aCY-pH/2)+'" width="'+pW+'" height="'+pH+'" fill="rgba(245,158,11,0.1)" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" rx="4"/>';
+  }else{
+    s+='<rect x="'+partLeft+'" y="'+(aCY-pH/2)+'" width="'+pW+'" height="'+pH+'" fill="'+c+'" stroke="'+cs+'" stroke-width="2" rx="4"/>';
+  }
+  var cgX=partLeft+pW/2,cgY=aCY+(pH/2)-p.cgP*sc;
+  s+='<circle cx="'+cgX+'" cy="'+cgY+'" r="10" fill="#22c55e" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>';
+  s+='<line x1="'+cgX+'" y1="'+(cgY+12)+'" x2="'+cgX+'" y2="'+(cgY+44)+'" stroke="#ef4444" stroke-width="3.5" marker-end="url(#mR)"/>';
+  s+='</svg>';
+  if(el('svgC'))el('svgC').innerHTML=s;
+}
+
+// ═══════ 3D MEASUREMENT ENGINE ═══════
+var raycaster=new THREE.Raycaster();
+var mouse=new THREE.Vector2();
+var measurePointsObj=[];
+var measureLine=null;
+
+function onCanvasClick(e){
+  var cv=el('c3d'); if(!cv)return;
+  var rect=cv.getBoundingClientRect();
+  mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+  mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+  raycaster.setFromCamera(mouse,t3.cam);
+  var intersects=raycaster.intersectObjects(scO,true);
+  if(intersects.length>0){
+    var p=intersects[0].point;
+    var marker=new THREE.Mesh(new THREE.SphereGeometry(5),new THREE.MeshBasicMaterial({color:0xef4444}));
+    marker.position.copy(p);
+    addO(marker);
+    measurePointsObj.push(marker);
+    if(measurePointsObj.length===2){
+      var p1=measurePointsObj[0].position,p2=measurePointsObj[1].position;
+      var dist=p1.distanceTo(p2);
+      if(el('measureLabel'))el('measureLabel').innerHTML='Laser: <span style="color:#86efac;font-size:14px">'+dist.toFixed(1)+' mm</span>';
+      var mat=new THREE.LineBasicMaterial({color:0xef4444,linewidth:2});
+      var geo=new THREE.BufferGeometry().setFromPoints([p1,p2]);
+      if(measureLine)t3.scene.remove(measureLine);
+      measureLine=new THREE.Line(geo,mat);
+      addO(measureLine);
+      measurePointsObj=[];
+    }else if(measurePointsObj.length>2){clear3DMeasures();measurePointsObj.push(marker);addO(marker);}
+  }
+}
+
+function clear3DMeasures(){
+  measurePointsObj.forEach(function(m){t3.scene.remove(m);});
+  measurePointsObj=[];
+  if(measureLine){t3.scene.remove(measureLine);measureLine=null;}
+  if(el('measureLabel'))el('measureLabel').textContent='Laser Measure: Click 2 Points';
+}
+
+// ═══════ THREE.JS 3D SCENE ═══════
+var t3={scene:null,cam:null,ren:null,sph:{th:0.65,ph:1.15,r:750},drag:false,prev:{x:0,y:0},spin:false,ready:false,animMode:false,tick:0};
+var scO=[];
+var robotJ4Group=null,robotJ5Group=null;
+
+function init3D(){
+  var cv=el('c3d'); if(!cv||!window.THREE)return;
+  var pWrapper=el('c3dWrapper');
+  var W=pWrapper?pWrapper.offsetWidth:500;
+  var H=pWrapper?pWrapper.offsetHeight:560;
+  t3.scene=new THREE.Scene();
+  t3.scene.background=new THREE.Color(0x020815);
+  t3.scene.fog=new THREE.FogExp2(0x020815,0.0006);
+  t3.cam=new THREE.PerspectiveCamera(40,W/H,1,20000);
+  camUp3();
+  t3.ren=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
+  t3.ren.setSize(W,H,false);
+  t3.ren.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  t3.ren.shadowMap.enabled=true;
+  t3.ren.shadowMap.type=THREE.PCFSoftShadowMap;
+  var hemi=new THREE.HemisphereLight(0xffffff,0x111827,0.7);
+  t3.scene.add(hemi);
+  var mainL=new THREE.DirectionalLight(0xffffff,0.9);
+  mainL.position.set(500,1000,500);
+  mainL.castShadow=true;
+  mainL.shadow.mapSize.width=2048;
+  mainL.shadow.mapSize.height=2048;
+  mainL.shadow.camera.left=-1000;mainL.shadow.camera.right=1000;
+  mainL.shadow.camera.top=1000;mainL.shadow.camera.bottom=-1000;
+  t3.scene.add(mainL);
+  var rimL=new THREE.DirectionalLight(0x3b82f6,0.3);
+  rimL.position.set(-500,300,-500);
+  t3.scene.add(rimL);
+  var grid=new THREE.GridHelper(2000,50,0x1e2d45,0x111827);
+  grid.position.y=-300;
+  t3.scene.add(grid);
+  cv.addEventListener('mousedown',function(e){t3.drag=true;t3.prev={x:e.clientX,y:e.clientY};});
+  window.addEventListener('mouseup',function(){t3.drag=false;});
+  cv.addEventListener('mousemove',function(e){
+    if(!t3.drag)return;
+    t3.spin=false;
+    t3.sph.th-=(e.clientX-t3.prev.x)*0.009;
+    t3.sph.ph-=(e.clientY-t3.prev.y)*0.009;
+    t3.sph.ph=Math.max(0.1,Math.min(Math.PI*0.88,t3.sph.ph));
+    t3.prev={x:e.clientX,y:e.clientY};
+    camUp3();
+  });
+  cv.addEventListener('wheel',function(e){
+    e.preventDefault();
+    t3.sph.r*=1+e.deltaY*0.0015;
+    t3.sph.r=Math.max(150,Math.min(10000,t3.sph.r));
+    camUp3();
+  },{passive:false});
+  cv.addEventListener('click',onCanvasClick);
+  window.addEventListener('resize',function(){
+    var pw=el('c3dWrapper');
+    if(!pw||!t3.ren)return;
+    var W=pw.offsetWidth,H=pw.offsetHeight;
+    t3.ren.setSize(W,H,false);
+    t3.cam.aspect=W/H;
+    t3.cam.updateProjectionMatrix();
+  });
+  t3.ready=true;
+  anim3D();
+  safeCalc();
+}
+
+function camUp3(){
+  t3.cam.position.set(t3.sph.r*Math.sin(t3.sph.ph)*Math.cos(t3.sph.th),t3.sph.r*Math.cos(t3.sph.ph)+50,t3.sph.r*Math.sin(t3.sph.ph)*Math.sin(t3.sph.th));
+  t3.cam.lookAt(0,30,0);
+}
+
+function toggleAnim(){
+  t3.animMode=!t3.animMode;
+  var btn=el('btnAnim');
+  if(btn){btn.innerHTML=t3.animMode?'⏸ Stop Cycle':'▶ Animate Cycle';btn.className=t3.animMode?'d3-btn playing':'d3-btn';}
+  if(!t3.animMode&&robotJ5Group&&robotJ4Group){robotJ5Group.rotation.x=0;robotJ4Group.rotation.y=0;}
+}
+
+function anim3D(){
+  requestAnimationFrame(anim3D);
+  if(t3.spin){t3.sph.th+=0.004;camUp3();}
+  if(t3.animMode&&robotJ5Group&&robotJ4Group){
+    var a=gv('accel')||2;
+    t3.tick+=Math.max(0.005,a*0.012);
+    var cycle=t3.tick%(Math.PI*4);
+    if(cycle<Math.PI){robotJ5Group.rotation.x=Math.sin(cycle)*(Math.PI/3);robotJ4Group.rotation.y=0;}
+    else if(cycle<Math.PI*2){robotJ5Group.rotation.x=0;robotJ4Group.rotation.y=Math.sin(cycle-Math.PI)*Math.PI;}
+    else if(cycle<Math.PI*3){robotJ4Group.rotation.y=Math.PI;robotJ5Group.rotation.x=Math.sin(cycle-Math.PI*2)*(Math.PI/3);}
+    else{robotJ5Group.rotation.x=0;robotJ4Group.rotation.y=Math.PI-(Math.sin(cycle-Math.PI*3)*Math.PI);}
+  }
+  if(t3.ren)t3.ren.render(t3.scene,t3.cam);
+}
+
+function resetCam(){t3.sph={th:0.65,ph:1.15,r:750};camUp3();}
+function clearSc(){for(var i=0;i<scO.length;i++){t3.scene.remove(scO[i]);}scO=[];robotJ4Group=null;robotJ5Group=null;clear3DMeasures();}
+function addO(o){t3.scene.add(o);scO.push(o);return o;}
+function mkM(geo,mat){var m=new THREE.Mesh(geo,mat);m.castShadow=true;m.receiveShadow=true;return m;}
+
+function build3D(p){
+  if(!t3.ready)return;
+  clearSc();
+  var mPart=new THREE.MeshStandardMaterial({color:0xf59e0b,roughness:0.4,metalness:0.3});
+  var mFlange=new THREE.MeshStandardMaterial({color:0x94a3b8,roughness:0.3,metalness:0.8});
+  var mRobot=new THREE.MeshStandardMaterial({color:0x1e3a5f,roughness:0.4,metalness:0.5});
+  var mActJaw=new THREE.MeshStandardMaterial({color:0x1d4ed8,roughness:0.4,metalness:0.5,emissive:0x1e3a5f,emissiveIntensity:0.2});
+  var mActVac=new THREE.MeshStandardMaterial({color:0x0284c7,roughness:0.4,metalness:0.5});
+  var mToolJaw=new THREE.MeshStandardMaterial({color:0x0f766e,roughness:0.5,metalness:0.7});
+  var mToolVac=new THREE.MeshStandardMaterial({color:0x38bdf8,roughness:0.7,metalness:0.1});
+  var OD=Math.max(10,p.partOD),L=Math.max(10,p.partL);
+  var flDia=Math.max(60,Math.min(120,p.actW*0.6));
+  var masterGroup=new THREE.Group();
+  addO(masterGroup);
+  var j4Dist=Math.max(10,gv('j4L')||300),j5Dist=Math.max(10,gv('j5L')||100);
+  robotJ4Group=new THREE.Group();
+  robotJ4Group.position.y=180+j4Dist;
+  masterGroup.add(robotJ4Group);
+  var arm4to5=mkM(new THREE.CylinderGeometry(flDia*0.6,flDia*0.8,j4Dist-j5Dist,32),mRobot);
+  arm4to5.position.y=-(j4Dist-j5Dist)/2;
+  robotJ4Group.add(arm4to5);
+  robotJ5Group=new THREE.Group();
+  robotJ5Group.position.y=-(j4Dist-j5Dist);
+  robotJ4Group.add(robotJ5Group);
+  var jointMesh=mkM(new THREE.SphereGeometry(flDia*0.85,32,32),mRobot);
+  robotJ5Group.add(jointMesh);
+  var arm5toFlange=mkM(new THREE.CylinderGeometry(flDia/2,flDia*0.6,j5Dist,32),mRobot);
+  arm5toFlange.position.y=-j5Dist/2;
+  robotJ5Group.add(arm5toFlange);
+  var flM=mkM(new THREE.CylinderGeometry(flDia/2,flDia/2,10,32),mFlange);
+  flM.position.y=-j5Dist;
+  robotJ5Group.add(flM);
+  var bridgeThickness=Math.max(10,p.adpZ);
+  if(p.adpZ>0||Math.abs(p.adpX)>0){
+    var spanX=Math.abs(p.adpX)+flDia,bridgeX=p.adpX/2;
+    var adpM=mkM(new THREE.BoxGeometry(spanX,bridgeThickness,flDia),mFlange);
+    adpM.position.set(bridgeX,-j5Dist-bridgeThickness/2,0);
+    robotJ5Group.add(adpM);
+  }
+  var actGrp=new THREE.Group();
+  actGrp.position.set(p.adpX,-j5Dist-bridgeThickness,0);
+  robotJ5Group.add(actGrp);
+  var actBox=mkM(new THREE.BoxGeometry(p.actW,p.actH,p.actD),calcMode==='jaw'?mActJaw:mActVac);
+  actBox.position.y=-p.actH/2;
+  actGrp.add(actBox);
+  var partGroup=new THREE.Group();
+  robotJ5Group.add(partGroup);
+  var pMesh;
+  if(p.shape==='cad'){
+    if(userSTLGeo){
+      pMesh=mkM(userSTLGeo,mPart);
+      pMesh.rotation.set(gv('cadRotX')*Math.PI/180,gv('cadRotY')*Math.PI/180,gv('cadRotZ')*Math.PI/180);
+      pMesh.position.y+=gv('cadOffsetY');
+    }else{
+      var w=Math.max(10,gv('partW'));
+      var cadBox=new THREE.BoxGeometry(w,L,w*0.8);
+      cadBox.translate(0,-L/2,0);
+      var wireMat=new THREE.MeshBasicMaterial({color:0xd97706,wireframe:true,transparent:true,opacity:0.5});
+      var solidMat=new THREE.MeshBasicMaterial({color:0xd97706,transparent:true,opacity:0.1});
+      pMesh=new THREE.Group();
+      pMesh.add(new THREE.Mesh(cadBox,wireMat));
+      pMesh.add(new THREE.Mesh(cadBox,solidMat));
+    }
+    partGroup.add(pMesh);
+  }else if(p.shape==='cyl'||p.shape==='hcyl'||p.shape==='disc'){
+    pMesh=mkM(new THREE.CylinderGeometry(OD/2,OD/2,L,32),mPart);
+    partGroup.add(pMesh);
+  }else{
+    pMesh=mkM(new THREE.BoxGeometry(OD,L,OD*0.8),mPart);
+    partGroup.add(pMesh);
+  }
+  if(calcMode==='jaw'){
+    var isInt=p.gripType==='int';
+    var rad=isInt?Math.max(15,p.gripD/2-15):(p.gripD/2+15);
+    for(var i=0;i<p.N;i++){
+      var angle=(i*Math.PI*2/p.N);
+      var j=mkM(new THREE.BoxGeometry(Math.max(15,p.actW*0.1),p.L+p.actH/2,Math.max(20,p.actD*0.3)),mToolJaw);
+      j.position.set(Math.cos(angle)*rad,-p.actH-p.L/2,Math.sin(angle)*rad);
+      actGrp.add(j);
+    }
+    if(p.shape==='cad'&&!userSTLGeo){partGroup.position.set(p.adpX,actGrp.position.y-p.actH/2-p.L/2+(L-p.gripP),0);}
+    else{partGroup.position.set(p.adpX,actGrp.position.y-p.actH/2-p.L/2+(L/2-p.gripP),0);}
+    if(orient==='H')partGroup.rotation.z=Math.PI/2;
+  }else{
+    for(var k=0;k<p.nCups;k++){
+      var cup=mkM(new THREE.CylinderGeometry(p.vacD/2,p.vacD/4,15,32),mToolVac);
+      var xO=0,zO=0;
+      if(p.vacLayout==='linear'){xO=(k-(p.nCups-1)/2)*p.spaceX;}
+      else if(p.vacLayout==='grid'){var cols=Math.ceil(Math.sqrt(p.nCups)),rows=Math.ceil(p.nCups/cols),r=Math.floor(k/cols),c=k%cols;xO=(c-(cols-1)/2)*p.spaceX;zO=(r-(rows-1)/2)*p.spaceX;}
+      else if(p.vacLayout==='radial'){var ang=(k/p.nCups)*Math.PI*2;xO=Math.cos(ang)*p.spaceX;zO=Math.sin(ang)*p.spaceX;}
+      cup.position.set(xO,-p.actH-7.5,zO);
+      cup.rotation.x=Math.PI;
+      actGrp.add(cup);
+    }
+    if(orient==='V'){
+      robotJ5Group.rotation.z=Math.PI/2;
+      if(p.shape==='cad'&&!userSTLGeo)partGroup.position.set(p.adpX,actGrp.position.y-p.actH-15,0);
+      else partGroup.position.set(p.adpX,actGrp.position.y-p.actH-15-L/2,0);
+      partGroup.rotation.z=-Math.PI/2;
+    }else{
+      if(p.shape==='cad'&&!userSTLGeo)partGroup.position.set(p.adpX,actGrp.position.y-p.actH-15,0);
+      else partGroup.position.set(p.adpX,actGrp.position.y-p.actH-15-L/2,0);
+    }
+  }
+  var cgSphere=new THREE.Mesh(new THREE.SphereGeometry(12,16,16),new THREE.MeshStandardMaterial({color:0x22c55e,emissive:0x14532d,roughness:0.2,metalness:0.3}));
+  var cgOffsetLocalY=(p.shape==='cad'&&!userSTLGeo)?-(L-p.cgP):(p.cgP-L/2);
+  partGroup.add(cgSphere);
+  cgSphere.position.y+=cgOffsetLocalY;
+  var maxDim=Math.max(L,OD,p.actW);
+  t3.sph.r=Math.max(680,maxDim*2.5);
+  camUp3();
+}
+
+// ── BOOT ──
+window.addEventListener('load',function(){
+  setTimeout(init3D,200);
+  onShapeChange();
+});
+</script>
+</body>
+</html>

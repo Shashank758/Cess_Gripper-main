@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gripper Force Calculator — V1</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{
+  --bg:#f4f4f0;
+  --white:#ffffff;
+  --dark:#12121a;
+  --dark2:#1e1e2a;
+  --border:#ddddd5;
+  --border2:#c5c5bb;
+  --blue:#1a56db;
+  --blue-l:#eff6ff;
+  --amber:#d97706;
+  --amber-l:#fffbeb;
+  --teal:#0f766e;
+  --teal-l:#f0fdfa;
+  --green:#15803d;
+  --green-l:#f0fdf4;
+  --green-b:#bbf7d0;
+  --red:#b91c1c;
+  --red-l:#fef2f2;
+  --red-b:#fecaca;
+  --yellow:#a16207;
+  --yellow-l:#fefce8;
+  --yellow-b:#fef08a;
+  --orange:#ea580c;
+  --orange-l:#fff7ed;
+  --text:#12121a;
+  --muted:#71717a;
+  --muted2:#a1a1aa;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Plus Jakarta Sans',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5}
+
+/* HEADER */
+.header{background:var(--dark);padding:0;border-bottom:3px solid var(--amber)}
+.header-inner{max-width:1280px;margin:0 auto;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.logo{display:flex;align-items:center;gap:14px}
+.logo-icon{width:42px;height:42px;background:var(--amber);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.logo h1{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.logo h1 span{color:var(--amber)}
+.logo-sub{font-size:11px;color:#8888aa;margin-top:2px;font-weight:400}
+.header-meta{display:flex;gap:8px;flex-wrap:wrap}
+.hbadge{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:5px;padding:5px 12px;font-size:11px;color:#8888aa;font-family:var(--mono)}
+.hbadge b{color:#ccccee}
+
+/* LAYOUT */
+.main{max-width:1280px;margin:0 auto;padding:22px 28px 0;display:grid;grid-template-columns:360px 1fr;gap:20px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.full{max-width:1280px;margin:0 auto;padding:20px 28px 60px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:900px){.full{grid-template-columns:1fr}}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:14px}
+
+/* CARDS */
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.card-head{padding:13px 16px 11px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:10px}
+.step-chip{width:24px;height:24px;border-radius:6px;background:var(--dark2);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono)}
+.card-title{font-size:13px;font-weight:700;color:var(--dark)}
+.card-body{padding:14px 16px}
+
+/* FIELDS */
+.field{margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+.field-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+.flabel{font-size:11px;font-weight:700;color:var(--dark);letter-spacing:.1px}
+.fsym{font-family:var(--mono);font-size:10px;color:var(--amber);background:var(--amber-l);border:1px solid #fed7aa;border-radius:3px;padding:1px 5px}
+.fhint{font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:4px}
+.fhint b{color:var(--dark)}
+.finput-row{display:flex;gap:6px;align-items:center}
+input[type=number]{background:var(--bg);border:1.5px solid var(--border2);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:13px;padding:6px 9px;width:100%;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none}
+input[type=number]:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(217,119,6,.12)}
+select{background:var(--bg);border:1.5px solid var(--border2);border-radius:6px;color:var(--text);font-family:var(--sans);font-size:12px;padding:6px 26px 6px 9px;width:100%;outline:none;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;cursor:pointer;transition:border-color .15s}
+select:focus{border-color:var(--amber)}
+select option{background:#fff}
+.ulab{font-size:10px;color:var(--muted2);white-space:nowrap;font-family:var(--mono);min-width:26px}
+
+/* TOGGLE */
+.tog{display:flex;border:1.5px solid var(--border2);border-radius:6px;overflow:hidden}
+.tog-opt{flex:1;padding:7px 6px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s;user-select:none;line-height:1.3;border-right:1px solid var(--border2)}
+.tog-opt:last-child{border-right:none}
+.tog-opt.on{background:var(--dark2);color:#fff}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.chip{padding:2px 8px;border:1px solid var(--border2);border-radius:99px;font-size:10px;font-family:var(--mono);color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+.chip:hover,.chip.on{border-color:var(--amber);background:var(--amber-l);color:var(--amber)}
+
+/* SLIDER */
+.srow{display:flex;align-items:center;gap:8px}
+.srow input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:3px;background:var(--border2);border-radius:99px;outline:none;cursor:pointer}
+.srow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--amber);border:2px solid #fff;box-shadow:0 0 0 2px var(--amber);cursor:pointer}
+.srow input[type=number]{max-width:62px}
+
+/* DIVIDER */
+.div{height:1px;background:var(--border);margin:11px 0}
+
+/* CONDITIONAL FIELD */
+.cond-field{display:none}
+.cond-field.show{display:block}
+
+/* RIGHT COLUMN */
+.right{display:flex;flex-direction:column;gap:14px}
+
+/* DIAGRAM */
+.dgcard{background:var(--white);border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.dghead{padding:11px 16px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.dgtitle{font-size:13px;font-weight:700}
+.dgtags{display:flex;gap:6px}
+.dgtag{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 7px}
+.dgbody{display:flex;justify-content:center;align-items:center;padding:16px;background:linear-gradient(135deg,#fafaf8,#f4f4f0);min-height:340px}
+.dgbody svg{display:block;max-width:100%;height:auto}
+.dgleg{padding:8px 16px 12px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px}
+.lgi{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted)}
+.lgd{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* ANSWER CARD */
+.ans{background:var(--dark2);border-radius:10px;padding:20px 22px;display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.ans-main{}
+.ans-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8888aa;margin-bottom:5px}
+.ans-val{font-family:var(--mono);font-size:52px;font-weight:600;color:#fff;line-height:1;letter-spacing:-1px}
+.ans-val span{font-size:18px;color:#8888aa;font-weight:400;margin-left:3px}
+.ans-extras{display:flex;gap:18px;margin-top:10px;flex-wrap:wrap}
+.ans-e .el{font-size:9px;color:#8888aa;letter-spacing:1.5px;text-transform:uppercase}
+.ans-e .ev{font-family:var(--mono);font-size:16px;color:#ccccee;margin-top:2px}
+.vbadge{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:7px;font-size:12px;font-weight:700;margin-top:6px}
+.vbadge.pass{background:rgba(21,128,61,.2);color:#86efac}
+.vbadge.warn{background:rgba(161,98,7,.2);color:#fde047}
+.vbadge.fail{background:rgba(185,28,28,.2);color:#fca5a5}
+.vsub{font-size:10px;color:#8888aa;margin-top:4px;max-width:160px}
+
+/* CHECKS */
+.chrow{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.chrow:last-child{border-bottom:none}
+.chbull{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.chbull.pass{background:var(--green)}
+.chbull.warn{background:var(--yellow)}
+.chbull.fail{background:var(--red)}
+.chname{font-size:11px;font-weight:700;margin-bottom:2px}
+.cheq{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:2px}
+.chnote{font-size:10px;color:var(--muted);line-height:1.5}
+.chval{font-family:var(--mono);font-size:11px;margin-left:auto;white-space:nowrap;padding-left:8px}
+.chval.pass{color:var(--green)}
+.chval.warn{color:var(--yellow)}
+.chval.fail{color:var(--red)}
+
+/* FORMULA SECTION */
+.fcard{background:var(--white);border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.sechead{padding:12px 16px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sectitle{font-size:13px;font-weight:700}
+.live-pill{display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--green);font-family:var(--mono);letter-spacing:1px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+.fstep{display:grid;grid-template-columns:38px 1fr;border-bottom:1px solid var(--border)}
+.fstep:last-child{border-bottom:none}
+.fsn{background:var(--bg);border-right:1px solid var(--border);font-family:var(--mono);font-size:17px;font-weight:600;color:var(--muted2);display:flex;align-items:flex-start;justify-content:center;padding-top:14px}
+.fsb{padding:12px 14px}
+.fst{font-size:11px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.fsf{font-family:var(--mono);font-size:11px;color:var(--orange);background:var(--orange-l);border:1px solid #fed7aa;border-radius:4px;padding:3px 8px;display:inline-block;margin:3px 0}
+.fsl{font-family:var(--mono);font-size:10px;color:var(--green);background:var(--green-l);border:1px solid var(--green-b);border-radius:4px;padding:3px 8px;display:inline-block;margin-bottom:4px}
+.fse{font-size:10px;color:var(--muted);line-height:1.6}
+.fse b{color:var(--dark)}
+
+/* DATASHEET TABLE */
+.dtcard{background:var(--white);border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.dttable{width:100%;border-collapse:collapse}
+.dttable thead th{background:var(--dark2);color:#fff;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px 14px;text-align:left}
+.dttable tbody tr:nth-child(even){background:var(--bg)}
+.dttable tbody tr:hover{background:var(--amber-l)}
+.dttable td{padding:9px 14px;font-size:12px;border-bottom:1px solid var(--border);vertical-align:top}
+.dttable tr:last-child td{border-bottom:none}
+.dt-sym{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:600}
+.dt-link{font-family:var(--mono);font-size:10px;color:var(--blue);background:var(--blue-l);border:1px solid #bfdbfe;border-radius:3px;padding:1px 6px;display:inline-block;margin-top:2px}
+.dt-live-cell{background:#f0fdf4 !important;border-left:3px solid var(--green) !important}
+.dt-live{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--green);display:block;margin-bottom:2px}
+.dt-how{font-size:10px;color:var(--muted);line-height:1.4;display:block}
+
+/* SECTION LABEL */
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);padding:4px 0 10px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🤖</div>
+      <div>
+        <h1>Gripper Force <span>Calculator</span></h1>
+        <div class="logo-sub">Industrial Robot Gripper Engineering Tool</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="hbadge">Version <b>V1</b></div>
+      <div class="hbadge">CESS Dynamics</div>
+      <div class="hbadge">Formula: <b>F = (m×g×A)/(N×μ)</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="main">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <div class="sidebar">
+
+    <!-- STEP 1: PART -->
+    <div class="card">
+      <div class="card-head">
+        <div class="step-chip">1</div>
+        <div class="card-title">Define Your Part</div>
+      </div>
+      <div class="card-body">
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">Part Shape</span></div>
+          <select id="shape" onchange="onShapeChange()">
+            <option value="cyl">Solid Cylinder (rod / shaft)</option>
+            <option value="hcyl">Hollow Cylinder (pipe / tube)</option>
+            <option value="rect">Rectangular Block</option>
+            <option value="sq">Square Block</option>
+            <option value="disc">Disc / Flange</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">Mass</span><span class="fsym">m</span></div>
+          <div class="fhint">How heavy is the part? Weigh it on a scale.</div>
+          <div class="finput-row">
+            <input type="number" id="mass" value="0.2" step="0.01" min="0.001" oninput="calc()">
+            <span class="ulab">kg</span>
+          </div>
+          <div class="chips">
+            <span class="chip" onclick="sv('mass',0.1);calc()">100g</span>
+            <span class="chip on" onclick="sv('mass',0.2);calc()">200g</span>
+            <span class="chip" onclick="sv('mass',0.5);calc()">500g</span>
+            <span class="chip" onclick="sv('mass',1);calc()">1kg</span>
+            <span class="chip" onclick="sv('mass',2);calc()">2kg</span>
+            <span class="chip" onclick="sv('mass',5);calc()">5kg</span>
+          </div>
+        </div>
+
+        <div class="div"></div>
+
+        <!-- SHAPE-SPECIFIC FIELDS -->
+
+        <!-- Length (cylinder, hollow, rect, sq) -->
+        <div class="field cond-field show" id="fPartLen">
+          <div class="field-row"><span class="flabel" id="lblLen">Length</span><span class="fsym">ℓ</span></div>
+          <div class="fhint" id="hintLen">Total length from one end to the other. <b>Your pipe = 163 mm.</b></div>
+          <div class="finput-row">
+            <input type="number" id="partLen" value="163" step="1" min="1" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+        </div>
+
+        <!-- Outer diameter (cyl, hcyl) -->
+        <div class="field cond-field show" id="fPartDia">
+          <div class="field-row"><span class="flabel">Outer Diameter</span><span class="fsym">⌀</span></div>
+          <div class="fhint">Outer diameter of the cylinder or pipe.</div>
+          <div class="finput-row">
+            <input type="number" id="partDia" value="60" step="1" min="1" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+        </div>
+
+        <!-- Inner diameter (hollow only) -->
+        <div class="field cond-field" id="fInnerDia">
+          <div class="field-row"><span class="flabel">Inner Diameter (Bore)</span><span class="fsym">⌀i</span></div>
+          <div class="fhint">Inner hole diameter. <b>Must be less than outer diameter.</b></div>
+          <div class="finput-row">
+            <input type="number" id="innerDia" value="40" step="1" min="1" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+        </div>
+
+        <!-- Width (rect) -->
+        <div class="field cond-field" id="fPartW">
+          <div class="field-row"><span class="flabel">Width</span><span class="fsym">W</span></div>
+          <div class="fhint">Width of the rectangular block (the face the fingers grip).</div>
+          <div class="finput-row">
+            <input type="number" id="partW" value="60" step="1" min="1" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+        </div>
+
+        <!-- Side (square) -->
+        <div class="field cond-field" id="fPartSide">
+          <div class="field-row"><span class="flabel">Side Length</span><span class="fsym">s</span></div>
+          <div class="fhint">All sides equal for a square cross-section.</div>
+          <div class="finput-row">
+            <input type="number" id="partSide" value="60" step="1" min="1" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+        </div>
+
+        <!-- Disc thickness -->
+        <div class="field cond-field" id="fDiscThick">
+          <div class="field-row"><span class="flabel">Disc Thickness</span><span class="fsym">t</span></div>
+          <div class="fhint">Thickness of the disc / flange (axis direction).</div>
+          <div class="finput-row">
+            <input type="number" id="discThick" value="20" step="1" min="1" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+        </div>
+
+        <!-- Disc diameter -->
+        <div class="field cond-field" id="fDiscDia">
+          <div class="field-row"><span class="flabel">Disc Diameter</span><span class="fsym">⌀</span></div>
+          <div class="fhint">Outer diameter of the disc or flange.</div>
+          <div class="finput-row">
+            <input type="number" id="discDia" value="120" step="1" min="1" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+        </div>
+
+        <div class="div"></div>
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">Pick Orientation</span></div>
+          <div class="fhint">Is the part <b>standing upright</b> (vertical) or <b>lying sideways</b> (horizontal) when picked?</div>
+          <div class="tog" style="margin-top:4px">
+            <div class="tog-opt on" id="btnV" onclick="setOrient('V')">↕ Vertical<br><small style="font-size:9px;font-weight:400">part standing up</small></div>
+            <div class="tog-opt" id="btnH" onclick="setOrient('H')">↔ Horizontal<br><small style="font-size:9px;font-weight:400">part lying flat</small></div>
+          </div>
+        </div>
+
+        <div class="div"></div>
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">CG Position from Bottom</span><span class="fsym">CG</span></div>
+          <div class="fhint"><b>Where is the centre of gravity?</b> For a uniform part = half the length. Change if one end is heavier (e.g. stepped bore).</div>
+          <div class="finput-row">
+            <input type="number" id="cgPos" value="81.5" step="0.5" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+          <div class="chips"><span class="chip" onclick="autoCG()">Auto (half length)</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STEP 2: GRIPPER -->
+    <div class="card">
+      <div class="card-head">
+        <div class="step-chip">2</div>
+        <div class="card-title">Define Your Gripper</div>
+      </div>
+      <div class="card-body">
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">Number of Fingers</span><span class="fsym">N</span></div>
+          <div class="fhint">How many jaw fingers touch the part. More = less force each needs.</div>
+          <select id="nFing" onchange="calc()">
+            <option value="2">2 — Standard parallel jaw</option>
+            <option value="3">3 — Three-jaw / lathe chuck style</option>
+            <option value="4">4 — Four-point angular</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">Finger Length (L)</span><span class="fsym">L</span></div>
+          <div class="fhint"><b>L = how long is the jaw that touches the part's surface.</b> NOT the robot arm length. In the diagram, this is the green jaw block height. <b>Your gripper = 40 mm.</b></div>
+          <div class="finput-row">
+            <input type="number" id="fingerLen" value="40" step="1" min="5" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">Grip Position from Bottom</span><span class="fsym">G</span></div>
+          <div class="fhint">Where on the part does the <b>centre</b> of the jaw sit? Centre of 163mm part = 81.5mm.</div>
+          <div class="finput-row">
+            <input type="number" id="gripPos" value="81.5" step="0.5" oninput="calc()">
+            <span class="ulab">mm</span>
+          </div>
+          <div class="chips">
+            <span class="chip" onclick="autoGrip()">Auto (centre)</span>
+            <span class="chip" onclick="sv('gripPos',20);calc()">Near bottom</span>
+            <span class="chip" onclick="sv('gripPos',143);calc()">Near top</span>
+          </div>
+        </div>
+
+        <div class="div"></div>
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">Friction Coefficient</span><span class="fsym">μ</span></div>
+          <div class="fhint">How grippy is the contact? <b>Steel on steel = 0.10.</b> Higher = less force needed.</div>
+          <div class="finput-row">
+            <input type="number" id="mu" value="0.1" step="0.01" min="0.01" max="1.5" oninput="calc()">
+            <span class="ulab">—</span>
+          </div>
+          <div class="chips">
+            <span class="chip on" onclick="setMu(0.10,this)">Metal 0.10</span>
+            <span class="chip" onclick="setMu(0.15,this)">Knurled 0.15</span>
+            <span class="chip" onclick="setMu(0.25,this)">Coated 0.25</span>
+            <span class="chip" onclick="setMu(0.50,this)">Rubber 0.50</span>
+            <span class="chip" onclick="setMu(0.80,this)">Silicone 0.80</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">Safety Factor</span><span class="fsym">A</span></div>
+          <div class="fhint"><b>4× = standard for robot motion.</b> Never go below 2×. Higher for faster robots.</div>
+          <div class="srow">
+            <input type="range" id="safetyR" min="1" max="10" step="0.5" value="4" oninput="syncSR()">
+            <input type="number" id="safety" value="4" step="0.5" min="1" max="10" oninput="syncSI()" style="max-width:58px">
+            <span class="ulab">×</span>
+          </div>
+          <div class="chips">
+            <span class="chip" onclick="setSF(2)">2× static</span>
+            <span class="chip on" onclick="setSF(4)">4× robot</span>
+            <span class="chip" onclick="setSF(6)">6× fast</span>
+            <span class="chip" onclick="setSF(8)">8× impact</span>
+          </div>
+        </div>
+
+        <div class="div"></div>
+
+        <div class="field">
+          <div class="field-row"><span class="flabel">Robot Acceleration</span><span class="fsym">a</span></div>
+          <div class="fhint">Peak arm acceleration. Typical FANUC = 2–5 m/s². Set 0 to ignore motion effects.</div>
+          <div class="srow">
+            <input type="range" id="accelR" min="0" max="10" step="0.5" value="2" oninput="syncAR()">
+            <input type="number" id="accel" value="2" step="0.5" min="0" oninput="syncAI()" style="max-width:58px">
+            <span class="ulab">m/s²</span>
+          </div>
+          <div class="chips">
+            <span class="chip" onclick="sv('accel',0);syncAI()">0 (off)</span>
+            <span class="chip" onclick="sv('accel',1);syncAI()">1 slow</span>
+            <span class="chip on" onclick="sv('accel',2);syncAI()">2 typical</span>
+            <span class="chip" onclick="sv('accel',5);syncAI()">5 fast</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- end sidebar -->
+
+  <!-- ═══ RIGHT COLUMN ═══ -->
+  <div class="right">
+
+    <!-- DIAGRAM -->
+    <div class="dgcard">
+      <div class="dghead">
+        <div class="dgtitle">Live Diagram — updates instantly with your inputs</div>
+        <div class="dgtags">
+          <span class="dgtag" id="dg-shape-tag">Cylinder</span>
+          <span class="dgtag" id="dg-orient-tag">Vertical Pick</span>
+        </div>
+      </div>
+      <div class="dgbody">
+        <div id="svgContainer"></div>
+      </div>
+      <div class="dgleg">
+        <div class="lgi"><div class="lgd" style="background:#1a56db"></div>Actuator</div>
+        <div class="lgi"><div class="lgd" style="background:#d97706"></div>Mount plate</div>
+        <div class="lgi"><div class="lgd" style="background:#0f766e"></div>Fingers (jaw)</div>
+        <div class="lgi"><div class="lgd" style="background:#fbbf24"></div>Part</div>
+        <div class="lgi"><div class="lgd" style="background:#15803d;border-radius:50%"></div>CG position</div>
+        <div class="lgi"><div class="lgd" style="background:#1a56db;border-radius:50%"></div>F — grip force</div>
+        <div class="lgi"><div class="lgd" style="background:#15803d;border-radius:50%"></div>μF — friction</div>
+        <div class="lgi"><div class="lgd" style="background:#b91c1c;border-radius:50%"></div>W — weight</div>
+      </div>
+    </div>
+
+    <!-- ANSWER -->
+    <div class="ans">
+      <div class="ans-main">
+        <div class="ans-label">Required Grip Force per Finger</div>
+        <div class="ans-val" id="bigF">—<span>N</span></div>
+        <div class="ans-extras">
+          <div class="ans-e"><div class="el">Total actuator</div><div class="ev" id="ansTotal">—</div></div>
+          <div class="ans-e"><div class="el">Min. spec to order</div><div class="ev" id="ansSpec">—</div></div>
+          <div class="ans-e"><div class="el">Tipping force</div><div class="ev" id="ansTip">—</div></div>
+          <div class="ans-e"><div class="el">Effective load</div><div class="ev" id="ansEffL">—</div></div>
+        </div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div class="vbadge pass" id="vbadge">✓ SAFE TO PICK</div>
+        <div class="vsub" id="vsub">All checks passed</div>
+      </div>
+    </div>
+
+    <!-- CHECKS -->
+    <div class="card">
+      <div class="sechead">
+        <div class="sectitle">Safety Checks</div>
+        <div class="live-pill"><span class="live-dot"></span>live</div>
+      </div>
+      <div id="checksArea"></div>
+    </div>
+
+  </div><!-- end right -->
+</div><!-- end main -->
+
+<!-- ══════════════════════════════════════════════════
+     3D LIVE VIEW SECTION
+══════════════════════════════════════════════════ -->
+<div style="max-width:1280px;margin:0 auto;padding:0 28px 20px">
+  <div style="background:#fff;border:1.5px solid var(--border);border-radius:10px;overflow:hidden">
+
+    <!-- Head -->
+    <div style="padding:13px 18px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="step-chip" style="background:#7c3aed">3D</div>
+        <div>
+          <div class="card-title">Interactive 3D View</div>
+          <div style="font-size:11px;color:var(--muted)">Updates with every input · Drag to rotate · Scroll to zoom</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <button onclick="toggleAutoRot()" id="btnAutoRot"
+          style="padding:5px 12px;border:1.5px solid var(--border2);border-radius:6px;background:var(--bg);font-size:11px;font-family:var(--sans);cursor:pointer;color:var(--muted)">
+          ↻ Auto-rotate: ON
+        </button>
+        <button onclick="resetCamera3D()"
+          style="padding:5px 12px;border:1.5px solid var(--border2);border-radius:6px;background:var(--bg);font-size:11px;font-family:var(--sans);cursor:pointer;color:var(--muted)">
+          ⌂ Reset view
+        </button>
+        <div style="font-size:10px;color:var(--muted2);font-family:var(--mono)">
+          <span style="color:var(--blue)">■</span> Actuator
+          <span style="color:#d97706;margin-left:8px">■</span> Mount
+          <span style="color:#0f766e;margin-left:8px">■</span> Fingers
+          <span style="color:#b45309;margin-left:8px">■</span> Arms
+          <span style="color:#fbbf24;margin-left:8px">■</span> Part
+          <span style="color:#15803d;margin-left:8px">●</span> CG
+        </div>
+      </div>
+    </div>
+
+    <!-- Canvas -->
+    <div style="width:100%;height:480px;position:relative;background:linear-gradient(135deg,#1a1a2e,#16213e)">
+      <canvas id="canvas3d" style="width:100%;height:100%;display:block;cursor:grab;touch-action:none"></canvas>
+      <div id="overlay3d" style="position:absolute;bottom:12px;left:12px;font-size:10px;color:rgba(255,255,255,.45);font-family:var(--mono);pointer-events:none;line-height:1.8">
+        Drag: rotate &nbsp;|&nbsp; Scroll: zoom &nbsp;|&nbsp; Click auto-rotate to pause
+      </div>
+      <div id="loading3d" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:14px;font-family:var(--sans)">
+        Loading 3D…
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FULL-WIDTH BOTTOM SECTIONS -->
+<div class="full">
+
+  <!-- FORMULA STEPS -->
+  <div class="fcard">
+    <div class="sechead">
+      <div class="sectitle">How to Calculate — Step by Step</div>
+      <div class="live-pill"><span class="live-dot"></span>your numbers live</div>
+    </div>
+    <div id="formulaArea"></div>
+  </div>
+
+  <!-- DATASHEET TABLE -->
+  <div class="dtcard">
+    <div class="sechead">
+      <div class="sectitle">Gripper Datasheet Reference Guide</div>
+      <div style="font-size:10px;color:var(--muted)">What to look for when ordering a gripper</div>
+    </div>
+    <table class="dttable">
+      <thead>
+        <tr>
+          <th style="min-width:160px">Datasheet Term</th>
+          <th style="min-width:52px">Symbol</th>
+          <th>What it means</th>
+          <th style="min-width:170px">How it links to our calc</th>
+          <th style="min-width:160px;background:#1a2e1a;color:#86efac">✦ Your Calculated Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Gripping / Closing Force</b></td>
+          <td><span class="dt-sym">F</span></td>
+          <td>Maximum total clamping force the gripper can produce (all fingers combined). This is the most important spec to check.</td>
+          <td>This is what Step 11 calculates. Your gripper's rated closing force must exceed this number.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-F">—</span><br><span class="dt-how">Order gripper rated ≥ this value</span></td>
+        </tr>
+        <tr>
+          <td><b>Force per Jaw / Finger</b></td>
+          <td><span class="dt-sym">F/jaw</span></td>
+          <td>Some datasheets show force per individual jaw instead of total. Multiply by number of fingers to get total.</td>
+          <td>Step 10 gives force per finger. Total = F_final × N fingers.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-Fpj">—</span><br><span class="dt-how">per finger — check if datasheet shows per-jaw or total</span></td>
+        </tr>
+        <tr>
+          <td><b>Stroke per Jaw</b></td>
+          <td><span class="dt-sym">s</span></td>
+          <td>How far each jaw moves from fully open to fully closed. Both jaws move, so total jaw opening = 2 × stroke. Must be wider than your part.</td>
+          <td>Min stroke = half your part's grip diameter. If the gripper can't open wide enough, it can't pick up the part at all.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-stroke">—</span><br><span class="dt-how">min stroke per jaw needed</span></td>
+        </tr>
+        <tr>
+          <td><b>Jaw Depth / Finger Length</b></td>
+          <td><span class="dt-sym">L</span></td>
+          <td>Length of the jaw contact surface along the part's axis. Longer = more stable grip, more tipping resistance.</td>
+          <td>This is exactly our "Finger Length L" input. The lever arm in Steps 8 & 9. Longer finger reduces tipping force needed.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-L">—</span><br><span class="dt-how">finger length you entered — must match jaw depth in datasheet</span></td>
+        </tr>
+        <tr>
+          <td><b>Max Workpiece Mass</b></td>
+          <td><span class="dt-sym">m<sub>max</sub></span></td>
+          <td>Maximum part mass the gripper is rated for (with full robot motion, not just static holding).</td>
+          <td>Must be ≥ your part mass. This is your Step 1 input m.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-mass">—</span><br><span class="dt-how">your part mass — datasheet m_max must exceed this</span></td>
+        </tr>
+        <tr>
+          <td><b>Max Allowable Jaw Moment M<sub>L</sub></b></td>
+          <td><span class="dt-sym">M<sub>L</sub></span></td>
+          <td>Max tipping/bending moment the jaw can withstand before the jaw bearing fails. If CG ≠ grip centre, this moment is created.</td>
+          <td>Calculated in Step 7: M_tip = W × CG_offset. The datasheet M_L must be greater than our M_tip.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-Mt">—</span><br><span class="dt-how">our tipping moment — datasheet M_L must exceed this</span></td>
+        </tr>
+        <tr>
+          <td><b>Weight Force on Part</b></td>
+          <td><span class="dt-sym">W = mg</span></td>
+          <td>The actual downward gravitational pull on the part. This is what friction must overcome in Step 2.</td>
+          <td>Step 1: W = m × 9.81. This is the starting force all other calculations build on.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-W">—</span><br><span class="dt-how">gravity on your part — base of all force calcs</span></td>
+        </tr>
+        <tr>
+          <td><b>Effective Load (with inertia)</b></td>
+          <td><span class="dt-sym">F<sub>eff</sub></span></td>
+          <td>Combined gravity + robot inertia force. Higher than weight alone because the robot moves.</td>
+          <td>Step 3: F_eff = √(W² + F_inertia²). Use this when quoting loads to your integrator or checking robot wrist payload.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-Feff">—</span><br><span class="dt-how">combined load including robot motion</span></td>
+        </tr>
+        <tr>
+          <td><b>IP Rating</b></td>
+          <td><span class="dt-sym">IP XX</span></td>
+          <td>Ingress Protection: 1st digit = dust (6=dustproof), 2nd digit = water (4=splash, 7=immersion). Minimum IP54 for shop floor.</td>
+          <td>Not a calculated value — choose based on environment. CNC machines spray coolant so select IP54 minimum.</td>
+          <td class="dt-live-cell" style="color:var(--muted)"><span style="font-family:var(--mono);font-size:11px;color:#0f766e;font-weight:700">IP54 min</span><br><span class="dt-how">for CNC tending with coolant</span></td>
+        </tr>
+        <tr>
+          <td><b>Repeatability</b></td>
+          <td><span class="dt-sym">±δ</span></td>
+          <td>How precisely the jaw returns to the exact same position every cycle. Critical for consistent part placement in chuck.</td>
+          <td>Not calculated — based on your tolerance requirement. Tighter part tolerances need better repeatability.</td>
+          <td class="dt-live-cell" style="color:var(--muted)"><span style="font-family:var(--mono);font-size:11px;color:#0f766e;font-weight:700">≤ ±0.05 mm</span><br><span class="dt-how">for CNC tending (±0.02mm for precision)</span></td>
+        </tr>
+        <tr>
+          <td><b>Friction Coefficient μ</b></td>
+          <td><span class="dt-sym">μ</span></td>
+          <td>Grip surface grippiness. Raw metal 0.10–0.15, knurled 0.15–0.25, rubber 0.40–0.80. Higher μ = lower grip force needed.</td>
+          <td>This is your μ input. Used in Step 5. If datasheet lists a different μ for their finger surface, update this input.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-mu">—</span><br><span class="dt-how">μ you entered — match to actual finger surface material</span></td>
+        </tr>
+        <tr>
+          <td><b>Safety Factor Applied</b></td>
+          <td><span class="dt-sym">A</span></td>
+          <td>Multiplier over theoretical minimum. Some datasheets include a built-in safety factor — ask the supplier if so.</td>
+          <td>Step 4: we applied A = <span id="dt-Aval">—</span>× to all calculations. If datasheet already includes 2×, you can reduce ours to 2× to avoid double-counting.</td>
+          <td class="dt-live-cell"><span class="dt-live" id="dt-A">—</span><br><span class="dt-how">safety factor used in all our calculations</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- end full -->
+
+<!-- CUSTOM FINGER DESIGNER -->
+<div style="max-width:1280px;margin:0 auto;padding:0 28px 60px">
+<div class="card" style="border-radius:10px;overflow:hidden">
+  <div class="card-head" style="padding:14px 20px">
+    <div class="step-chip" style="background:#0f766e">✦</div>
+    <div>
+      <div class="card-title">Custom Finger Designer</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">Design a finger that picks one part — or two parts with the same finger simultaneously</div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <div class="tog" style="border-radius:6px;overflow:hidden;width:260px">
+        <div class="tog-opt on" id="cfBtn1" onclick="setCFMode(1)">Single Part</div>
+        <div class="tog-opt" id="cfBtn2" onclick="setCFMode(2)">Dual Part (2 parts, 1 finger)</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body" style="display:grid;grid-template-columns:280px 1fr;gap:24px">
+
+    <!-- INPUTS -->
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin-bottom:12px">Finger Geometry</div>
+
+      <div class="field">
+        <div class="field-row"><span class="flabel">Finger Total Length</span><span class="fsym">L_tot</span></div>
+        <div class="fhint">Total jaw length from mounting face to tip.</div>
+        <div class="finput-row"><input type="number" id="cf_L" value="80" step="1" min="10" oninput="drawCF()"><span class="ulab">mm</span></div>
+      </div>
+      <div class="field">
+        <div class="field-row"><span class="flabel">Finger Width</span><span class="fsym">W_f</span></div>
+        <div class="fhint">Width of the finger pad that contacts the part.</div>
+        <div class="finput-row"><input type="number" id="cf_W" value="30" step="1" min="5" oninput="drawCF()"><span class="ulab">mm</span></div>
+      </div>
+      <div class="field">
+        <div class="field-row"><span class="flabel">Finger Thickness</span><span class="fsym">T</span></div>
+        <div class="fhint">Thickness of the finger body (radial depth).</div>
+        <div class="finput-row"><input type="number" id="cf_T" value="20" step="1" min="5" oninput="drawCF()"><span class="ulab">mm</span></div>
+      </div>
+
+      <div id="cfDualFields" style="display:none">
+        <div class="div"></div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:10px">Part 1 Pocket</div>
+        <div class="field">
+          <div class="field-row"><span class="flabel">Part 1 Diameter</span><span class="fsym">⌀1</span></div>
+          <div class="finput-row"><input type="number" id="cf_d1" value="60" step="1" min="5" oninput="drawCF()"><span class="ulab">mm</span></div>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="flabel">Pocket 1 Position from top</span><span class="fsym">P1</span></div>
+          <div class="fhint">Distance from finger mounting face to centre of part 1 pocket.</div>
+          <div class="finput-row"><input type="number" id="cf_p1" value="20" step="1" min="5" oninput="drawCF()"><span class="ulab">mm</span></div>
+        </div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin:10px 0">Part 2 Pocket</div>
+        <div class="field">
+          <div class="field-row"><span class="flabel">Part 2 Diameter</span><span class="fsym">⌀2</span></div>
+          <div class="finput-row"><input type="number" id="cf_d2" value="40" step="1" min="5" oninput="drawCF()"><span class="ulab">mm</span></div>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="flabel">Pocket 2 Position from top</span><span class="fsym">P2</span></div>
+          <div class="finput-row"><input type="number" id="cf_p2" value="55" step="1" min="5" oninput="drawCF()"><span class="ulab">mm</span></div>
+        </div>
+      </div>
+
+      <div id="cfSingleFields">
+        <div class="div"></div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:10px">Part Pocket</div>
+        <div class="field">
+          <div class="field-row"><span class="flabel">Part Diameter</span><span class="fsym">⌀</span></div>
+          <div class="finput-row"><input type="number" id="cf_ds" value="60" step="1" min="5" oninput="drawCF()"><span class="ulab">mm</span></div>
+        </div>
+        <div class="field">
+          <div class="field-row"><span class="flabel">Pocket Depth (V-notch)</span><span class="fsym">d</span></div>
+          <div class="fhint">How deep the V-groove or pocket is cut into the finger face. For a round part, use ≈ diameter × 0.1.</div>
+          <div class="finput-row"><input type="number" id="cf_notch" value="6" step="1" min="0" oninput="drawCF()"><span class="ulab">mm</span></div>
+        </div>
+      </div>
+
+      <div class="div"></div>
+      <div style="background:var(--teal-l);border:1px solid #99f6e4;border-radius:6px;padding:10px 12px;font-size:11px;color:#0f766e;line-height:1.7" id="cfNote">
+        Single part finger: design with a V-groove or radius pocket matching the part's OD. The pocket prevents the part from rolling sideways.
+      </div>
+    </div>
+
+    <!-- DIAGRAM -->
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin-bottom:10px">Live Finger Drawing</div>
+      <div style="background:linear-gradient(135deg,#fafaf8,#f4f4f0);border:1.5px solid var(--border);border-radius:8px;padding:16px;display:flex;justify-content:center;align-items:flex-start;min-height:320px">
+        <div id="cfSVGContainer"></div>
+      </div>
+      <div style="margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:700;color:var(--dark);margin-bottom:6px">How to make a dual-part finger:</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.8" id="cfExplain">
+          A dual-part finger has <b>two pockets</b> cut at different heights. The robot picks Part 1 from one position, then the same finger picks Part 2 from a different height without tool change. The key constraints are:<br>
+          • Pocket 1 centre must be ≥ (⌀1/2 + wall thickness) from the finger top<br>
+          • Pocket 2 centre must be ≥ (⌀2/2 + wall thickness) from Pocket 1 bottom<br>
+          • Total finger length must accommodate both pockets + wall thickness at bottom
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+const G=9.81;
+let orient='V';
+
+// ── HELPERS ──
+function gv(id){return parseFloat(document.getElementById(id).value)||0}
+function sv(id,v){document.getElementById(id).value=v}
+function fmt(v,d=2){return isFinite(v)&&!isNaN(v)?v.toFixed(d):'—'}
+
+function setOrient(o){
+  orient=o;
+  document.getElementById('btnV').classList.toggle('on',o==='V');
+  document.getElementById('btnH').classList.toggle('on',o==='H');
+  document.getElementById('dg-orient-tag').textContent=o==='V'?'Vertical Pick':'Horizontal Pick';
+  calc();
+}
+
+function autoCG(){
+  const l=getPartLen();
+  sv('cgPos',(l/2).toFixed(1));
+  calc();
+}
+function autoGrip(){
+  const l=getPartLen();
+  sv('gripPos',(l/2).toFixed(1));
+  calc();
+}
+
+function syncSR(){sv('safety',document.getElementById('safetyR').value);calc()}
+function syncSI(){document.getElementById('safetyR').value=gv('safety');calc()}
+function syncAR(){sv('accel',document.getElementById('accelR').value);calc()}
+function syncAI(){document.getElementById('accelR').value=gv('accel');calc()}
+
+function setSF(v){
+  sv('safety',v);sv('safetyR',v);
+  document.getElementById('safetyR').value=v;
+  calc();
+}
+
+let muChips=null;
+function setMu(v,el){
+  sv('mu',v);
+  if(muChips)muChips.forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  muChips=[el];
+  calc();
+}
+
+function onShapeChange(){
+  const s=document.getElementById('shape').value;
+  // Show/hide fields
+  const show=(id,show)=>{document.getElementById(id).classList.toggle('show',show)};
+  show('fPartLen', s==='cyl'||s==='hcyl'||s==='rect'||s==='sq');
+  show('fPartDia', s==='cyl'||s==='hcyl');
+  show('fInnerDia', s==='hcyl');
+  show('fPartW',   s==='rect');
+  show('fPartSide',s==='sq');
+  show('fDiscThick',s==='disc');
+  show('fDiscDia', s==='disc');
+  // Hint
+  if(s==='cyl') document.getElementById('hintLen').innerHTML='Total length from one end to the other. <b>Your pipe = 163 mm.</b>';
+  if(s==='hcyl') document.getElementById('hintLen').innerHTML='Total length of the hollow cylinder / pipe.';
+  if(s==='rect') document.getElementById('hintLen').innerHTML='Length of the rectangular block (axis direction).';
+  if(s==='sq')   document.getElementById('hintLen').innerHTML='Length of the square block (axis direction).';
+  // Shape tag
+  const names={cyl:'Solid Cylinder',hcyl:'Hollow Cylinder',rect:'Rectangular',sq:'Square Block',disc:'Disc/Flange'};
+  document.getElementById('dg-shape-tag').textContent=names[s]||s;
+  // Auto-update CG based on shape
+  autoCGSilent();
+  calc();
+}
+
+function autoCGSilent(){
+  const l=getPartLen();
+  const curCG=gv('cgPos');
+  // Only auto-update if it was already at center
+  sv('cgPos',(l/2).toFixed(1));
+}
+
+function getPartLen(){
+  const s=document.getElementById('shape').value;
+  if(s==='disc') return gv('discThick')||20;
+  return gv('partLen')||163;
+}
+function getPartDia(){
+  const s=document.getElementById('shape').value;
+  if(s==='disc') return gv('discDia')||120;
+  if(s==='sq')   return gv('partSide')||60;
+  if(s==='rect') return gv('partW')||60;
+  return gv('partDia')||60;
+}
+function getGripWidth(){
+  // Width the fingers grip (perpendicular to axis)
+  const s=document.getElementById('shape').value;
+  if(s==='disc') return gv('discDia')||120;
+  if(s==='sq')   return gv('partSide')||60;
+  if(s==='rect') return gv('partW')||60;
+  return gv('partDia')||60;
+}
+
+// ── MAIN CALCULATION ──
+function calc(){
+  const m     = Math.max(0.001, gv('mass'));
+  const partL = Math.max(1, getPartLen());
+  const partD = Math.max(1, getGripWidth());
+  const cgP   = gv('cgPos');
+  const gripP = gv('gripPos');
+  const L     = Math.max(1, gv('fingerLen'));
+  const N     = parseInt(document.getElementById('nFing').value)||2;
+  const mu    = Math.max(0.01, gv('mu'));
+  const A     = Math.max(1, gv('safety'));
+  const a     = gv('accel');
+
+  // ── FORCES ──
+  const W  = m * G;
+  const Fi = m * a;
+  const Fe = Math.sqrt(W*W + Fi*Fi);  // combined effective load
+
+  // ── SLIP FORCE ──
+  const F_slip = (Fe * A) / (N * mu);
+
+  // ── CG OFFSET ──
+  const cgOff = Math.abs(gripP - cgP);  // mm
+
+  // ── CG TIPPING MOMENT ──
+  const M_cg    = W * cgOff;                    // N·mm
+  const F_cgtip = (M_cg * A) / Math.max(1,L);  // N extra per finger
+
+  // ── INERTIA TIPPING (CG overhang below finger tip) ──
+  const finBot = Math.max(0, gripP - L/2);
+  const cgOver = Math.max(0, cgP - finBot);  // CG hanging below finger bottom (mm)
+  const M_iner  = Fi * cgOver;
+  const F_itip  = (M_iner * A) / Math.max(1,L);
+
+  // ── FINAL ──
+  const F_final = Math.max(F_slip, F_cgtip, F_itip);
+  const F_total = F_final * N;
+  const F_spec  = F_total * 1.3;
+  const M_tip   = Math.max(M_cg, M_iner);
+
+  // ── STATUS ──
+  const cgOK   = cgOff < 5;
+  const cgWarn = cgOff < 25;
+  const covPct = (L / partL) * 100;
+  const covOK  = covPct >= 25;
+  const covWar = covPct >= 12;
+  const itOK   = F_itip < F_slip * 0.2;
+  const itWarn = F_itip < F_slip * 0.5;
+
+  const anyFail= (!covOK && !covWar) || F_itip > F_slip * 0.7;
+  const anyWarn= !cgOK || !covOK || !itOK;
+  const allGood= !anyFail && !anyWarn;
+
+  // ── UPDATE BIG ANSWER ──
+  document.getElementById('bigF').innerHTML = fmt(F_final)+'<span> N</span>';
+  document.getElementById('ansTotal').textContent = fmt(F_total)+' N';
+  document.getElementById('ansSpec').textContent  = fmt(F_spec)+' N';
+  document.getElementById('ansTip').textContent   = fmt(Math.max(F_cgtip,F_itip))+' N';
+  document.getElementById('ansEffL').textContent  = fmt(Fe)+' N';
+
+  const vb=document.getElementById('vbadge');
+  const vs=document.getElementById('vsub');
+  if(anyFail){vb.className='vbadge fail';vb.textContent='✗ CHECK CAREFULLY';vs.textContent='One or more issues need attention';}
+  else if(anyWarn){vb.className='vbadge warn';vb.textContent='⚠ SAFE WITH CARE';vs.textContent='Minor items to be aware of';}
+  else{vb.className='vbadge pass';vb.textContent='✓ SAFE TO PICK';vs.textContent='All checks passed';}
+
+
+  // ── DATASHEET LIVE VALUES ──
+  const dtEl=id=>{const e=document.getElementById(id);return e||{textContent:''}};
+  dtEl('dt-F').textContent     = fmt(F_spec)+' N  ← order gripper ≥ this';
+  dtEl('dt-Fpj').textContent   = fmt(F_final)+' N per finger';
+  dtEl('dt-stroke').textContent= fmt(partD/2,1)+' mm  (= ⌀'+partD+' / 2)';
+  dtEl('dt-L').textContent     = L+' mm';
+  dtEl('dt-mass').textContent  = m+' kg';
+  dtEl('dt-Mt').textContent    = fmt(M_tip)+' N·mm';
+  dtEl('dt-W').textContent     = fmt(W)+' N  (= '+m+' × 9.81)';
+  dtEl('dt-Feff').textContent  = fmt(Fe)+' N  (= √W²+Fi²)';
+  dtEl('dt-mu').textContent    = mu;
+  dtEl('dt-A').textContent     = A+'×  (applied in Step 4)';
+  dtEl('dt-Aval').textContent  = A;
+
+  // ── CHECKS ──
+  const checks=[
+    {
+      name:'Slip Resistance — will friction hold the part?',
+      eq:`N×μ×F = ${N}×${mu}×${fmt(F_slip)} = ${fmt(N*mu*F_slip)} N ≥ W×A = ${fmt(W*A)} N`,
+      note:'Total friction from all fingers must exceed the effective load × safety factor. This is the core calculation.',
+      val:'✓ '+fmt(N*mu*F_slip)+' N ≥ '+fmt(W*A)+' N',
+      st:'pass'
+    },
+    {
+      name:'CG Balance — grip at the right point?',
+      eq:`CG offset = |${fmt(gripP,1)} − ${fmt(cgP,1)}| = ${fmt(cgOff,1)} mm`,
+      note: cgOK?'Grip is at the CG. Zero tipping. Ideal.':cgWarn?'Small offset. Small extra clamping force needed.':'Large offset! Part will try to rotate significantly.',
+      val: (cgOK?'✓':cgWarn?'⚠':'✗')+' '+fmt(cgOff,1)+' mm offset',
+      st: cgOK?'pass':cgWarn?'warn':'fail'
+    },
+    {
+      name:'CG Tipping — extra force for rotation resistance',
+      eq:`F_tip = (W×offset×A)/L = (${fmt(W,2)}×${fmt(cgOff,1)}×${A})/${L} = ${fmt(F_cgtip)} N`,
+      note:`Finger length L=${L}mm acts as a lever to resist tipping. Longer finger = less extra force needed.`,
+      val: (F_cgtip<1?'✓':F_cgtip<F_slip*0.3?'⚠':'✗')+' '+fmt(F_cgtip)+' N extra',
+      st: F_cgtip<1?'pass':F_cgtip<F_slip*0.3?'warn':'fail'
+    },
+    {
+      name:'Inertia Tipping — CG hanging below finger tip',
+      eq:`CG overhang = ${fmt(cgOver,1)} mm below finger tip → F_itip = ${fmt(F_itip)} N`,
+      note: cgOver<1?'CG is within the finger zone. No inertia tipping. Good.':'During robot acceleration, CG below the finger tip creates tilting. Grip higher on the part or use longer fingers.',
+      val: (itOK?'✓':itWarn?'⚠':'✗')+' '+fmt(F_itip)+' N',
+      st: itOK?'pass':itWarn?'warn':'fail'
+    },
+    {
+      name:'Finger Coverage — how much of the part do fingers cover?',
+      eq:`Coverage = L/partLen = ${L}/${partL} = ${fmt(covPct,0)}%`,
+      note: covOK?'Good coverage. Stable grip.':covWar?'Low coverage (< 25%). Consider longer fingers or gripping closer to CG.':'Very low coverage. High tilt risk. Change strategy.',
+      val: (covOK?'✓':covWar?'⚠':'✗')+' '+fmt(covPct,0)+'%',
+      st: covOK?'pass':covWar?'warn':'fail'
+    }
+  ];
+
+  document.getElementById('checksArea').innerHTML=checks.map(c=>`
+    <div class="chrow">
+      <div class="chbull ${c.st}" style="margin-top:4px"></div>
+      <div style="flex:1;min-width:0">
+        <div class="chname">${c.name}</div>
+        <div class="cheq">${c.eq}</div>
+        <div class="chnote">${c.note}</div>
+      </div>
+      <div class="chval ${c.st}" style="white-space:nowrap;font-size:10px">${c.val}</div>
+    </div>`).join('');
+
+  // ── FORMULA STEPS ──
+  const steps=[
+    {n:'1',title:'Gravity pulling the part down',f:'W = m × g',l:`W = ${m} × 9.81 = ${fmt(W)} N`,e:`<b>g = 9.81 m/s²</b> is constant (Earth gravity). A ${m}kg part pulls down with ${fmt(W)}N. The gripper friction must overcome this or the part falls.`},
+    {n:'2',title:'Inertia during robot acceleration',f:'F_i = m × a',l:`F_i = ${m} × ${gv('accel')} = ${fmt(Fi)} N`,e:`When the robot arm accelerates at ${gv('accel')} m/s², the part wants to stay behind (like being pushed back in a car seat). This acts <b>sideways</b> — perpendicular to gravity.`},
+    {n:'3',title:'Combined effective load (gravity + inertia)',f:'F_eff = √(W² + F_i²)',l:`F_eff = √(${fmt(W)}² + ${fmt(Fi)}²) = ${fmt(Fe)} N`,e:`Gravity acts <b>downward</b>, inertia acts <b>sideways</b> — they're at 90° to each other. Use Pythagoras. This ${fmt(Fe)}N is the total force the grip must overcome.`},
+    {n:'4',title:'Apply safety factor',f:'F_safe = F_eff × A',l:`F_safe = ${fmt(Fe)} × ${A} = ${fmt(Fe*A)} N`,e:`Real robots jerk at start/stop, vibrate, and experience unexpected loads. Safety factor A=${A}× means we design for ${A}× the minimum. <b>Never design at the minimum.</b>`},
+    {n:'5',title:'Grip force per finger (slip check)',f:'F_slip = F_safe / (N × μ)',l:`F_slip = ${fmt(Fe*A)} / (${N} × ${mu}) = ${fmt(F_slip)} N`,e:`Friction per finger = μ × F. All N=${N} fingers together must reach F_safe. Solving: each finger pushes with ${fmt(F_slip)}N → friction = ${fmt(mu*F_slip)}N → total = ${fmt(N*mu*F_slip)}N ≥ ${fmt(Fe*A)}N ✓`},
+    {n:'6',title:'CG offset — are you gripping at the balance point?',f:'CG_offset = |Grip_pos − CG_pos|',l:`CG_offset = |${fmt(gripP,1)} − ${fmt(cgP,1)}| = ${fmt(cgOff,1)} mm`,e:`If you grip away from the CG, the part tries to rotate — like holding a hammer near the end. The CG is at ${fmt(cgP,1)}mm, grip at ${fmt(gripP,1)}mm. <b>Ideal = 0mm offset.</b>`},
+    {n:'7',title:'Tipping moment from CG offset',f:'M_tip = W × CG_offset',l:`M_tip = ${fmt(W)} × ${fmt(cgOff,1)} = ${fmt(M_cg,1)} N·mm`,e:`A moment (torque) = force × distance. Weight ${fmt(W)}N acting at ${fmt(cgOff,1)}mm from grip creates a rotating force of ${fmt(M_cg,1)}N·mm. The fingers must resist this.`},
+    {n:'8',title:'Extra grip force to resist CG tipping',f:'F_tip = (M_tip × A) / L',l:`F_tip = (${fmt(M_cg,1)} × ${A}) / ${L} = ${fmt(F_cgtip)} N`,e:`Your finger L=${L}mm is the lever arm resisting tipping. <b>Longer finger = more leverage = less extra force.</b> This is added to the slip requirement.`},
+    {n:'9',title:'Inertia tipping — CG hanging below finger tip',f:'F_itip = (m × a × overhang × A) / L',l:`Overhang = ${fmt(cgOver,1)} mm → F_itip = ${fmt(F_itip)} N`,e:`Finger bottom edge is at ${fmt(Math.max(0,gripP-L/2),1)}mm from part bottom. CG is at ${fmt(cgP,1)}mm. CG hangs ${fmt(cgOver,1)}mm below finger tip. Robot acceleration swings this mass, creating tipping force.`},
+    {n:'10',title:'Final required force — take the worst case',f:'F_final = max(F_slip, F_tip, F_itip)',l:`F_final = max(${fmt(F_slip)}, ${fmt(F_cgtip)}, ${fmt(F_itip)}) = ${fmt(F_final)} N`,e:`The gripper must handle ALL failure modes. Take the largest of slip, CG tipping, and inertia tipping. This is what each finger must provide.`},
+    {n:'11',title:'Gripper specification to order',f:'F_spec = F_final × N × 1.3',l:`F_spec = ${fmt(F_final)} × ${N} × 1.3 = ${fmt(F_spec)} N total`,e:`Gripper datasheets give total closing force (all fingers). Multiply per-finger force × fingers × 1.3 margin. <b>Order a gripper rated ≥ ${fmt(F_spec)}N.</b>`},
+  ];
+  document.getElementById('formulaArea').innerHTML=steps.map(s=>`
+    <div class="fstep">
+      <div class="fsn">${s.n}</div>
+      <div class="fsb">
+        <div class="fst">${s.title}</div>
+        <div><span class="fsf">${s.f}</span></div>
+        <div><span class="fsl">→ ${s.l}</span></div>
+        <div class="fse">${s.e}</div>
+      </div>
+    </div>`).join('');
+
+  // ── DRAW DIAGRAM ──
+  const p3d={m,partL,partD,cgP,gripP,gripPos:gripP,L,N,W,Fi,F_final,cgOff,cgOver,
+    innerDia:gv('innerDia'), shape:document.getElementById('shape').value, N,
+    discThick:gv('discThick')};
+  drawDiagram(p3d);
+  build3DScene(p3d);
+}
+
+// ═══════════════════════════════════════════════════
+// SVG DIAGRAM — matches reference image style
+// ═══════════════════════════════════════════════════
+function drawDiagram(p){
+  if(orient==='V') drawVertical(p);
+  else drawHorizontal(p);
+}
+
+function baseDefs(){
+  return `<defs>
+    <marker id="mF" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0L7,3.5L0,7Z" fill="#1a56db"/></marker>
+    <marker id="mG" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0L7,3.5L0,7Z" fill="#15803d"/></marker>
+    <marker id="mR" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0L7,3.5L0,7Z" fill="#b91c1c"/></marker>
+    <marker id="mD" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#a1a1aa"/></marker>
+    <marker id="mDr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M0,0L6,3L0,6Z" fill="#a1a1aa"/></marker>
+    <marker id="mO" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#ea580c"/></marker>
+    <marker id="mOr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M0,0L6,3L0,6Z" fill="#ea580c"/></marker>
+  </defs>`;
+}
+
+// ── VERTICAL PICK — proper diagram with N-finger support ──
+function drawVertical(p){
+  const N=p.N;
+  const SVG_W=500, SVG_H=440;
+  const CX=SVG_W/2;
+
+  // ── Scale part ──
+  const maxPH=180, maxPW=130;
+  const sc=Math.min(maxPH/Math.max(p.partL,1), maxPW/Math.max(p.partD,1), 2.2);
+  const pH=Math.max(24, p.partL*sc);
+  const pW=Math.max(22, Math.min(p.partD*sc, maxPW));
+  const fH=Math.max(16, Math.min(p.L*sc, 150)); // finger height in SVG
+  const FW=32; // finger block width
+
+  // ── Actuator / mount ──
+  const ACT_W=Math.max(120, pW+FW*2+50);
+  const ACT_H=46, MNT_H=14;
+  const actY=10, mntY=actY+ACT_H, mntBotY=mntY+MNT_H;
+
+  // ── Grip anchor Y ──
+  const gripDY=240;
+
+  // ── Part Y bounds ──
+  const pBotY=gripDY+(p.partL-p.gripP)*sc;
+  const pTopY=pBotY-pH;
+  const drawPTop=Math.max(pTopY,mntBotY+4);
+  const drawPBot=Math.min(pBotY,SVG_H-40);
+  const drawPH=Math.max(0, drawPBot-drawPTop);
+
+  // ── CG Y ──
+  const cgDY=pBotY-p.cgP*sc;
+
+  // ── Finger Y (centred on grip) ──
+  const finTopY=gripDY-fH/2;
+  const finBotY=gripDY+fH/2;
+
+  // ── Part X bounds ──
+  const pLeft=CX-pW/2, pRight=CX+pW/2;
+
+  // ── Arm X positions (per finger config) ──
+  // N=2: arms at fLeft+FW/2 and fRight+FW/2
+  // N=3: same arms + note about 3rd finger from depth
+  // N=4: 4 arm positions
+
+  // For N=2,3,4 we always show left+right fingers on-screen
+  // For N=3: add a "depth finger" indicator
+  // For N=4: add top+bottom (shown as thinner overlay fingers)
+
+  const fLeft=pLeft-FW, fRight=pRight;
+  const armLx=fLeft+FW/2, armRx=fRight+FW/2;
+
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" width="${SVG_W}" height="${SVG_H}" viewBox="0 0 ${SVG_W} ${SVG_H}">`;
+  s+=baseDefs();
+  s+=`<rect width="${SVG_W}" height="${SVG_H}" fill="#fafaf8" rx="6"/>`;
+
+  // ── ACTUATOR ──
+  s+=`<rect x="${CX-ACT_W/2}" y="${actY}" width="${ACT_W}" height="${ACT_H}" rx="6" fill="#1a56db" stroke="#1e3a8a" stroke-width="1.5"/>`;
+  s+=`<text x="${CX}" y="${actY+ACT_H/2+5}" text-anchor="middle" fill="white" font-size="13" font-weight="700" font-family="Plus Jakarta Sans">ACTUATOR</text>`;
+
+  // ── MOUNT PLATE (wide, spans arms) ──
+  const mntW=pW+FW*2+44;
+  s+=`<rect x="${CX-mntW/2}" y="${mntY}" width="${mntW}" height="${MNT_H}" rx="2" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/>`;
+
+  // ── ARMS — flush to finger tops, no gap ──
+  if(finTopY>mntBotY){
+    s+=`<line x1="${armLx}" y1="${mntBotY}" x2="${armLx}" y2="${finTopY}" stroke="#92400e" stroke-width="7" stroke-linecap="square"/>`;
+    s+=`<line x1="${armRx}" y1="${mntBotY}" x2="${armRx}" y2="${finTopY}" stroke="#92400e" stroke-width="7" stroke-linecap="square"/>`;
+  }
+
+  // ── PART BODY (drawn before fingers so fingers overlap part edge) ──
+  if(drawPH>0){
+    s=drawPartVertical_mutate(s,p.shape,CX,pLeft,pRight,pW,drawPTop,drawPBot,drawPH,
+      p.innerDia/Math.max(p.partD,1));
+  }
+
+  // ── FINGERS (left + right, always shown) ──
+  const fingerFill='#ccfbf1', fingerStroke='#0f766e';
+  s+=`<rect x="${fLeft}" y="${finTopY}" width="${FW}" height="${fH}" rx="3" fill="${fingerFill}" stroke="${fingerStroke}" stroke-width="2"/>`;
+  s+=`<rect x="${fRight}" y="${finTopY}" width="${FW}" height="${fH}" rx="3" fill="${fingerFill}" stroke="${fingerStroke}" stroke-width="2"/>`;
+
+  // ── N=3 THIRD FINGER — shown as depth indicator ──
+  if(N===3){
+    // A dashed outline finger slightly in front of the part (offset up-left by perspective)
+    const f3x=CX-FW/2, f3y=finTopY-6;
+    s+=`<rect x="${f3x}" y="${f3y}" width="${FW}" height="${fH}" rx="3" fill="rgba(204,251,241,0.5)" stroke="${fingerStroke}" stroke-width="1.5" stroke-dasharray="5,3"/>`;
+    s+=`<text x="${f3x+FW/2}" y="${f3y+fH/2+4}" text-anchor="middle" fill="${fingerStroke}" font-size="8" font-family="Plus Jakarta Sans" opacity=".8">3rd</text>`;
+    // perspective line from arm to 3rd finger
+    const arm3x=CX;
+    if(f3y>mntBotY)
+      s+=`<line x1="${arm3x}" y1="${mntBotY}" x2="${arm3x}" y2="${f3y}" stroke="#92400e" stroke-width="5" stroke-dasharray="6,3" stroke-linecap="round" opacity=".6"/>`;
+  }
+
+  // ── N=4 FRONT/BACK FINGERS — shown as thinner overlays ──
+  if(N===4){
+    const f4W=22, f4x=CX-f4W/2;
+    // front finger (slightly in front, offset)
+    s+=`<rect x="${f4x-4}" y="${finTopY-8}" width="${f4W}" height="${fH}" rx="3" fill="rgba(204,251,241,0.5)" stroke="${fingerStroke}" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+    // back finger (behind part)
+    s+=`<rect x="${f4x+4}" y="${finTopY+4}" width="${f4W}" height="${fH}" rx="3" fill="rgba(204,251,241,0.3)" stroke="${fingerStroke}" stroke-width="1.5" stroke-dasharray="3,4" opacity=".7"/>`;
+    // arms for front/back
+    if((finTopY-8)>mntBotY){
+      s+=`<line x1="${CX-6}" y1="${mntBotY}" x2="${CX-6}" y2="${finTopY-8}" stroke="#92400e" stroke-width="5" stroke-dasharray="5,3" opacity=".55"/>`;
+      s+=`<line x1="${CX+6}" y1="${mntBotY}" x2="${CX+6}" y2="${finTopY+4}" stroke="#92400e" stroke-width="4" stroke-dasharray="4,4" opacity=".4"/>`;
+    }
+  }
+
+  // ── L DIMENSION (left side) ──
+  const ldx=fLeft-20;
+  s+=`<line x1="${ldx}" y1="${finTopY}" x2="${ldx}" y2="${finBotY}" stroke="#a1a1aa" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+  s+=`<text x="${ldx-4}" y="${(finTopY+finBotY)/2+4}" text-anchor="end" fill="#71717a" font-size="10" font-family="JetBrains Mono">L=${p.L}</text>`;
+
+  // ── CG DOT ──
+  if(cgDY>=drawPTop-2&&cgDY<=drawPBot+2){
+    s+=`<circle cx="${CX}" cy="${cgDY}" r="9" fill="#15803d" stroke="white" stroke-width="2"/>`;
+    s+=`<text x="${CX}" y="${cgDY+4}" text-anchor="middle" fill="white" font-size="8" font-weight="700" font-family="JetBrains Mono">CG</text>`;
+  }
+
+  // ── GRIP DASHED LINE — spans ONLY across the part (pLeft to pRight) ──
+  // This is the key fix: line stops at part edges, so it looks connected to fingers
+  s+=`<line x1="${pLeft}" y1="${gripDY}" x2="${pRight}" y2="${gripDY}" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="4,3" opacity=".8"/>`;
+
+  // ── F ARROWS — tip touches outer face of finger (no gap) ──
+  const fAL=28;
+  // Left finger: arrow from left, tip at fLeft (outer face)
+  s+=`<line x1="${fLeft-fAL}" y1="${gripDY}" x2="${fLeft}" y2="${gripDY}" stroke="#1a56db" stroke-width="2.5" marker-end="url(#mF)"/>`;
+  s+=`<text x="${fLeft-fAL-5}" y="${gripDY-6}" text-anchor="end" fill="#1a56db" font-size="13" font-weight="700" font-family="Plus Jakarta Sans">F</text>`;
+  // Right finger: arrow from right, tip at fRight+FW (outer face)
+  s+=`<line x1="${fRight+FW+fAL}" y1="${gripDY}" x2="${fRight+FW}" y2="${gripDY}" stroke="#1a56db" stroke-width="2.5" marker-end="url(#mF)"/>`;
+  s+=`<text x="${fRight+FW+fAL+5}" y="${gripDY-6}" text-anchor="start" fill="#1a56db" font-size="13" font-weight="700" font-family="Plus Jakarta Sans">F</text>`;
+
+  // ── μF ARROWS — friction on part contact faces ──
+  const mfL=28;
+  s+=`<line x1="${pLeft-3}" y1="${gripDY+mfL/2}" x2="${pLeft-3}" y2="${gripDY-mfL/2}" stroke="#15803d" stroke-width="2" marker-end="url(#mG)"/>`;
+  s+=`<text x="${pLeft-7}" y="${gripDY-mfL/2-3}" text-anchor="end" fill="#15803d" font-size="10" font-weight="700" font-family="Plus Jakarta Sans">μF</text>`;
+  s+=`<line x1="${pRight+3}" y1="${gripDY+mfL/2}" x2="${pRight+3}" y2="${gripDY-mfL/2}" stroke="#15803d" stroke-width="2" marker-end="url(#mG)"/>`;
+  s+=`<text x="${pRight+7}" y="${gripDY-mfL/2-3}" text-anchor="start" fill="#15803d" font-size="10" font-weight="700" font-family="Plus Jakarta Sans">μF</text>`;
+
+  // ── W=mg ARROW ──
+  const wY1=Math.min(cgDY+12,drawPBot);
+  const wY2=Math.min(wY1+38,SVG_H-14);
+  s+=`<line x1="${CX}" y1="${wY1}" x2="${CX}" y2="${wY2}" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#mR)"/>`;
+  s+=`<text x="${CX+5}" y="${wY2}" text-anchor="start" fill="#b91c1c" font-size="10" font-weight="700" font-family="Plus Jakarta Sans">W=mg</text>`;
+
+  // ── CG OFFSET BRACKET ──
+  if(Math.abs(p.gripP-p.cgP)>3){
+    const ox=pRight+20;
+    s+=`<line x1="${ox}" y1="${gripDY}" x2="${ox}" y2="${cgDY}" stroke="#ea580c" stroke-width="1.5" marker-end="url(#mO)" marker-start="url(#mOr)"/>`;
+    s+=`<text x="${ox+4}" y="${(gripDY+cgDY)/2+4}" text-anchor="start" fill="#ea580c" font-size="9" font-family="JetBrains Mono">${Math.abs(p.gripP-p.cgP).toFixed(1)}mm</text>`;
+  }
+
+  // ── PART WIDTH DIMENSION ──
+  const dimBX=Math.min(pBotY+12,SVG_H-26);
+  if(dimBX+14<SVG_H){
+    s+=`<line x1="${pLeft}" y1="${dimBX}" x2="${pRight}" y2="${dimBX}" stroke="#a1a1aa" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+    s+=`<text x="${CX}" y="${dimBX+13}" text-anchor="middle" fill="#71717a" font-size="9" font-family="JetBrains Mono">⌀${p.partD}mm</text>`;
+  }
+
+  // ── GRIP LABEL ──
+  s+=`<text x="${fLeft-4}" y="${gripDY-3}" text-anchor="end" fill="#ea580c" font-size="8" font-family="JetBrains Mono">G=${p.gripP}mm</text>`;
+
+  // ── TOP-VIEW INSET (finger arrangement) — shown for N≥3 ──
+  if(N>=3){
+    const ix=SVG_W-90, iy=SVG_H-105, ir=28; // inset circle radius
+    s+=`<rect x="${ix-36}" y="${iy-36}" width="80" height="80" rx="6" fill="white" stroke="#e5e5e5" stroke-width="1"/>`;
+    s+=`<text x="${ix+4}" y="${iy-22}" text-anchor="middle" fill="#71717a" font-size="8" font-family="Plus Jakarta Sans">${N}-jaw top view</text>`;
+    // Part circle
+    s+=`<circle cx="${ix}" cy="${iy}" r="${ir*0.55}" fill="#fbbf24" stroke="#b45309" stroke-width="1.5" opacity=".7"/>`;
+    // Finger blocks at N positions
+    const angOffset = N===3 ? -90 : -45;
+    for(let i=0;i<N;i++){
+      const ang=(angOffset + i*(360/N))*Math.PI/180;
+      const fx=ix+Math.cos(ang)*(ir*0.55+12);
+      const fy=iy+Math.sin(ang)*(ir*0.55+12);
+      s+=`<rect x="${fx-6}" y="${fy-9}" width="12" height="18" rx="2" fill="#ccfbf1" stroke="#0f766e" stroke-width="1.5" transform="rotate(${angOffset+i*(360/N)+90},${fx},${fy})"/>`;
+    }
+    // F arrows for each finger pointing inward
+    for(let i=0;i<N;i++){
+      const ang=(angOffset + i*(360/N))*Math.PI/180;
+      const ax=ix+Math.cos(ang)*(ir*0.55+26);
+      const ay=iy+Math.sin(ang)*(ir*0.55+26);
+      const bx=ix+Math.cos(ang)*(ir*0.55+14);
+      const by=iy+Math.sin(ang)*(ir*0.55+14);
+      s+=`<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="#1a56db" stroke-width="1.5" marker-end="url(#mF)"/>`;
+    }
+    s+=`<text x="${ix+4}" y="${iy+ir+22}" text-anchor="middle" fill="#71717a" font-size="7" font-family="JetBrains Mono">${N} fingers 360°/${N}=${Math.round(360/N)}°</text>`;
+  }
+
+  // ── FINGER COUNT LABEL ──
+  const nLabel = N===2?'2-jaw parallel':N===3?'3-jaw chuck':'4-jaw';
+  s+=`<text x="8" y="16" fill="#71717a" font-size="9" font-family="Plus Jakarta Sans" font-weight="600">${nLabel}</text>`;
+
+  s+='</svg>';
+  document.getElementById('svgContainer').innerHTML=s;
+}
+
+// Mutable version (returns string, sets innerHTML)
+function drawPartVertical_mutate(existing, shape, CX, pLeft, pRight, pW, pTopY, pBotY, pH, innerRatio){
+  let s=existing;
+  const cPart='#fbbf24', cPartS='#b45309';
+  const hW=pW*Math.min(0.9,Math.max(0.3,innerRatio));
+  switch(shape){
+    case 'cyl':
+      s+=`<rect x="${pLeft}" y="${pTopY}" width="${pW}" height="${pH}" fill="${cPart}" stroke="${cPartS}" stroke-width="2" rx="2"/>`;
+      // top/bottom ellipse hints
+      s+=`<ellipse cx="${CX}" cy="${pTopY+5}" rx="${pW/2}" ry="5" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      if(pBotY-5>pTopY+10)
+        s+=`<ellipse cx="${CX}" cy="${pBotY-5}" rx="${pW/2}" ry="5" fill="#fef3c7" stroke="${cPartS}" stroke-width="1.5"/>`;
+      break;
+    case 'hcyl':
+      s+=`<rect x="${pLeft}" y="${pTopY}" width="${pW}" height="${pH}" fill="${cPart}" stroke="${cPartS}" stroke-width="2" rx="2"/>`;
+      s+=`<ellipse cx="${CX}" cy="${pTopY+5}" rx="${pW/2}" ry="5" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      // inner bore (hollow)
+      s+=`<rect x="${CX-hW/2}" y="${pTopY}" width="${hW}" height="${pH}" fill="#fafaf8" stroke="${cPartS}" stroke-width="1" stroke-dasharray="4,3" rx="1"/>`;
+      // inner ellipse at top
+      s+=`<ellipse cx="${CX}" cy="${pTopY+5}" rx="${hW/2}" ry="3" fill="#f4f4f0" stroke="${cPartS}" stroke-width="1" opacity=".7"/>`;
+      break;
+    case 'rect':
+      s+=`<rect x="${pLeft}" y="${pTopY}" width="${pW}" height="${pH}" fill="${cPart}" stroke="${cPartS}" stroke-width="2" rx="2"/>`;
+      // depth hint lines
+      const dO=7;
+      s+=`<line x1="${pLeft}" y1="${pTopY}" x2="${pLeft-dO}" y2="${pTopY-dO}" stroke="${cPartS}" stroke-width="1" opacity=".5"/>`;
+      s+=`<line x1="${pRight}" y1="${pTopY}" x2="${pRight+dO}" y2="${pTopY-dO}" stroke="${cPartS}" stroke-width="1" opacity=".5"/>`;
+      s+=`<line x1="${pLeft-dO}" y1="${pTopY-dO}" x2="${pRight+dO}" y2="${pTopY-dO}" stroke="${cPartS}" stroke-width="1" opacity=".5"/>`;
+      break;
+    case 'sq':
+      s+=`<rect x="${pLeft}" y="${pTopY}" width="${pW}" height="${pH}" fill="${cPart}" stroke="${cPartS}" stroke-width="2" rx="2"/>`;
+      // isometric hint
+      const sdO=6;
+      s+=`<line x1="${pLeft}" y1="${pTopY}" x2="${pLeft-sdO}" y2="${pTopY-sdO}" stroke="${cPartS}" stroke-width="1" opacity=".5"/>`;
+      s+=`<line x1="${pRight}" y1="${pTopY}" x2="${pRight+sdO}" y2="${pTopY-sdO}" stroke="${cPartS}" stroke-width="1" opacity=".5"/>`;
+      s+=`<line x1="${pLeft-sdO}" y1="${pTopY-sdO}" x2="${pRight+sdO}" y2="${pTopY-sdO}" stroke="${cPartS}" stroke-width="1" opacity=".5"/>`;
+      break;
+    case 'disc':
+      s+=`<rect x="${pLeft}" y="${pTopY}" width="${pW}" height="${pH}" fill="${cPart}" stroke="${cPartS}" stroke-width="2" rx="2"/>`;
+      s+=`<ellipse cx="${CX}" cy="${pTopY+4}" rx="${pW/2}" ry="4" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      if(pBotY-4>pTopY+8)
+        s+=`<ellipse cx="${CX}" cy="${pBotY-4}" rx="${pW/2}" ry="4" fill="#fef3c7" stroke="${cPartS}" stroke-width="1.5"/>`;
+      break;
+  }
+  return s;
+}
+
+// ── HORIZONTAL PICK: proper side-view ──
+function drawHorizontal(p){
+  const SVG_W=500, SVG_H=400;
+  const sh=document.getElementById('shape').value;
+  const cPart='#fbbf24', cPartS='#b45309';
+
+  // Scale: fit part length and diameter nicely
+  const maxPW=200, maxPH=110;
+  const scL=maxPW/Math.max(p.partL,1);
+  const scD=maxPH/Math.max(p.partD,1);
+  const sc=Math.min(scL,scD,2.0);
+
+  const pW=Math.max(30, Math.min(p.partL*sc, maxPW));
+  const pHraw=Math.max(18, Math.min(p.partD*sc, maxPH));
+  const pHfinal = sh==='disc' ? Math.max(14, Math.min(gv('discThick')*sc*0.8, 50)) : pHraw;
+
+  // Part centred horizontally
+  const pLeft=(SVG_W-pW)/2;
+  const pRight=pLeft+pW;
+
+  // Grip centre X and CG X based on position along part length
+  const gripX=pLeft+(p.gripPos/Math.max(p.partL,1))*pW;
+  const cgX  =pLeft+(p.cgP/Math.max(p.partL,1))*pW;
+
+  // Actuator top-centre, above grip point
+  const ACT_W=110, ACT_H=44, MNT_H=13;
+  const actY=8, mntY=actY+ACT_H, mntBotY=mntY+MNT_H;
+
+  // Finger dims
+  const fH=Math.max(18, Math.min(p.L*sc*0.9, 70));
+  const FW=Math.max(Math.max(pW*0.28,36), p.L*sc*0.8);
+
+  // Part vertical centre
+  const partCY=230;
+  const pTop=partCY-pHfinal/2;
+  const pBot=partCY+pHfinal/2;
+
+  // Top finger (above part)
+  const ftTop=pTop-fH-5;
+  const ftBot=pTop-5;
+  // Bottom finger (below part)
+  const fbTop=pBot+5;
+  const fbBot=pBot+fH+5;
+
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" width="${SVG_W}" height="${SVG_H}" viewBox="0 0 ${SVG_W} ${SVG_H}">`;
+  s+=baseDefs();
+  s+=`<rect width="${SVG_W}" height="${SVG_H}" fill="#fafaf8" rx="6"/>`;
+
+  // ── ACTUATOR ──
+  s+=`<rect x="${SVG_W/2-ACT_W/2}" y="${actY}" width="${ACT_W}" height="${ACT_H}" rx="5" fill="#1a56db" stroke="#1e3a8a" stroke-width="1.5"/>`;
+  s+=`<text x="${SVG_W/2}" y="${actY+ACT_H/2+5}" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Plus Jakarta Sans">ACTUATOR</text>`;
+
+  // ── MOUNT PLATE ──
+  const mntW=FW+44;
+  s+=`<rect x="${gripX-mntW/2}" y="${mntY}" width="${mntW}" height="${MNT_H}" rx="2" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/>`;
+
+  // ── ARM from mount to top finger ──
+  if(ftTop>mntBotY+2)
+    s+=`<line x1="${gripX}" y1="${mntBotY}" x2="${gripX}" y2="${ftTop}" stroke="#b45309" stroke-width="6" stroke-linecap="round"/>`;
+
+  // ── ARM from mount through part to bottom finger (dashed through part) ──
+  s+=`<line x1="${gripX}" y1="${pBot+2}" x2="${gripX}" y2="${fbTop}" stroke="#b45309" stroke-width="5" stroke-dasharray="5,3" stroke-linecap="round" opacity=".55"/>`;
+
+  // ── TOP FINGER ──
+  s+=`<rect x="${gripX-FW/2}" y="${ftTop}" width="${FW}" height="${fH}" rx="3" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>`;
+  s+=`<text x="${gripX}" y="${ftTop+fH/2+4}" text-anchor="middle" fill="#0f766e" font-size="9" font-weight="600" font-family="Plus Jakarta Sans">Finger</text>`;
+
+  // ── BOTTOM FINGER ──
+  s+=`<rect x="${gripX-FW/2}" y="${fbTop}" width="${FW}" height="${fH}" rx="3" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>`;
+  s+=`<text x="${gripX}" y="${fbTop+fH/2+4}" text-anchor="middle" fill="#0f766e" font-size="9" font-weight="600" font-family="Plus Jakarta Sans">Finger</text>`;
+
+  // ── L DIMENSION (right side of top finger) ──
+  const ldx=gripX+FW/2+10;
+  s+=`<line x1="${ldx}" y1="${ftTop}" x2="${ldx}" y2="${ftBot}" stroke="#a1a1aa" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+  s+=`<text x="${ldx+4}" y="${(ftTop+ftBot)/2+4}" text-anchor="start" fill="#71717a" font-size="10" font-family="JetBrains Mono">L=${p.L}</text>`;
+
+  // ── PART BODY ──
+  switch(sh){
+    case 'cyl':{
+      const ey=pHfinal/2, ex=Math.min(13,pW*0.08);
+      s+=`<rect x="${pLeft}" y="${pTop}" width="${pW}" height="${pHfinal}" fill="${cPart}" stroke="${cPartS}" stroke-width="2"/>`;
+      s+=`<ellipse cx="${pLeft}" cy="${partCY}" rx="${ex}" ry="${ey}" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      s+=`<ellipse cx="${pRight}" cy="${partCY}" rx="${ex}" ry="${ey}" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      break;}
+    case 'hcyl':{
+      const ey=pHfinal/2, ex=Math.min(13,pW*0.08);
+      const iRatio=Math.min(0.82, p.innerDia/Math.max(p.partD,1));
+      const iH=pHfinal*iRatio;
+      s+=`<rect x="${pLeft}" y="${pTop}" width="${pW}" height="${pHfinal}" fill="${cPart}" stroke="${cPartS}" stroke-width="2"/>`;
+      s+=`<rect x="${pLeft+ex}" y="${partCY-iH/2}" width="${pW-ex*2}" height="${iH}" fill="#fffbeb" stroke="${cPartS}" stroke-width="1" stroke-dasharray="5,3" rx="2" opacity=".85"/>`;
+      s+=`<ellipse cx="${pLeft}" cy="${partCY}" rx="${ex}" ry="${ey}" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      s+=`<ellipse cx="${pRight}" cy="${partCY}" rx="${ex}" ry="${ey}" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      s+=`<text x="${(pLeft+pRight)/2}" y="${partCY+4}" text-anchor="middle" fill="${cPartS}" font-size="9" font-family="JetBrains Mono" opacity=".65">bore ⌀${p.innerDia}</text>`;
+      break;}
+    case 'rect':{
+      const iso=8;
+      s+=`<rect x="${pLeft}" y="${pTop}" width="${pW}" height="${pHfinal}" fill="${cPart}" stroke="${cPartS}" stroke-width="2" rx="1"/>`;
+      s+=`<polygon points="${pLeft},${pTop} ${pLeft+iso},${pTop-iso} ${pRight+iso},${pTop-iso} ${pRight},${pTop}" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      s+=`<polygon points="${pRight},${pTop} ${pRight+iso},${pTop-iso} ${pRight+iso},${pBot-iso} ${pRight},${pBot}" fill="#fef3c7" stroke="${cPartS}" stroke-width="1.5"/>`;
+      break;}
+    case 'sq':{
+      const iso=8;
+      s+=`<rect x="${pLeft}" y="${pTop}" width="${pW}" height="${pHfinal}" fill="${cPart}" stroke="${cPartS}" stroke-width="2" rx="1"/>`;
+      s+=`<polygon points="${pLeft},${pTop} ${pLeft+iso},${pTop-iso} ${pRight+iso},${pTop-iso} ${pRight},${pTop}" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      s+=`<polygon points="${pRight},${pTop} ${pRight+iso},${pTop-iso} ${pRight+iso},${pBot-iso} ${pRight},${pBot}" fill="#fef3c7" stroke="${cPartS}" stroke-width="1.5"/>`;
+      break;}
+    case 'disc':{
+      const ey=pHfinal/2, ex=Math.min(22,pW*0.35);
+      s+=`<rect x="${pLeft}" y="${pTop}" width="${pW}" height="${pHfinal}" fill="${cPart}" stroke="${cPartS}" stroke-width="2"/>`;
+      s+=`<ellipse cx="${pLeft}" cy="${partCY}" rx="${ex}" ry="${ey}" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      s+=`<ellipse cx="${pRight}" cy="${partCY}" rx="${ex}" ry="${ey}" fill="#fde68a" stroke="${cPartS}" stroke-width="1.5"/>`;
+      break;}
+  }
+
+  // ── CG DOT ──
+  s+=`<circle cx="${cgX}" cy="${partCY}" r="9" fill="#15803d" stroke="white" stroke-width="2"/>`;
+  s+=`<text x="${cgX}" y="${partCY+4}" text-anchor="middle" fill="white" font-size="8" font-weight="700" font-family="JetBrains Mono">CG</text>`;
+
+  // ── GRIP LINE (vertical dashed through everything) ──
+  s+=`<line x1="${gripX}" y1="${ftTop-5}" x2="${gripX}" y2="${fbBot+5}" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="4,3" opacity=".65"/>`;
+
+  // ── F ARROWS (into part: top downward, bottom upward) ──
+  s+=`<line x1="${gripX}" y1="${ftBot+8}" x2="${gripX}" y2="${pTop-2}" stroke="#1a56db" stroke-width="2.5" marker-end="url(#mF)"/>`;
+  s+=`<text x="${gripX-7}" y="${ftBot+14+(pTop-ftBot-10)/2}" text-anchor="end" fill="#1a56db" font-size="13" font-weight="700" font-family="Plus Jakarta Sans">F</text>`;
+  s+=`<line x1="${gripX}" y1="${fbTop-8}" x2="${gripX}" y2="${pBot+2}" stroke="#1a56db" stroke-width="2.5" marker-end="url(#mF)"/>`;
+  s+=`<text x="${gripX-7}" y="${fbTop-4-(fbTop-pBot-8)/2}" text-anchor="end" fill="#1a56db" font-size="13" font-weight="700" font-family="Plus Jakarta Sans">F</text>`;
+
+  // ── μF ARROWS (horizontal at ends of part — friction stops part from sliding sideways) ──
+  const mfLen=28, mfY=partCY;
+  s+=`<line x1="${pLeft-6}" y1="${mfY}" x2="${pLeft-6-mfLen}" y2="${mfY}" stroke="#15803d" stroke-width="2" marker-end="url(#mG)"/>`;
+  s+=`<text x="${pLeft-8-mfLen}" y="${mfY-5}" text-anchor="end" fill="#15803d" font-size="10" font-weight="700" font-family="Plus Jakarta Sans">μF</text>`;
+  s+=`<line x1="${pRight+6}" y1="${mfY}" x2="${pRight+6+mfLen}" y2="${mfY}" stroke="#15803d" stroke-width="2" marker-end="url(#mG)"/>`;
+  s+=`<text x="${pRight+9+mfLen}" y="${mfY-5}" text-anchor="start" fill="#15803d" font-size="10" font-weight="700" font-family="Plus Jakarta Sans">μF</text>`;
+
+  // ── W=mg ARROW (downward from CG) ──
+  const wY1=pBot+14, wY2=Math.min(wY1+40,SVG_H-18);
+  s+=`<line x1="${cgX}" y1="${wY1}" x2="${cgX}" y2="${wY2}" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#mR)"/>`;
+  s+=`<text x="${cgX+5}" y="${wY2}" text-anchor="start" fill="#b91c1c" font-size="10" font-weight="700" font-family="Plus Jakarta Sans">W=mg</text>`;
+
+  // ── CG OFFSET ──
+  if(Math.abs(p.gripPos-p.cgP)>3){
+    const offY=pTop-30;
+    s+=`<line x1="${gripX}" y1="${offY}" x2="${cgX}" y2="${offY}" stroke="#ea580c" stroke-width="1.5" marker-end="url(#mO)" marker-start="url(#mOr)"/>`;
+    s+=`<text x="${(gripX+cgX)/2}" y="${offY-5}" text-anchor="middle" fill="#ea580c" font-size="9" font-family="JetBrains Mono">${Math.abs(p.gripPos-p.cgP).toFixed(1)}mm offset</text>`;
+  }
+
+  // ── PART LENGTH DIMENSION ──
+  const dimY=fbBot+16;
+  if(dimY<SVG_H-12){
+    s+=`<line x1="${pLeft}" y1="${dimY}" x2="${pRight}" y2="${dimY}" stroke="#a1a1aa" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+    s+=`<text x="${(pLeft+pRight)/2}" y="${dimY+13}" text-anchor="middle" fill="#71717a" font-size="10" font-family="JetBrains Mono">${p.partL}mm</text>`;
+  }
+
+  // ── DIAMETER DIMENSION (vertical, right side) ──
+  const dX=Math.min(pRight+52, SVG_W-32);
+  s+=`<line x1="${dX}" y1="${pTop}" x2="${dX}" y2="${pBot}" stroke="#a1a1aa" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+  s+=`<text x="${dX+4}" y="${partCY+4}" text-anchor="start" fill="#71717a" font-size="9" font-family="JetBrains Mono">⌀${p.partD}</text>`;
+
+  // ── GRIP LABEL ──
+  s+=`<text x="${gripX}" y="${ftTop-9}" text-anchor="middle" fill="#ea580c" font-size="9" font-family="JetBrains Mono">G=${p.gripPos}mm</text>`;
+
+  // ── SIDE VIEW LABEL ──
+  s+=`<text x="${SVG_W-8}" y="${SVG_H-6}" text-anchor="end" fill="#a1a1aa" font-size="9" font-family="JetBrains Mono">Side view — horizontal pick</text>`;
+
+  s+='</svg>';
+  document.getElementById('svgContainer').innerHTML=s;
+}
+
+// drawPartVertical just returns empty (the mutate version does the work)
+function drawPartVertical(){}
+
+// ══════════════════════════════════════════
+// CUSTOM FINGER DESIGNER
+// ══════════════════════════════════════════
+let cfMode=1;
+
+function setCFMode(m){
+  cfMode=m;
+  document.getElementById('cfBtn1').classList.toggle('on',m===1);
+  document.getElementById('cfBtn2').classList.toggle('on',m===2);
+  document.getElementById('cfSingleFields').style.display=m===1?'block':'none';
+  document.getElementById('cfDualFields').style.display=m===2?'block':'none';
+  document.getElementById('cfNote').textContent = m===1
+    ? 'Single part finger: design with a V-groove or radius pocket matching the part OD. The pocket stops the part from rolling sideways.'
+    : 'Dual-part finger: two pockets at different heights. Robot picks Part 1, moves to Part 2 position, picks it with the same finger — no tool change needed!';
+  document.getElementById('cfExplain').innerHTML = m===1
+    ? 'A <b>single-part finger</b> has one V-groove or radius pocket cut into the face. The pocket must match the part diameter. The contact angle should be 60–120° for a secure grip without marking the part. Depth ≈ diameter × 0.08–0.12.'
+    : 'A <b>dual-part finger</b> has two pockets cut at different heights. The robot picks Part 1, then repositions and picks Part 2 with the same finger.<br><br>Key rules:<br>• Min wall between mounting face and Pocket 1 top = 5–8mm<br>• Min wall between Pocket 1 bottom and Pocket 2 top = 5–8mm<br>• Both pockets must be within the finger length<br>• Part contact should be at 90° to the grip force direction';
+  drawCF();
+}
+
+function drawCF(){
+  const L_tot=Math.max(20, parseFloat(document.getElementById('cf_L').value)||80);
+  const W_f  =Math.max(10, parseFloat(document.getElementById('cf_W').value)||30);
+  const T    =Math.max(8,  parseFloat(document.getElementById('cf_T').value)||20);
+
+  const SVG_W=460, SVG_H=360;
+  const scale=Math.min((SVG_H-80)/L_tot, (SVG_W*0.3)/W_f, 3.0);
+  const fH=L_tot*scale, fW=W_f*scale, fT=T*scale;
+
+  // Draw TWO fingers facing each other (left and right), front view
+  const CX=SVG_W/2;
+  const fTopY=40;
+
+  // Left finger: rightmost face at CX - gap/2 (facing right)
+  // Right finger: leftmost face at CX + gap/2 (facing left)
+  const gap=12; // gap between finger faces (where part sits)
+  const faceL=CX-gap/2-fT; // left edge of left finger
+  const faceR=CX+gap/2;    // left edge of right finger
+
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" width="${SVG_W}" height="${SVG_H}" viewBox="0 0 ${SVG_W} ${SVG_H}">`;
+  s+=baseDefs();
+  s+=`<rect width="${SVG_W}" height="${SVG_H}" fill="#fafaf8" rx="6"/>`;
+
+  // Mounting block at top
+  s+=`<rect x="${faceL-10}" y="${fTopY-22}" width="${fT+20}" height="20" rx="3" fill="#92400e" stroke="#78350f" stroke-width="1.5"/>`;
+  s+=`<rect x="${faceR-10}" y="${fTopY-22}" width="${fT+20}" height="20" rx="3" fill="#92400e" stroke="#78350f" stroke-width="1.5"/>`;
+  s+=`<text x="${faceL+fT/2}" y="${fTopY-9}" text-anchor="middle" fill="white" font-size="7" font-family="Plus Jakarta Sans">MOUNT</text>`;
+  s+=`<text x="${faceR+fT/2}" y="${fTopY-9}" text-anchor="middle" fill="white" font-size="7" font-family="Plus Jakarta Sans">MOUNT</text>`;
+
+  if(cfMode===1){
+    const ds   =Math.max(5, parseFloat(document.getElementById('cf_ds').value)||60);
+    const notch=Math.max(0, parseFloat(document.getElementById('cf_notch').value)||6);
+    const pR   =(ds/2)*scale;
+    const nD   =notch*scale;
+    const pCY  =fTopY+fH/2; // pocket centre Y (middle of finger)
+
+    // LEFT FINGER body
+    s+=`<rect x="${faceL}" y="${fTopY}" width="${fT}" height="${fH}" rx="2" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>`;
+    // V-notch cut on right face
+    const vd=nD, vw=Math.min(pR*1.2, fT*0.8);
+    s+=`<polygon points="${faceL+fT},${pCY-vw/2} ${faceL+fT-vd},${pCY} ${faceL+fT},${pCY+vw/2}" fill="#fafaf8" stroke="#0f766e" stroke-width="1.5"/>`;
+
+    // RIGHT FINGER body
+    s+=`<rect x="${faceR}" y="${fTopY}" width="${fT}" height="${fH}" rx="2" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>`;
+    // V-notch on left face
+    s+=`<polygon points="${faceR},${pCY-vw/2} ${faceR+vd},${pCY} ${faceR},${pCY+vw/2}" fill="#fafaf8" stroke="#0f766e" stroke-width="1.5"/>`;
+
+    // Part circle
+    const partR=Math.min(pR, gap/2+nD-1);
+    s+=`<circle cx="${CX}" cy="${pCY}" r="${partR}" fill="#fbbf24" stroke="#b45309" stroke-width="1.5" opacity=".85"/>`;
+    s+=`<text x="${CX}" y="${pCY+4}" text-anchor="middle" fill="#92400e" font-size="8" font-family="JetBrains Mono">⌀${ds}</text>`;
+
+    // Dimensions
+    // Finger length
+    s+=`<line x1="${faceL-14}" y1="${fTopY}" x2="${faceL-14}" y2="${fTopY+fH}" stroke="#a1a1aa" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+    s+=`<text x="${faceL-18}" y="${fTopY+fH/2+4}" text-anchor="end" fill="#71717a" font-size="9" font-family="JetBrains Mono">${L_tot}mm</text>`;
+    // Notch depth
+    s+=`<line x1="${faceL+fT}" y1="${pCY+30}" x2="${faceL+fT-vd}" y2="${pCY+30}" stroke="#a1a1aa" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+    s+=`<text x="${faceL+fT-vd/2}" y="${pCY+42}" text-anchor="middle" fill="#71717a" font-size="8" font-family="JetBrains Mono">d=${notch}mm</text>`;
+
+    // Label
+    s+=`<text x="${CX}" y="${fTopY+fH+20}" text-anchor="middle" fill="#0f766e" font-size="10" font-weight="600" font-family="Plus Jakarta Sans">V-groove pocket — ⌀${ds}mm part</text>`;
+
+  } else {
+    // DUAL MODE
+    const d1=Math.max(5, parseFloat(document.getElementById('cf_d1').value)||60);
+    const d2=Math.max(5, parseFloat(document.getElementById('cf_d2').value)||40);
+    const p1=Math.max(5, parseFloat(document.getElementById('cf_p1').value)||20);
+    const p2=Math.max(5, parseFloat(document.getElementById('cf_p2').value)||55);
+
+    const p1Y=fTopY+p1*scale;
+    const p2Y=fTopY+p2*scale;
+    const r1=(d1/2)*scale, r2=(d2/2)*scale;
+    const nw1=Math.min(r1*1.3, fT*0.75), nd1=Math.min(r1*0.35, fT*0.4);
+    const nw2=Math.min(r2*1.2, fT*0.65), nd2=Math.min(r2*0.3, fT*0.35);
+
+    // LEFT FINGER
+    s+=`<rect x="${faceL}" y="${fTopY}" width="${fT}" height="${fH}" rx="2" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>`;
+    // Pocket 1 notch
+    s+=`<polygon points="${faceL+fT},${p1Y-nw1/2} ${faceL+fT-nd1},${p1Y} ${faceL+fT},${p1Y+nw1/2}" fill="#fff7ed" stroke="#f59e0b" stroke-width="1.5"/>`;
+    // Pocket 2 notch
+    s+=`<polygon points="${faceL+fT},${p2Y-nw2/2} ${faceL+fT-nd2},${p2Y} ${faceL+fT},${p2Y+nw2/2}" fill="#eff6ff" stroke="#1a56db" stroke-width="1.5"/>`;
+
+    // RIGHT FINGER
+    s+=`<rect x="${faceR}" y="${fTopY}" width="${fT}" height="${fH}" rx="2" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>`;
+    s+=`<polygon points="${faceR},${p1Y-nw1/2} ${faceR+nd1},${p1Y} ${faceR},${p1Y+nw1/2}" fill="#fff7ed" stroke="#f59e0b" stroke-width="1.5"/>`;
+    s+=`<polygon points="${faceR},${p2Y-nw2/2} ${faceR+nd2},${p2Y} ${faceR},${p2Y+nw2/2}" fill="#eff6ff" stroke="#1a56db" stroke-width="1.5"/>`;
+
+    // Part 1 (amber)
+    s+=`<circle cx="${CX}" cy="${p1Y}" r="${Math.min(r1,gap/2+nd1-1)}" fill="#fbbf24" stroke="#b45309" stroke-width="1.5" opacity=".9"/>`;
+    s+=`<text x="${CX}" y="${p1Y+3}" text-anchor="middle" fill="#92400e" font-size="7" font-family="JetBrains Mono">P1 ⌀${d1}</text>`;
+
+    // Part 2 (blue)
+    s+=`<circle cx="${CX}" cy="${p2Y}" r="${Math.min(r2,gap/2+nd2-1)}" fill="#93c5fd" stroke="#1d4ed8" stroke-width="1.5" opacity=".9"/>`;
+    s+=`<text x="${CX}" y="${p2Y+3}" text-anchor="middle" fill="#1e3a8a" font-size="7" font-family="JetBrains Mono">P2 ⌀${d2}</text>`;
+
+    // Dimension: p1 from top
+    s+=`<line x1="${faceL-14}" y1="${fTopY}" x2="${faceL-14}" y2="${p1Y}" stroke="#f59e0b" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+    s+=`<text x="${faceL-18}" y="${(fTopY+p1Y)/2+4}" text-anchor="end" fill="#b45309" font-size="8" font-family="JetBrains Mono">${p1}</text>`;
+    // p2 from top
+    s+=`<line x1="${faceL-14}" y1="${fTopY}" x2="${faceL-14}" y2="${p2Y}" stroke="#1a56db" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+    s+=`<text x="${faceL-18}" y="${(fTopY+p2Y)/2+4}" text-anchor="end" fill="#1a56db" font-size="8" font-family="JetBrains Mono">${p2}</text>`;
+    // Total finger length
+    s+=`<line x1="${faceR+fT+12}" y1="${fTopY}" x2="${faceR+fT+12}" y2="${fTopY+fH}" stroke="#a1a1aa" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+    s+=`<text x="${faceR+fT+16}" y="${fTopY+fH/2+4}" text-anchor="start" fill="#71717a" font-size="9" font-family="JetBrains Mono">L=${L_tot}mm</text>`;
+
+    // Pocket labels
+    s+=`<text x="${faceL+fT-nd1-22}" y="${p1Y-nw1/2-5}" text-anchor="end" fill="#b45309" font-size="8" font-family="Plus Jakarta Sans" font-weight="600">Pocket 1</text>`;
+    s+=`<text x="${faceL+fT-nd2-22}" y="${p2Y-nw2/2-5}" text-anchor="end" fill="#1a56db" font-size="8" font-family="Plus Jakarta Sans" font-weight="600">Pocket 2</text>`;
+
+    s+=`<text x="${CX}" y="${fTopY+fH+20}" text-anchor="middle" fill="#0f766e" font-size="10" font-weight="600" font-family="Plus Jakarta Sans">Dual-pocket finger — Part1 ⌀${d1} &amp; Part2 ⌀${d2}</text>`;
+
+    // Validity check
+    const wall=5;
+    const p1ok=(p1>=d1/2+wall) && (p2-p1>=d1/2+d2/2+wall) && (L_tot-p2>=d2/2+wall);
+    const msg=p1ok?'✓ Geometry valid — pockets have enough wall thickness':`⚠ Check: min wall = ${wall}mm between pockets and edges`;
+    s+=`<text x="${CX}" y="${fTopY+fH+34}" text-anchor="middle" fill="${p1ok?'#15803d':'#b45309'}" font-size="9" font-family="JetBrains Mono">${msg}</text>`;
+  }
+
+  // Finger width dimension at bottom
+  s+=`<line x1="${faceL}" y1="${fTopY+fH+54}" x2="${faceL+fT}" y2="${fTopY+fH+54}" stroke="#a1a1aa" stroke-width="1" marker-end="url(#mD)" marker-start="url(#mDr)"/>`;
+  s+=`<text x="${faceL+fT/2}" y="${fTopY+fH+66}" text-anchor="middle" fill="#71717a" font-size="8" font-family="JetBrains Mono">T=${T}mm</text>`;
+
+  s+='</svg>';
+  document.getElementById('cfSVGContainer').innerHTML=s;
+}
+
+// ══════════════════════════════════════════════════
+// THREE.JS 3D GRIPPER VIEWER
+// ══════════════════════════════════════════════════
+
+let t3 = {
+  scene:null, camera:null, renderer:null, animId:null,
+  objects:[], lights:[],
+  sph:{theta:0.55, phi:1.05, r:700},
+  drag:false, prev:{x:0,y:0},
+  autoRot:true, ready:false
+};
+
+function init3D(){
+  const canvas = document.getElementById('canvas3d');
+  if(!canvas || !window.THREE){ return; }
+
+  const W = canvas.offsetWidth || 800;
+  const H = canvas.offsetHeight || 480;
+
+  t3.scene = new THREE.Scene();
+  t3.scene.background = new THREE.Color(0x0d1117);
+  t3.scene.fog = new THREE.Fog(0x0d1117, 800, 1800);
+
+  t3.camera = new THREE.PerspectiveCamera(42, W/H, 1, 3000);
+  camUpdate3D();
+
+  t3.renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:false});
+  t3.renderer.setSize(W, H, false);
+  t3.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  t3.renderer.shadowMap.enabled = true;
+  t3.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  // Lights
+  const amb = new THREE.AmbientLight(0xffffff, 0.45);
+  t3.scene.add(amb);
+
+  const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+  sun.position.set(250, 500, 350);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 1024;
+  sun.shadow.mapSize.height = 1024;
+  sun.shadow.camera.near = 10;
+  sun.shadow.camera.far = 1500;
+  sun.shadow.camera.left = -400; sun.shadow.camera.right = 400;
+  sun.shadow.camera.top = 400; sun.shadow.camera.bottom = -400;
+  t3.scene.add(sun);
+
+  const fill = new THREE.DirectionalLight(0x6688cc, 0.35);
+  fill.position.set(-300, -100, -200);
+  t3.scene.add(fill);
+
+  const rim = new THREE.DirectionalLight(0xffcc88, 0.2);
+  rim.position.set(0, -300, 400);
+  t3.scene.add(rim);
+
+  // Ground grid
+  const grid = new THREE.GridHelper(600, 24, 0x334455, 0x1e293b);
+  grid.position.y = -200;
+  t3.scene.add(grid);
+  t3.objects.push(grid);
+
+  // Mouse / touch events
+  const el = canvas;
+  el.addEventListener('mousedown',  e=>{t3.drag=true; t3.prev={x:e.clientX,y:e.clientY}; el.style.cursor='grabbing';});
+  window.addEventListener('mouseup', ()=>{t3.drag=false; el.style.cursor='grab';});
+  el.addEventListener('mousemove', e=>{
+    if(!t3.drag) return;
+    t3.autoRot=false;
+    document.getElementById('btnAutoRot').textContent='↻ Auto-rotate: OFF';
+    const dx=e.clientX-t3.prev.x, dy=e.clientY-t3.prev.y;
+    t3.sph.theta -= dx*0.013;
+    t3.sph.phi   -= dy*0.013;
+    t3.sph.phi    = Math.max(0.1, Math.min(Math.PI*0.88, t3.sph.phi));
+    t3.prev={x:e.clientX,y:e.clientY};
+    camUpdate3D();
+  });
+  el.addEventListener('wheel', e=>{
+    e.preventDefault();
+    t3.sph.r *= 1 + e.deltaY*0.0012;
+    t3.sph.r  = Math.max(120, Math.min(1400, t3.sph.r));
+    camUpdate3D();
+  },{passive:false});
+  // Touch
+  el.addEventListener('touchstart', e=>{t3.drag=true; t3.prev={x:e.touches[0].clientX,y:e.touches[0].clientY};});
+  el.addEventListener('touchend',   ()=>{t3.drag=false;});
+  el.addEventListener('touchmove',  e=>{
+    if(!t3.drag) return;
+    e.preventDefault();
+    const dx=e.touches[0].clientX-t3.prev.x, dy=e.touches[0].clientY-t3.prev.y;
+    t3.sph.theta -= dx*0.013; t3.sph.phi -= dy*0.013;
+    t3.sph.phi = Math.max(0.1,Math.min(Math.PI*0.88,t3.sph.phi));
+    t3.prev={x:e.touches[0].clientX,y:e.touches[0].clientY};
+    camUpdate3D();
+  },{passive:false});
+
+  // Resize
+  window.addEventListener('resize', ()=>{
+    const W2=canvas.offsetWidth, H2=canvas.offsetHeight;
+    t3.camera.aspect=W2/H2; t3.camera.updateProjectionMatrix();
+    t3.renderer.setSize(W2,H2,false);
+  });
+
+  t3.ready = true;
+  document.getElementById('loading3d').style.display='none';
+  animate3D();
+}
+
+function camUpdate3D(){
+  const {theta,phi,r}=t3.sph;
+  const lookY = 30;
+  t3.camera.position.set(
+    r*Math.sin(phi)*Math.cos(theta),
+    r*Math.cos(phi) + lookY,
+    r*Math.sin(phi)*Math.sin(theta)
+  );
+  t3.camera.lookAt(0, lookY, 0);
+}
+
+function animate3D(){
+  t3.animId = requestAnimationFrame(animate3D);
+  if(t3.autoRot){ t3.sph.theta += 0.007; camUpdate3D(); }
+  t3.renderer.render(t3.scene, t3.camera);
+}
+
+function toggleAutoRot(){
+  t3.autoRot = !t3.autoRot;
+  document.getElementById('btnAutoRot').textContent = '↻ Auto-rotate: '+(t3.autoRot?'ON':'OFF');
+}
+
+function resetCamera3D(){
+  t3.sph = {theta:0.55, phi:1.05, r:700};
+  camUpdate3D();
+}
+
+// ── Scene objects management ──
+let sceneObjs = [];
+
+function clearScene3D(){
+  sceneObjs.forEach(o=>{
+    t3.scene.remove(o);
+    if(o.geometry){ o.geometry.dispose(); }
+    if(o.material){
+      const mats = Array.isArray(o.material)?o.material:[o.material];
+      mats.forEach(m=>{ if(m.map) m.map.dispose(); m.dispose(); });
+    }
+  });
+  sceneObjs = [];
+}
+
+function addO(obj){ t3.scene.add(obj); sceneObjs.push(obj); return obj; }
+
+function mesh(geo, mat, castShadow=true, receiveShadow=true){
+  const m=new THREE.Mesh(geo,mat);
+  m.castShadow=castShadow; m.receiveShadow=receiveShadow;
+  return m;
+}
+
+// Shared materials (recreated each build)
+function makeMats(){
+  return {
+    part:     new THREE.MeshPhongMaterial({color:0xf59e0b, shininess:70, specular:0xffd580}),
+    partBore: new THREE.MeshPhongMaterial({color:0x1f2937, shininess:10, side:THREE.BackSide}),
+    finger:   new THREE.MeshPhongMaterial({color:0x14b8a6, shininess:55, specular:0x5eead4}),
+    fingerH:  new THREE.MeshPhongMaterial({color:0x0d9488, shininess:55, specular:0x5eead4, transparent:true, opacity:0.75}),
+    arm:      new THREE.MeshPhongMaterial({color:0x92400e, shininess:30}),
+    mount:    new THREE.MeshPhongMaterial({color:0xd97706, shininess:60, specular:0xfcd34d}),
+    actuator: new THREE.MeshPhongMaterial({color:0x2563eb, shininess:90, specular:0x93c5fd}),
+    cg:       new THREE.MeshPhongMaterial({color:0x16a34a, shininess:100, specular:0x86efac, emissive:0x052e16}),
+    wArrow:   0xef4444,
+    fArrow:   0x3b82f6,
+    mfArrow:  0x22c55e
+  };
+}
+
+// ── Build full 3D scene from calculator params ──
+function build3DScene(p){
+  if(!t3.ready) return;
+  clearScene3D();
+
+  const M = makeMats();
+  const sh = p.shape;
+  const partL = Math.max(10, p.partL);
+  const partD = Math.max(5,  p.partD);
+  const gripP = Math.max(1,  p.gripP);
+  const cgP   = p.cgP;
+  const L     = Math.max(5,  p.L);
+  const N     = p.N || 2;
+  const iR    = Math.max(0, (p.innerDia||0)/2);
+  const oR    = partD/2;
+
+  // Y coords: gripP from bottom → grip at Y=0
+  const partBotY   = -gripP;          // bottom of part
+  const partTopY   =  partL - gripP;  // top of part
+  const partCentreY = (partBotY+partTopY)/2;
+  const cgY        = partBotY + cgP;
+
+  // ── PART ──
+  if(sh==='cyl'){
+    const g=new THREE.CylinderGeometry(oR,oR,partL,48);
+    addO(mesh(g,M.part)).position.y=partCentreY;
+    // End caps highlighted
+    const capGeo=new THREE.CircleGeometry(oR,48);
+    const capMat=new THREE.MeshPhongMaterial({color:0xfde68a,shininess:40});
+    const capT=mesh(capGeo,capMat,false); capT.rotation.x=-Math.PI/2; capT.position.y=partTopY-0.5; addO(capT);
+    const capB=mesh(capGeo.clone(),capMat.clone(),false); capB.rotation.x=Math.PI/2; capB.position.y=partBotY+0.5; addO(capB);
+  }
+  else if(sh==='hcyl'){
+    // Outer shell
+    const og=new THREE.CylinderGeometry(oR,oR,partL,48,1,false);
+    addO(mesh(og,M.part)).position.y=partCentreY;
+    // Inner bore (backside facing)
+    if(iR>1 && iR<oR){
+      const ig=new THREE.CylinderGeometry(iR,iR,partL+2,48,1,false);
+      addO(mesh(ig,M.partBore)).position.y=partCentreY;
+    }
+    // Top ring (annulus hint)
+    const ringG=new THREE.RingGeometry(iR>0?iR:oR*0.3, oR, 48);
+    const ringM=new THREE.MeshPhongMaterial({color:0xfde68a,shininess:30,side:THREE.DoubleSide});
+    const ringT=mesh(ringG,ringM,false); ringT.rotation.x=-Math.PI/2; ringT.position.y=partTopY-0.5; addO(ringT);
+    const ringB=mesh(ringG.clone(),ringM.clone(),false); ringB.rotation.x=Math.PI/2; ringB.position.y=partBotY+0.5; addO(ringB);
+  }
+  else if(sh==='rect'){
+    const depth=Math.max(10, partD*0.7);
+    const g=new THREE.BoxGeometry(partD,partL,depth);
+    addO(mesh(g,M.part)).position.y=partCentreY;
+  }
+  else if(sh==='sq'){
+    const g=new THREE.BoxGeometry(partD,partL,partD);
+    addO(mesh(g,M.part)).position.y=partCentreY;
+  }
+  else if(sh==='disc'){
+    const dT=Math.max(5, p.discThick||20);
+    const g=new THREE.CylinderGeometry(oR,oR,dT,48);
+    addO(mesh(g,M.part)).position.y=dT/2-gripP;
+  }
+
+  // ── FINGER ARRANGEMENT ──
+  const FW = Math.max(12, partD*0.28);  // finger width (tangential)
+  const FT = Math.max(14, partD*0.22);  // finger thickness (radial depth)
+  const radDist = oR + FT/2 + 2;        // radial centre of finger from axis
+
+  // Angle offsets per N
+  const angOffset = N===2?0 : N===3?Math.PI/2 : Math.PI/4;
+  const angles = Array.from({length:N}, (_,i)=> angOffset + i*(Math.PI*2/N));
+
+  // Mount plate height (above part top, with gap)
+  const mountBotY = partTopY + L + 10;
+  const mountH    = 14;
+  const mountTopY = mountBotY + mountH;
+
+  angles.forEach((ang, idx)=>{
+    const cx = Math.cos(ang)*radDist;
+    const cz = Math.sin(ang)*radDist;
+
+    // ── Finger block ──
+    const fg = new THREE.BoxGeometry(FT, L, FW);
+    const fm = mesh(fg, idx<2?M.finger:M.fingerH);
+    fm.position.set(cx, 0, cz);
+    fm.rotation.y = -ang;  // face part axis
+    addO(fm);
+
+    // Beveled tip: thin wedge at inner face of finger
+    const bW=FW*0.85, bH=4, bD=Math.min(FT*0.3,8);
+    const bg=new THREE.BoxGeometry(bD,bH,bW);
+    const bm=mesh(bg, new THREE.MeshPhongMaterial({color:0x0f766e,shininess:70}));
+    bm.position.set(cx - Math.cos(ang)*(FT/2-bD/2+0.5), 0, cz - Math.sin(ang)*(FT/2-bD/2+0.5));
+    bm.rotation.y=-ang;
+    addO(bm);
+
+    // ── Arm (round rod from mount plate to finger top) ──
+    const armTopY   = L/2;
+    const armBotY   = mountBotY;
+    const armH2     = Math.max(2, armBotY-armTopY);
+    const ag        = new THREE.CylinderGeometry(5,5,armH2,10);
+    const am        = mesh(ag,M.arm);
+    am.position.set(cx, armTopY+armH2/2, cz);
+    addO(am);
+
+    // ── F Arrow (blue, pointing radially inward) ──
+    const aOrigin = new THREE.Vector3(cx + Math.cos(ang)*55, 0, cz + Math.sin(ang)*55);
+    const aDir    = new THREE.Vector3(-Math.cos(ang), 0, -Math.sin(ang)).normalize();
+    const fa      = new THREE.ArrowHelper(aDir, aOrigin, 48, M.fArrow, 12, 7);
+    addO(fa);
+
+    // Label "F" as small sphere + thin cylinder at arrow tail
+    const fs=mesh(new THREE.SphereGeometry(4,8,8), new THREE.MeshPhongMaterial({color:M.fArrow,emissive:0x1e3a8a}));
+    fs.position.copy(aOrigin).addScaledVector(aDir,-4);
+    addO(fs);
+
+    // ── μF Arrow (green, pointing upward at contact point) ──
+    const mfX = Math.cos(ang)*(oR+1);
+    const mfZ = Math.sin(ang)*(oR+1);
+    const mfOrigin = new THREE.Vector3(mfX, -16, mfZ);
+    const mfDir    = new THREE.Vector3(0,1,0);
+    const mfa      = new THREE.ArrowHelper(mfDir, mfOrigin, 30, M.mfArrow, 10, 6);
+    addO(mfa);
+  });
+
+  // ── MOUNT PLATE ──
+  const mntSpan = radDist*2 + FT + 30;
+  const mg = new THREE.BoxGeometry(mntSpan, mountH, mntSpan);
+  const mm = mesh(mg, M.mount);
+  mm.position.y = mountBotY + mountH/2;
+  addO(mm);
+
+  // Mount plate edge highlight
+  const mEdge=new THREE.EdgesGeometry(mg);
+  const mLine=new THREE.LineSegments(mEdge, new THREE.LineBasicMaterial({color:0xfcd34d,linewidth:1}));
+  mLine.position.y=mountBotY+mountH/2;
+  addO(mLine);
+
+  // ── ACTUATOR ──
+  const actW=Math.max(100,mntSpan*0.7), actH=46, actD=actW*0.65;
+  const actG=new THREE.BoxGeometry(actW,actH,actD);
+  const actM=mesh(actG,M.actuator);
+  actM.position.y=mountTopY+actH/2;
+  addO(actM);
+
+  // Actuator edge highlight
+  const aEdge=new THREE.EdgesGeometry(actG);
+  const aLine=new THREE.LineSegments(aEdge,new THREE.LineBasicMaterial({color:0x93c5fd}));
+  aLine.position.y=mountTopY+actH/2;
+  addO(aLine);
+
+  // Actuator connectors (decorative bolts/ports)
+  [-actW/3, actW/3].forEach(bx=>{
+    const bg2=new THREE.CylinderGeometry(4,4,5,8);
+    const bm2=mesh(bg2,new THREE.MeshPhongMaterial({color:0x1e3a8a,shininess:100}));
+    bm2.position.set(bx, mountTopY+2, 0);
+    addO(bm2);
+  });
+
+  // ── CG SPHERE (glowing green) ──
+  const cgg=new THREE.SphereGeometry(8,24,24);
+  const cgm=mesh(cgg,M.cg);
+  cgm.position.y=cgY;
+  addO(cgm);
+
+  // CG ring glow
+  const cgRing=new THREE.TorusGeometry(14,1.5,8,32);
+  const cgRM=new THREE.MeshPhongMaterial({color:0x22c55e,emissive:0x14532d,shininess:80,transparent:true,opacity:0.7});
+  const cgR=mesh(cgRing,cgRM,false);
+  cgR.position.y=cgY;
+  addO(cgR);
+
+  // Dashed vertical line from CG to bottom (visual axis guide)
+  const pts=[new THREE.Vector3(0,cgY,0), new THREE.Vector3(0,partBotY-10,0)];
+  const lineGeo=new THREE.BufferGeometry().setFromPoints(pts);
+  const line=new THREE.Line(lineGeo, new THREE.LineDashedMaterial({color:0x16a34a,dashSize:8,gapSize:6,scale:1}));
+  line.computeLineDistances();
+  addO(line);
+
+  // ── W = mg ARROW (red, downward from CG) ──
+  const wOrigin = new THREE.Vector3(0, cgY, 0);
+  const wDir    = new THREE.Vector3(0, -1, 0);
+  const wArrow  = new THREE.ArrowHelper(wDir, wOrigin, 70, M.wArrow, 16, 9);
+  addO(wArrow);
+
+  // ── GRIP PLANE (thin disc at grip height, orange dashed) ──
+  const gpGeo = new THREE.TorusGeometry(oR+FT+12, 1, 8, 64);
+  const gpMat = new THREE.MeshPhongMaterial({color:0xea580c,shininess:30,transparent:true,opacity:0.5});
+  const gpM   = mesh(gpGeo,gpMat,false);
+  gpM.rotation.x = Math.PI/2;
+  addO(gpM);
+
+  // ── CG OFFSET INDICATOR ──
+  if(Math.abs(gripP-cgP)>3){
+    const offPts=[new THREE.Vector3(oR+20,0,0), new THREE.Vector3(oR+20,cgY,0)];
+    const offGeo=new THREE.BufferGeometry().setFromPoints(offPts);
+    const offLine=new THREE.Line(offGeo, new THREE.LineBasicMaterial({color:0xea580c}));
+    addO(offLine);
+    // small spheres at ends
+    [0, cgY].forEach(y=>{
+      const sg=new THREE.SphereGeometry(3,8,8);
+      const sm=mesh(sg,new THREE.MeshPhongMaterial({color:0xea580c}));
+      sm.position.set(oR+20,y,0);
+      addO(sm);
+    });
+  }
+}
+
+// ── INIT ──
+onShapeChange();
+calc();
+setCFMode(1);
+
+window.addEventListener('load', ()=>{
+  setTimeout(init3D, 200);
+});
+
+</script>
+</body>
+</html>
